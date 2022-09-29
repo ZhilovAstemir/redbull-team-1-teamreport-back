@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <RootNamespace>redbull_team_1_teamreport_back.Domain</RootNamespace>
+        <AssemblyName>redbull_team_1_teamreport_back.Domain</AssemblyName>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Compile Remove="Exceptions\**" />
+      <Compile Remove="Persistence\Migrations\**" />
+      <EmbeddedResource Remove="Exceptions\**" />
+      <EmbeddedResource Remove="Persistence\Migrations\**" />
+      <None Remove="Exceptions\**" />
+      <None Remove="Persistence\Migrations\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" Version="6.0.9" />
+      <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.9" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.9">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.9" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.9" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Enums\" />
+      <Folder Include="Migrations\" />
+    </ItemGroup>
+
+</Project>
