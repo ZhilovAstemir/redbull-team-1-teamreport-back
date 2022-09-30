@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
-using redbull_team_1_teamreport_back.Domain.Entities;
-using redbull_team_1_teamreport_back.Domain.Enums;
+using redbull_team_1_teamreport_back.Data.Entities;
+using redbull_team_1_teamreport_back.Data.Enums;
 
-namespace Domain.UnitTests.Entities;
+namespace Data.Tests.Entities;
 
 public class ReportTest
 {
@@ -16,21 +16,24 @@ public class ReportTest
     [Fact]
     public void ShouldReportReportHaveProperties()
     {
-        var report = new Report();
-
-        report.Id = 1;
         var member = new Member();
-        report.Member = member;
-        report.Morale = Emotion.Great;
-        report.MoraleComment = "MoraleComment";
-        report.Stress = Emotion.Great;
-        report.StressComment = "StressComment";
-        report.Workload = Emotion.Great;
-        report.WorkloadComment = "WorkloadComment";
-        report.High = "High";
-        report.Low = "Low";
-        report.Else = "Else";
-        report.Week = new Week() { DateStart = DateTime.MaxValue, DateEnd =DateTime.MaxValue };
+        var week= new Week() { DateStart = DateTime.MaxValue, DateEnd =DateTime.MaxValue };
+
+        var report = new Report()
+        {
+            Id = 1,
+            Member = member,
+            Morale = Emotion.Great,
+            MoraleComment = "MoraleComment",
+            Stress = Emotion.Great,
+            StressComment = "StressComment",
+            Workload = Emotion.Great,
+            WorkloadComment = "WorkloadComment",
+            High = "High",
+            Low = "Low",
+            Else = "Else",
+            Week = week
+        };
 
         report.Id.Should().Be(1);
         report.Member.Should().Be(member);

@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
-using redbull_team_1_teamreport_back.Domain.Entities;
+using redbull_team_1_teamreport_back.Data.Entities;
 
-namespace Domain.UnitTests.Entities;
+namespace Data.Tests.Entities;
 
 public class WeekTest
 {
@@ -15,10 +15,12 @@ public class WeekTest
     [Fact]
     public void ShouldWeekHaveProperties()
     {
-        var week = new Week();
-        week.Id = 1;
-        week.DateStart=DateTime.MaxValue;
-        week.DateEnd=DateTime.MaxValue;
+        var week = new Week()
+        {
+            Id = 1,
+            DateStart=DateTime.MaxValue,
+            DateEnd=DateTime.MaxValue
+        };
         
         week.Id.Should().Be(1);
         week.DateStart.Should().Be(DateTime.MaxValue);

@@ -1,7 +1,10 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using AutoMapper;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.IdentityModel.Tokens;
-using redbull_team_1_teamreport_back.Domain.Repositories.Interfaces;
+using redbull_team_1_teamreport_back.Data.Entities;
+using redbull_team_1_teamreport_back.Data.Repositories.Interfaces;
 using TeamReport.Domain.Exceptions;
 using TeamReport.Domain.Infrastructures;
 using TeamReport.Domain.Models;
@@ -9,28 +12,31 @@ using TeamReport.Domain.Services.Interfaces;
 
 namespace TeamReport.Domain.Services;
 
-public class AuthorizationServices: IAuthorizationServices
+public class AuthorizationService: IAuthorizationService
 {
     public readonly IMemberRepository _memberRepository;
     public readonly IMapper _mapper;
 
-    public AuthorizationServices(IMemberRepository memberRepository, IMapper mapper)
+    public AuthorizationService(IMemberRepository memberRepository, IMapper mapper)
     {
         _memberRepository = memberRepository;
         _mapper = mapper;
     }
 
-    public MemberModel GetUserForLogin(string email, string password)
+    public MemberModel Login(string email, string password)
     {
-        var member = _memberRepository.GetMemberByEmail(email);
-
-        if (!PasswordHash.ValidatePassword(password, member.Password))
+        var member = _memberRepository.GetByEmail(email);
+        if (member == null)
         {
-            throw new EntityNotFoundException("Invalid  password");
+            throw new EntityNotFoundException("Invalid creditals");
         }
-
-        return _mapper.Map<MemberModel>(member);
+        if (!PasswordHash.ValidatePassword(password,member.Password))
+        {
+            throw new EntityNotFoundException("Invalid creditals");
+        }
+        return _mapper.Map<Member,MemberModel>(member);
     }
+
 
     public string GetToken(MemberModel member)
     {
@@ -46,5 +52,12 @@ public class AuthorizationServices: IAuthorizationServices
                 signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
 
         return new JwtSecurityTokenHandler().WriteToken(jwt);
+    }
+
+    public int Register(MemberModel memberModel)
+    {
+        var member = _mapper.Map<MemberModel, Member>(memberModel);
+
+        return _memberRepository.Add(member);
     }
 }

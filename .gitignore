@@ -236,3 +236,4 @@ _Pvt_Extensions
 /redbull_team_1_teamreport_back.ndproj
 /.mfractor
 src/WebUI/ClientApp/package-lock.json
+/src/TeamReport.Database/TeamReport.Database.jfm

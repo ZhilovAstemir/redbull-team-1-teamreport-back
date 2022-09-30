@@ -12,17 +12,17 @@
     [Else]            NVARCHAR (MAX) NULL,
     [WeekId]          INT            NULL,
     CONSTRAINT [PK_Reports] PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_Reports_Member_MemberId] FOREIGN KEY ([MemberId]) REFERENCES [dbo].[Member] ([Id]),
+    CONSTRAINT [FK_Reports_Members_MemberId] FOREIGN KEY ([MemberId]) REFERENCES [dbo].[Members] ([Id]),
     CONSTRAINT [FK_Reports_Weeks_WeekId] FOREIGN KEY ([WeekId]) REFERENCES [dbo].[Weeks] ([Id])
 );
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_Reports_MemberId]
-    ON [dbo].[Reports]([MemberId] ASC);
+CREATE NONCLUSTERED INDEX [IX_Reports_WeekId]
+    ON [dbo].[Reports]([WeekId] ASC);
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_Reports_WeekId]
-    ON [dbo].[Reports]([WeekId] ASC);
+CREATE NONCLUSTERED INDEX [IX_Reports_MemberId]
+    ON [dbo].[Reports]([MemberId] ASC);
 

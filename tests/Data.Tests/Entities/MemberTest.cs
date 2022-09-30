@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
-using redbull_team_1_teamreport_back.Domain.Entities;
+using redbull_team_1_teamreport_back.Data.Entities;
 
-namespace Domain.UnitTests.Entities;
+namespace Data.Tests.Entities;
 
 public class MemberTest
 {
@@ -15,16 +15,18 @@ public class MemberTest
     [Fact]
     public void ShouldMemberHaveProperties()
     {
-        var member = new Member();
-
-        member.Id = 1;
         var company = new Company();
-        member.Company = company;
-        member.FirstName = "FirstName";
-        member.LastName = "LastName";
-        member.Email = "email@email.com";
-        member.Title = "Title";
 
+        var member = new Member()
+        {
+            Id = 1,
+            Company = company,
+            FirstName = "FirstName",
+            LastName = "LastName",
+            Email = "email@email.com",
+            Title = "Title"
+        };
+        
         member.Id.Should().Be(1);
         member.Company.Should().Be(company);
         member.FirstName.Should().Be("FirstName");

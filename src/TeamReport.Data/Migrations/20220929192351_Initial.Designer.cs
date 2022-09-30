@@ -5,15 +5,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using redbull_team_1_teamreport_back.Domain.Persistence;
+using redbull_team_1_teamreport_back.Data.Persistence;
 
 #nullable disable
 
 namespace redbull_team_1_teamreport_back.Domain.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220928214922_initial1")]
-    partial class initial1
+    [Migration("20220929192351_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -37,7 +37,7 @@ namespace redbull_team_1_teamreport_back.Domain.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Company", (string)null);
+                    b.ToTable("Companies");
                 });
 
             modelBuilder.Entity("redbull_team_1_teamreport_back.Domain.Entities.Leadership", b =>
@@ -97,7 +97,7 @@ namespace redbull_team_1_teamreport_back.Domain.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("Member", (string)null);
+                    b.ToTable("Members");
                 });
 
             modelBuilder.Entity("redbull_team_1_teamreport_back.Domain.Entities.Report", b =>

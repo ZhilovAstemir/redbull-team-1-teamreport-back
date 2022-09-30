@@ -1,6 +1,6 @@
-﻿using redbull_team_1_teamreport_back.Domain.Enums;
+﻿using redbull_team_1_teamreport_back.Data.Enums;
 
-namespace redbull_team_1_teamreport_back.Domain.Entities;
+namespace redbull_team_1_teamreport_back.Data.Entities;
 
 public class Report
 {
