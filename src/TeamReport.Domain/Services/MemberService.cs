@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using redbull_team_1_teamreport_back.Domain.Entities;
-using redbull_team_1_teamreport_back.Domain.Repositories.Interfaces;
+using redbull_team_1_teamreport_back.Data.Entities;
+using redbull_team_1_teamreport_back.Data.Repositories.Interfaces;
 using TeamReport.Domain.Models;
 using TeamReport.Domain.Services.Interfaces;
 
@@ -16,10 +16,14 @@ public class MemberService: IMemberService
         _mapper = mapper;
     }
 
+
     public int AddMember(MemberModel member)
     {
+        return 1;
+    }
 
-        member.Password = PasswordHash.HashPassword(member.Password);
-        return _memberRepository.AddMember(_mapper.Map<Member>(member));
+    public List<Member> GetAllMembers()
+    {
+        return _memberRepository.GetAll();
     }
 }

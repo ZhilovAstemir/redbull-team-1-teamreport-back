@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
-using redbull_team_1_teamreport_back.Domain.Entities;
+using redbull_team_1_teamreport_back.Data.Entities;
 
-namespace Domain.UnitTests.Entities;
+namespace Data.Tests.Entities;
 
 public class LeadershipTest
 {
@@ -15,14 +15,16 @@ public class LeadershipTest
     [Fact]
     public void ShouldLeadershipHaveProperties()
     {
-        var leadership = new Leadership();
-
-        leadership.Id = 1;
         var leader = new Member();
         var member = new Member();
-        leadership.Leader = leader;
-        leadership.Member = member;
 
+        var leadership = new Leadership()
+        {
+            Id = 1,
+            Leader = leader,
+            Member = member
+        };
+        
         leadership.Id.Should().Be(1);
         leadership.Leader.Should().Be(leader);
         leadership.Member.Should().Be(member);

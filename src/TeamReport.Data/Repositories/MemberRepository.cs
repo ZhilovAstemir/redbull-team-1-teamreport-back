@@ -1,8 +1,8 @@
-﻿using redbull_team_1_teamreport_back.Domain.Entities;
-using redbull_team_1_teamreport_back.Domain.Persistence;
-using redbull_team_1_teamreport_back.Domain.Repositories.Interfaces;
+﻿using redbull_team_1_teamreport_back.Data.Entities;
+using redbull_team_1_teamreport_back.Data.Persistence;
+using redbull_team_1_teamreport_back.Data.Repositories.Interfaces;
 
-namespace redbull_team_1_teamreport_back.Domain.Repositories;
+namespace redbull_team_1_teamreport_back.Data.Repositories;
 public class MemberRepository: IMemberRepository
 {
     private readonly ApplicationDbContext _context;
@@ -12,13 +12,18 @@ public class MemberRepository: IMemberRepository
         _context = context;
     }
 
-    public Member GetMemberByEmail(string email) => _context.Members.FirstOrDefault(c => c.Email == email);
+    public Member? GetByEmail(string email) => _context.Members.FirstOrDefault(c => c.Email == email);
 
-    public int AddMember(Member member)
+    public int Add(Member member)
     {
         _context.Members.Add(member);
         _context.SaveChanges();
 
         return member.Id;
+    }
+
+    public List<Member> GetAll()
+    {
+        return _context.Members.ToList();
     }
 }

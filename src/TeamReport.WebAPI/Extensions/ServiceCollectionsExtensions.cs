@@ -1,6 +1,6 @@
 ﻿using Microsoft.OpenApi.Models;
-using redbull_team_1_teamreport_back.Domain.Repositories;
-using redbull_team_1_teamreport_back.Domain.Repositories.Interfaces;
+using redbull_team_1_teamreport_back.Data.Repositories;
+using redbull_team_1_teamreport_back.Data.Repositories.Interfaces;
 using TeamReport.Domain.Services;
 using TeamReport.Domain.Services.Interfaces;
 
@@ -15,7 +15,7 @@ public static class ServiceCollectionsExtensions
 
     public static void AddDomainServices(this IServiceCollection services)
     {
-        services.AddScoped<IAuthorizationServices, AuthorizationServices>();
+        services.AddScoped<IAuthorizationService, AuthorizationService>();
         services.AddScoped<IMemberService, MemberService>();
     }
 

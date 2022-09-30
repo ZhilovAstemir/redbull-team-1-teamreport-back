@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using redbull_team_1_teamreport_back.Data.Entities;
 using TeamReport.Domain.Models;
 using TeamReport.WebAPI.Models.Requests;
 
