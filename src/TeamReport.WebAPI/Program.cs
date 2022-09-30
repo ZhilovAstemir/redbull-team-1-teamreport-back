@@ -8,18 +8,11 @@ using TeamReport.WebAPI.MapperStorage;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-
 
 builder.Services
     .AddDefaultIdentity<ApplicationUser>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
-
-//builder.Services.AddIdentityServer()
-//    .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(o =>
 {
@@ -33,9 +26,9 @@ builder.Services.AddDomainServices();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(MapperDomain), typeof(MapperAPI));
 
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

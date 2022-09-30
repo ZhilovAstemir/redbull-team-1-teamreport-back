@@ -6,7 +6,6 @@ using TeamReport.Domain.Services.Interfaces;
 namespace TeamReport.WebAPI.Controllers;
 
 [ApiController]
-[Authorize]
 [Produces("application/json")]
 [Route("api/members")]
 public class MemberController : ControllerBase

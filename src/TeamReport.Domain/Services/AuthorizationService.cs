@@ -56,6 +56,8 @@ public class AuthorizationService: IAuthorizationService
 
     public int Register(MemberModel memberModel)
     {
+        memberModel.Password = PasswordHash.HashPassword(memberModel.Password);
+
         var member = _mapper.Map<MemberModel, Member>(memberModel);
 
         return _memberRepository.Add(member);
