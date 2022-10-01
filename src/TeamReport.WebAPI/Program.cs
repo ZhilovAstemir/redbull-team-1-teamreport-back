@@ -1,46 +1,46 @@
+using System.Collections.Immutable;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using redbull_team_1_teamreport_back.Data.Identity;
 using redbull_team_1_teamreport_back.Data.Persistence;
 using TeamReport.Domain.Mappers;
-using TeamReport.WebAPI.Extensions;
-using TeamReport.WebAPI.MapperStorage;
+using TeamReport.WebAPI;
+using TeamReport.WebAPI.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-
 
 builder.Services
     .AddDefaultIdentity<ApplicationUser>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-//builder.Services.AddIdentityServer()
-//    .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
-
 builder.Services.AddDbContext<ApplicationDbContext>(o =>
 {
-    o.UseSqlServer(@"Data Source=localhost;Initial Catalog=WeeklyReport;Persist Security Info=True;User ID=sa;Password=Qwerty123");
-
+    o.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+builder.Services.AddCors();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDataRepositories();
 builder.Services.AddDomainServices();
 builder.Services.AddSwaggerGen();
-builder.Services.AddAutoMapper(typeof(MapperDomain), typeof(MapperAPI));
+builder.Services.AddAutoMapper(typeof(MapperProfile));
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<JwtMiddleware>();
+
+app.UseCors(x => x
+    .AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader());
 
 app.UseHttpsRedirection();
 
