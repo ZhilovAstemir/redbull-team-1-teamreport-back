@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.IdentityModel.Tokens;
 using redbull_team_1_teamreport_back.Data.Entities;
 using redbull_team_1_teamreport_back.Data.Repositories.Interfaces;
+using TeamReport.Domain.Auth;
 using TeamReport.Domain.Exceptions;
-using TeamReport.Domain.Infrastructures;
 using TeamReport.Domain.Models;
 using TeamReport.Domain.Services.Interfaces;
 
@@ -25,14 +25,14 @@ public class AuthorizationService: IAuthorizationService
 
     public MemberModel Login(string email, string password)
     {
-        var member = _memberRepository.GetByEmail(email);
+        var member = _memberRepository.ReadByEmail(email);
         if (member == null)
         {
-            throw new EntityNotFoundException("Invalid creditals");
+            throw new InvalidCreditalsException();
         }
         if (!PasswordHash.ValidatePassword(password,member.Password))
         {
-            throw new EntityNotFoundException("Invalid creditals");
+            throw new InvalidCreditalsException();
         }
         return _mapper.Map<Member,MemberModel>(member);
     }
@@ -46,10 +46,13 @@ public class AuthorizationService: IAuthorizationService
         }
 
         var jwt = new JwtSecurityToken(
-                issuer: AuthOptions.Issuer,
-                audience: AuthOptions.Audience,
-                expires: DateTime.UtcNow.Add(TimeSpan.FromDays(1)),
-                signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+            issuer: AuthOptions.Issuer,
+            audience: AuthOptions.Audience,
+            expires: DateTime.UtcNow.Add(TimeSpan.FromDays(7)),
+            signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(),
+                SecurityAlgorithms.HmacSha256),
+            claims:new List<Claim>(){new Claim("user",member.Id.ToString())}
+            );
 
         return new JwtSecurityTokenHandler().WriteToken(jwt);
     }
@@ -60,6 +63,8 @@ public class AuthorizationService: IAuthorizationService
 
         var member = _mapper.Map<MemberModel, Member>(memberModel);
 
-        return _memberRepository.Add(member);
+        var addedMember= _memberRepository.Create(member);
+
+        return addedMember.Id;
     }
 }

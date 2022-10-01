@@ -1,15 +1,15 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
+﻿using System.IdentityModel.Tokens.Jwt;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using TeamReport.Domain.Auth;
 using TeamReport.Domain.Models;
-using TeamReport.Domain.Services.Interfaces;
-using TeamReport.WebAPI.Extensions;
-using TeamReport.WebAPI.Models.Requests;
+using TeamReport.Domain.Models.Requests;
 using IAuthorizationService = TeamReport.Domain.Services.Interfaces.IAuthorizationService;
 
 namespace TeamReport.WebAPI.Controllers;
 
-[AllowAnonymous]
+
 [ApiController]
 [Route("api/auth")]
 public class AuthorizationController : ControllerBase
@@ -42,7 +42,32 @@ public class AuthorizationController : ControllerBase
 
         var id = _authService.Register(memberModel);
         
-        return Ok(id);
+        return Ok(_authService.GetToken(memberModel));
     }
 
+    [HttpPost]
+    [Route("token")]
+    public IActionResult ValidateToken([FromBody] string token)
+    {
+        try
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            tokenHandler.ValidateToken(token, new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ClockSkew = TimeSpan.Zero
+            }, out SecurityToken validatedToken);
+
+            var jwtToken = (JwtSecurityToken)validatedToken;
+            var userEmail = jwtToken.Claims.First(x => x.Type == "user").Value;
+            return Ok(userEmail);
+        }
+        catch
+        {
+            return Unauthorized();
+        }
+    }
 }

@@ -10,11 +10,11 @@
 
     <ItemGroup>
       <Compile Remove="Exceptions\**" />
-      <Compile Remove="Persistence\Migrations\**" />
+      <Compile Remove="Contexts\Migrations\**" />
       <EmbeddedResource Remove="Exceptions\**" />
-      <EmbeddedResource Remove="Persistence\Migrations\**" />
+      <EmbeddedResource Remove="Contexts\Migrations\**" />
       <None Remove="Exceptions\**" />
-      <None Remove="Persistence\Migrations\**" />
+      <None Remove="Contexts\Migrations\**" />
     </ItemGroup>
 
     <ItemGroup>
@@ -31,7 +31,6 @@
 
     <ItemGroup>
       <Folder Include="Enums\" />
-      <Folder Include="Migrations\" />
     </ItemGroup>
 
 </Project>
