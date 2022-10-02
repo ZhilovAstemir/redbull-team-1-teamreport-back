@@ -33,5 +33,28 @@ public class ApplicationDbContext: DbContext
             entity.ToTable(nameof(Company));
             entity.HasKey(c => c.Id);
         });
+
+        modelBuilder.Entity<Leadership>(entity =>
+        {
+            entity.ToTable(nameof(Leadership));
+            entity.HasKey(c => c.Id);
+            entity.HasMany(entity => entity.Members).WithMany(el => el.Leaderships);
+            entity.HasMany(entity => entity.Leaders).WithMany(el => el.Memberships);
+        });
+
+        modelBuilder.Entity<Report>(entity =>
+        {
+            entity.ToTable(nameof(Report));
+            entity.HasKey(r => r.Id);
+            entity.HasOne(entity => entity.Week).WithMany(w => w.Reports);
+            entity.HasOne(entity => entity.Member).WithMany(m => m.Reports);
+        });
+
+        modelBuilder.Entity<Week>(entity =>
+        {
+            entity.ToTable(nameof(Week));
+            entity.HasKey(r => r.Id);
+        });
+
     }
 }

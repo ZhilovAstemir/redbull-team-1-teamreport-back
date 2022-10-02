@@ -4,7 +4,6 @@ using redbull_team_1_teamreport_back.Domain.Repositories;
 using redbull_team_1_teamreport_back.Domain.Repositories.Interfaces;
 using TeamReport.Domain.Services;
 using TeamReport.Domain.Services.Interfaces;
-using FluentValidation;
 using FluentValidation.AspNetCore;
 using TeamReport.WebAPI.Models.Requests;
 using TeamReport.WebAPI.Validators;
