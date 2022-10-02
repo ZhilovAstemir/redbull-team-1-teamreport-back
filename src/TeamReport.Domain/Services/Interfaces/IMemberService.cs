@@ -3,5 +3,5 @@
 namespace TeamReport.Domain.Services.Interfaces;
 public interface IMemberService
 {
-    public int AddMember(MemberModel member);
+    public Task<int> AddMember(MemberModel member);
 }

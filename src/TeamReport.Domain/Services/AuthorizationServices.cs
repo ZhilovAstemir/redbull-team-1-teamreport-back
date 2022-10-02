@@ -20,10 +20,14 @@ public class AuthorizationServices: IAuthorizationServices
         _mapper = mapper;
     }
 
-    public MemberModel GetUserForLogin(string email, string password)
+    public async Task<MemberModel> GetUserForLogin(string email, string password)
     {
-        var member = _memberRepository.GetMemberByEmail(email);
+        var member = await _memberRepository.GetMemberByEmail(email);
 
+        if(member is null)
+        {
+            throw new EntityNotFoundException("Member not found");
+        }
         if (!PasswordHash.ValidatePassword(password, member.Password))
         {
             throw new EntityNotFoundException("Invalid  password");
@@ -32,7 +36,7 @@ public class AuthorizationServices: IAuthorizationServices
         return _mapper.Map<MemberModel>(member);
     }
 
-    public string GetToken(MemberModel member)
+    public async Task<string> GetToken(MemberModel member)
     {
         if (member is null || member.Email is null)
         {

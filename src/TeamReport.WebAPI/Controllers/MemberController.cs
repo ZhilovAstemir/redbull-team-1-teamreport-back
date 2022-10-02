@@ -26,9 +26,9 @@ public class MemberController : Controller
     [HttpPost]
     [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-    public ActionResult AddClient([FromBody] MemberRegistrationRequest member)
+    public async Task<ActionResult<int>> AddClient([FromBody] MemberRegistrationRequest member)
     {
-        var id = _memberService.AddMember(_mapper.Map<MemberModel>(member));
+        var id = await _memberService.AddMember(_mapper.Map<MemberModel>(member));
         return Created($"{this.GetRequestPath()}/{id}", id);
     }
 }
