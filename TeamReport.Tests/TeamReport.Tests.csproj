@@ -30,6 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\src\TeamReport.Data\TeamReport.Data.csproj" />
     <ProjectReference Include="..\src\TeamReport.Domain\TeamReport.Domain.csproj" />
     <ProjectReference Include="..\src\TeamReport.WebAPI\TeamReport.WebAPI.csproj" />
   </ItemGroup>
