@@ -16,7 +16,7 @@ public class MemberService: IMemberService
         _mapper = mapper;
     }
 
-    public int AddMember(MemberModel member)
+    public Task<int> AddMember(MemberModel member)
     {
 
         member.Password = PasswordHash.HashPassword(member.Password);
