@@ -11,4 +11,8 @@
     <ProjectReference Include="..\TeamReport.Data\TeamReport.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Mappers\" />
+  </ItemGroup>
+
 </Project>

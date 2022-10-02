@@ -26,11 +26,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TeamReport.Domain\TeamReport.Domain.csproj" />
+    <Folder Include="Models\Responses\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Helpers\" />
+    <ProjectReference Include="..\TeamReport.Domain\TeamReport.Domain.csproj" />
   </ItemGroup>
 
 </Project>
