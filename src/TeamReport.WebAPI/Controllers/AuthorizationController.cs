@@ -16,10 +16,14 @@ public class AuthorizationController : Controller
     }
 
     [HttpPost]
-    public async Task<string> Login([FromBody] LoginRequest request)
+    public async Task<ActionResult<string>> Login([FromBody] LoginRequest request)
     {
         var user = await _authService.GetUserForLogin(request.Email, request.Password);
+        if(user == null)
+        {
+            return NotFound();
+        }
 
-        return await _authService.GetToken(user);
+        return Ok(await _authService.GetToken(user));
     }
 }
