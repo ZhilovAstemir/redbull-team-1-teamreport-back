@@ -1,7 +1,7 @@
 using FluentValidation;
 using TeamReport.Domain.Models.Requests;
 
-namespace TeamReport.WebAPI.Validators;
+namespace TeamReport.Domain.Validators;
 
 public class LoginValidator: AbstractValidator<LoginRequest>
 {

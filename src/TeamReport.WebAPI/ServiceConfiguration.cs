@@ -7,8 +7,8 @@ using redbull_team_1_teamreport_back.Data.Repositories.Interfaces;
 using TeamReport.Domain.Models.Requests;
 using TeamReport.Domain.Services;
 using TeamReport.Domain.Services.Interfaces;
+using TeamReport.Domain.Validators;
 using TeamReport.WebAPI;
-using TeamReport.WebAPI.Validators;
 
 namespace TeamReport.WebAPI;
 
@@ -63,6 +63,7 @@ public static class ServiceConfiguration
         services.AddFluentValidationAutoValidation(config => config.DisableDataAnnotationsValidation = true);
 
         services.AddScoped<IValidator<LoginRequest>, LoginValidator>();
+        services.AddScoped<IValidator<MemberRegistrationRequest>, MemberRegistrationValidator>();
     }
 
 }

@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using TeamReport.Domain.Models.Requests;
-using TeamReport.WebAPI.Validators;
+using TeamReport.Domain.Validators;
 
 namespace TeamReport.WebAPI.Tests.Validators;
 
