@@ -4,13 +4,14 @@ using redbull_team_1_teamreport_back.Data.Entities;
 using TeamReport.Domain.Mappers;
 using TeamReport.Domain.Models;
 using TeamReport.Domain.Models.Requests;
+using TeamReport.WebAPI.MapperStorage;
 
 namespace TeamReport.Domain.Tests.Mappers;
 
-public class MapperProfileTest
+public class MapperDomainTest
 {
     private readonly MapperTestFixture _fixture;
-    public MapperProfileTest()
+    public MapperDomainTest()
     {
         _fixture = new MapperTestFixture();
     }
@@ -48,19 +49,5 @@ public class MapperProfileTest
         memberModel.Password.Should().Be(member.Password);
     }
 
-    [Fact]
-    public void ShouldMapMemberRegistrationRequestToMemberModel()
-    {
-        var config = new MapperConfiguration(cfg => cfg.AddProfile<MapperDomain>());
-        var mapper = config.CreateMapper();
 
-        var registrationRequest = _fixture.GetMemberRegistrationRequest();
-        var memberModel = mapper.Map<MemberRegistrationRequest, MemberModel>(registrationRequest);
-
-        memberModel.Password.Should().Be(registrationRequest.Password);
-        memberModel.Email.Should().Be(registrationRequest.Email);
-        memberModel.FirstName.Should().Be(registrationRequest.FirstName);
-        memberModel.LastName.Should().Be(registrationRequest.LastName);
-        memberModel.Title.Should().Be(registrationRequest.Title);
-    }
 }
