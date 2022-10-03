@@ -1,7 +1,13 @@
+<<<<<<< HEAD
 ﻿using FluentValidation;
 using Microsoft.OpenApi.Models;
+using redbull_team_1_teamreport_back.Domain.Repositories;
+using redbull_team_1_teamreport_back.Domain.Repositories.Interfaces;
+=======
+﻿using Microsoft.OpenApi.Models;
 using redbull_team_1_teamreport_back.Data.Repositories;
 using redbull_team_1_teamreport_back.Data.Repositories.Interfaces;
+>>>>>>> upstream/master
 using TeamReport.Domain.Services;
 using TeamReport.Domain.Services.Interfaces;
 using FluentValidation.AspNetCore;
@@ -19,7 +25,7 @@ public static class ServiceCollectionsExtensions
 
     public static void AddDomainServices(this IServiceCollection services)
     {
-        services.AddScoped<IAuthorizationServices, AuthorizationServices>();
+        services.AddScoped<IAuthorizationService, AuthorizationService>();
         services.AddScoped<IMemberService, MemberService>();
     }
 

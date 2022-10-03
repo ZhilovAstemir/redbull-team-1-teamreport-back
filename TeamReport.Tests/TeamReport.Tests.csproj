@@ -9,10 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentAssertions" Version="6.7.0" />
+    <PackageReference Include="AutoMapper" Version="12.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.9" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
     <PackageReference Include="Moq" Version="4.18.2" />
-    <PackageReference Include="Respawn" Version="5.0.1" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -25,7 +25,22 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\TeamReport.WebAPI\TeamReport.WebAPI.csproj" />
+<<<<<<<< HEAD:TeamReport.Tests/TeamReport.Tests.csproj
+    <Folder Include="TeamReport.Data.Tests\" />
+    <Folder Include="TeamReport.Domain.Tests\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\src\TeamReport.Data\TeamReport.Data.csproj" />
+    <ProjectReference Include="..\src\TeamReport.Domain\TeamReport.Domain.csproj" />
+    <ProjectReference Include="..\src\TeamReport.WebAPI\TeamReport.WebAPI.csproj" />
+========
+    <Folder Include="Repositories\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\TeamReport.Data\TeamReport.Data.csproj" />
+>>>>>>>> upstream/master:tests/Data.Tests/Data.Tests.csproj
   </ItemGroup>
 
 </Project>

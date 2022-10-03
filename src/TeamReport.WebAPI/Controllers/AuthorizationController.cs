@@ -5,7 +5,6 @@ using TeamReport.Domain.Models;
 using TeamReport.Domain.Services.Interfaces;
 using TeamReport.WebAPI.Extensions;
 using TeamReport.WebAPI.Models.Requests;
-using IAuthorizationService = TeamReport.Domain.Services.Interfaces.IAuthorizationService;
 
 namespace TeamReport.WebAPI.Controllers;
 
@@ -14,35 +13,25 @@ namespace TeamReport.WebAPI.Controllers;
 [Route("api/auth")]
 public class AuthorizationController : ControllerBase
 {
-    private readonly IAuthorizationService _authService;
+    private readonly IAuthorizationServices _authService;
     private readonly IMapper _mapper;
 
-    public AuthorizationController(IAuthorizationService authService, IMapper mapper)
+    public AuthorizationController(IAuthorizationServices authService, IMapper mapper)
     {
         _authService = authService;
         _mapper = mapper;
     }
 
     [HttpPost]
-    [Route("login")]
-    public string Login([FromBody] LoginRequest request)
+    public async Task<ActionResult<string>> Login([FromBody] LoginRequest request)
     {
-        var user = _authService.Login(request.Email, request.Password);
+        var user = await _authService.GetUserForLogin(request.Email, request.Password);
+        if(user == null)
+        {
+            return NotFound();
+        }
 
-        return _authService.GetToken(user);
-    }
-    
-    [HttpPost]
-    [Route("register")]
-    [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-    public ActionResult Register([FromBody] MemberRegistrationRequest member)
-    {
-        var memberModel = _mapper.Map<MemberRegistrationRequest, MemberModel>(member);
-
-        var id = _authService.Register(memberModel);
-        
-        return Ok(id);
+        return Ok(await _authService.GetToken(user));
     }
 
 }

@@ -12,25 +12,26 @@ using TeamReport.Domain.Services.Interfaces;
 
 namespace TeamReport.Domain.Services;
 
-public class AuthorizationService: IAuthorizationService
+public class AuthorizationServices: IAuthorizationServices
 {
     public readonly IMemberRepository _memberRepository;
     public readonly IMapper _mapper;
 
-    public AuthorizationService(IMemberRepository memberRepository, IMapper mapper)
+    public AuthorizationServices(IMemberRepository memberRepository, IMapper mapper)
     {
         _memberRepository = memberRepository;
         _mapper = mapper;
     }
 
-    public MemberModel Login(string email, string password)
+    public async Task<MemberModel> GetUserForLogin(string email, string password)
     {
-        var member = _memberRepository.GetByEmail(email);
-        if (member == null)
+        var member = await _memberRepository.GetMemberByEmail(email);
+
+        if(member is null)
         {
-            throw new EntityNotFoundException("Invalid creditals");
+            throw new EntityNotFoundException("Member not found");
         }
-        if (!PasswordHash.ValidatePassword(password,member.Password))
+        if (!PasswordHash.ValidatePassword(password, member.Password))
         {
             throw new EntityNotFoundException("Invalid creditals");
         }
@@ -38,7 +39,7 @@ public class AuthorizationService: IAuthorizationService
     }
 
 
-    public string GetToken(MemberModel member)
+    public async Task<string> GetToken(MemberModel member)
     {
         if (member is null || member.Email is null)
         {
@@ -54,10 +55,5 @@ public class AuthorizationService: IAuthorizationService
         return new JwtSecurityTokenHandler().WriteToken(jwt);
     }
 
-    public int Register(MemberModel memberModel)
-    {
-        var member = _mapper.Map<MemberModel, Member>(memberModel);
-
-        return _memberRepository.Add(member);
-    }
+    
 }

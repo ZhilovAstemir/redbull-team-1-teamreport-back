@@ -1,10 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TeamReport.Domain.Models;
 using TeamReport.Domain.Services.Interfaces;
-using TeamReport.WebAPI.Extensions;
-using TeamReport.WebAPI.Models.Requests;
 
 namespace TeamReport.WebAPI.Controllers;
 
@@ -23,6 +20,7 @@ public class MemberController : ControllerBase
         _mapper = mapper;
     }
 
+<<<<<<< HEAD
     [AllowAnonymous]
     [HttpPost]
     [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
@@ -31,11 +29,11 @@ public class MemberController : ControllerBase
     {
         var id = await _memberService.AddMember(_mapper.Map<MemberModel>(member));
         return Created($"{this.GetRequestPath()}/{id}", id);
-    }
-
+=======
     [HttpGet]
     public IActionResult GetAll()
     {
         return Ok(_memberService.GetAllMembers());
+>>>>>>> upstream/master
     }
 }
