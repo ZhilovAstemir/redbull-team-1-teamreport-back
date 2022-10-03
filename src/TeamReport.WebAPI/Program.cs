@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using redbull_team_1_teamreport_back.Data.Identity;
 using redbull_team_1_teamreport_back.Data.Persistence;
+using TeamReport.Domain.Infrastructures;
 using TeamReport.Domain.Mappers;
 using TeamReport.WebAPI;
 using TeamReport.WebAPI.Helpers;
@@ -37,7 +38,6 @@ builder.Services
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-
 builder.Services.AddDbContext<ApplicationDbContext>(o =>
 {
     o.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -50,6 +50,8 @@ builder.Services.AddDataRepositories();
 builder.Services.AddDomainServices();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(MapperDomain), typeof(MapperAPI));
+builder.Services.Configure<EmailConfiguration>(builder.Configuration);
+//builder.Services.D(builder.Configuration);
 
 
 var app = builder.Build();

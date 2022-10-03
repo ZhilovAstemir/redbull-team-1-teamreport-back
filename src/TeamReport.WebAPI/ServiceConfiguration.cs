@@ -1,9 +1,11 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.OpenApi.Models;
 using redbull_team_1_teamreport_back.Data.Repositories;
 using redbull_team_1_teamreport_back.Data.Repositories.Interfaces;
+using TeamReport.Domain.Infrastructures;
 using TeamReport.Domain.Models.Requests;
 using TeamReport.Domain.Services;
 using TeamReport.Domain.Services.Interfaces;
@@ -23,6 +25,7 @@ public static class ServiceConfiguration
     {
         services.AddScoped<IMemberService, MemberService>();
         services.AddScoped<ITeamService, TeamService>();
+        services.AddScoped<IEmailService, EmailService>();
     }
 
     public static void AddSwaggerGen(this IServiceCollection services)
@@ -63,6 +66,15 @@ public static class ServiceConfiguration
 
         services.AddScoped<IValidator<LoginRequest>, LoginValidator>();
         services.AddScoped<IValidator<MemberRegistrationRequest>, MemberRegistrationValidator>();
+
+    }
+
+    public static void D(this IServiceCollection services, IConfiguration configuration)
+    {
+        var emailConfig = configuration
+        .GetSection("EmailConfiguration")
+        .Get<EmailConfiguration>();
+        services.AddSingleton(emailConfig);
     }
 
 }

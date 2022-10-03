@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TeamReport.Domain.Models;
 using TeamReport.Domain.Models.Requests;
+using TeamReport.Domain.Services;
 using TeamReport.Domain.Services.Interfaces;
 
 namespace TeamReport.WebAPI.Controllers;
@@ -14,11 +15,13 @@ public class MemberController : ControllerBase
 {
     private readonly IMemberService _memberService;
     private readonly IMapper _mapper;
+    private readonly IEmailService _emailService;
 
-    public MemberController(IMemberService memberService, IMapper mapper)
+    public MemberController(IMemberService memberService, IMapper mapper, IEmailService emailService)
     {
         _memberService = memberService;
         _mapper = mapper;
+        _emailService = emailService;   
     }
 
     [HttpPost]
@@ -40,5 +43,12 @@ public class MemberController : ControllerBase
         var id = await _memberService.Register(memberModel);
         
         return Ok( await _memberService.GetToken(memberModel));
+    }
+
+    [HttpPost("invite")]
+    public async Task<IActionResult> InviteMember([FromBody] InviteMemberRequest request)
+    {
+        _emailService.InviteMember(request);
+        return Ok();
     }
 }
