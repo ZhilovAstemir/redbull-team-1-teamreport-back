@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using redbull_team_1_teamreport_back.Data.Entities;
 using redbull_team_1_teamreport_back.Data.Persistence;
 
 namespace TeamReport.Data.Tests.Repositories;
@@ -18,5 +19,10 @@ public class RepositoryTestFixture
     {
         context.Database.EnsureDeleted();
         context.SaveChanges();
+    }
+
+    public Company GetCompany()
+    {
+        return new Company() { Id = 1, Name = "CompanyName" };
     }
 }

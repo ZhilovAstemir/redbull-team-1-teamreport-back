@@ -1,7 +1,9 @@
 ﻿<SolutionConfiguration>
   <Settings>
     <AllowParallelTestExecution>True</AllowParallelTestExecution>
-    <MetricsExclusionList />
+    <MetricsExclusionList>
+      <Value>src\TeamReport.Data\TeamReport.Data.csproj\Migrations</Value>
+    </MetricsExclusionList>
     <SolutionConfigured>True</SolutionConfigured>
   </Settings>
 </SolutionConfiguration>
