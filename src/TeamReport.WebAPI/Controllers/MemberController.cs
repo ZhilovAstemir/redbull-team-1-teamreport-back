@@ -8,7 +8,6 @@ using TeamReport.Domain.Services.Interfaces;
 namespace TeamReport.WebAPI.Controllers;
 
 [ApiController]
-[Authorize]
 [Produces("application/json")]
 [Route("api/members")]
 public class MemberController : ControllerBase
@@ -41,11 +40,5 @@ public class MemberController : ControllerBase
         var id = await _memberService.Register(memberModel);
         
         return Ok( await _memberService.GetToken(memberModel));
-    }
-
-    [HttpGet]
-    public async Task<IActionResult> GetAll()
-    {
-        return Ok( await _memberService.GetAll());
     }
 }

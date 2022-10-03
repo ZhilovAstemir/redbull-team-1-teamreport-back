@@ -6,6 +6,7 @@ using redbull_team_1_teamreport_back.Data.Identity;
 using redbull_team_1_teamreport_back.Data.Persistence;
 using TeamReport.Domain.Mappers;
 using TeamReport.WebAPI;
+using TeamReport.WebAPI.Helpers;
 using TeamReport.WebAPI.MapperStorage;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -36,8 +37,6 @@ builder.Services
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-//builder.Services.AddIdentityServer()
-//    .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(o =>
 {
@@ -45,6 +44,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(o =>
 
 });
 
+builder.Services.AddCors();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDataRepositories();
 builder.Services.AddDomainServices();
@@ -60,6 +60,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<JwtMiddleware>();
 
 app.UseHttpsRedirection();
 
