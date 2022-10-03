@@ -22,14 +22,25 @@ public class MemberController : ControllerBase
         _mapper = mapper;
     }
 
-    [AllowAnonymous]
     [HttpPost]
+    [Route("login")]
+    public async Task<IActionResult> Login([FromBody] LoginRequest request)
+    {
+        var user = await _memberService.Login(request.Email, request.Password);
+        return Ok( await _memberService.GetToken(user));
+    }
+    
+    [HttpPost]
+    [Route("register")]
     [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-    public async Task<IActionResult> AddClient([FromBody] MemberRegistrationRequest member)
+    public async Task<IActionResult> Register([FromBody] MemberRegistrationRequest member)
     {
-        var id = await _memberService.AddMember(_mapper.Map<MemberModel>(member));
-        return Ok(id);
+        var memberModel = _mapper.Map<MemberRegistrationRequest, MemberModel>(member);
+
+        var id = await _memberService.Register(memberModel);
+        
+        return Ok( await _memberService.GetToken(memberModel));
     }
 
     [HttpGet]

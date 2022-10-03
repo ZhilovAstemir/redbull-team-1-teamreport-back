@@ -20,7 +20,7 @@ public class AuthorizationServiceTest
     [Fact]
     public void ShouldBeAbleToCreateAuthorizationService()
     {
-        var service = new AuthorizationService(_fixture.GetMemberRepositoryMock().Object, _fixture.GetMapperDomainMock().Object);
+        var service = new MemberService(_fixture.GetMemberRepositoryMock().Object, _fixture.GetMapperDomainMock().Object);
         service.Should().NotBeNull();
     }
 
@@ -29,11 +29,11 @@ public class AuthorizationServiceTest
     {
         _fixture.ClearDatabase();
 
-        var service = new AuthorizationService(_fixture.GetMemberRepositoryMock().Object, _fixture.GetMapperDomainMock().Object);
+        var service = new MemberService(_fixture.GetMemberRepositoryMock().Object, _fixture.GetMapperDomainMock().Object);
 
         var memberModel = _fixture.GetMemberModel();
 
-        (await service.Register(memberModel)).Should().BeOfType(typeof(int));
+        (await service.Register(memberModel)).Should().BeOfType(typeof(Member));
     }
 
     [Fact]
@@ -41,7 +41,7 @@ public class AuthorizationServiceTest
     {
         _fixture.ClearDatabase();
 
-        var service = new AuthorizationService(_fixture.GetMemberRepositoryMock().Object, _fixture.GetMapperDomainMock().Object);
+        var service = new MemberService(_fixture.GetMemberRepositoryMock().Object, _fixture.GetMapperDomainMock().Object);
 
         var memberModel = _fixture.GetMemberModel();
 
@@ -56,7 +56,7 @@ public class AuthorizationServiceTest
         var repository = _fixture.GetMemberRepositoryMock();
         repository.Setup(x => x.ReadByEmail(It.IsAny<string>())).Returns(Task.FromResult((Member?)null));
 
-        var service = new AuthorizationService(repository.Object, _fixture.GetMapperDomainMock().Object);
+        var service = new MemberService(repository.Object, _fixture.GetMapperDomainMock().Object);
 
         var memberModel = _fixture.GetMemberModel();
 
@@ -71,7 +71,7 @@ public class AuthorizationServiceTest
 
         var repository = _fixture.GetMemberRepositoryMock();
 
-        var service = new AuthorizationService(repository.Object, _fixture.GetMapperDomainMock().Object);
+        var service = new MemberService(repository.Object, _fixture.GetMapperDomainMock().Object);
 
         var memberModel = _fixture.GetMemberModel();
         memberModel.Password = "newwrongpass";
@@ -88,7 +88,7 @@ public class AuthorizationServiceTest
 
         var repository = _fixture.GetMemberRepositoryMock();
 
-        var service = new AuthorizationService(repository.Object, _fixture.GetMapperDomainMock().Object);
+        var service = new MemberService(repository.Object, _fixture.GetMapperDomainMock().Object);
 
         var memberModel = _fixture.GetMemberModel();
         memberModel.Email = null;

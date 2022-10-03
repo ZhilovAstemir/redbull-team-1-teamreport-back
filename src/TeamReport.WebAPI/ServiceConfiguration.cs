@@ -21,7 +21,7 @@ public static class ServiceConfiguration
 
     public static void AddDomainServices(this IServiceCollection services)
     {
-        services.AddScoped<IAuthorizationService, AuthorizationService>();
+        services.AddScoped<IMemberService, MemberService>();
         services.AddScoped<ITeamService, TeamService>();
     }
 

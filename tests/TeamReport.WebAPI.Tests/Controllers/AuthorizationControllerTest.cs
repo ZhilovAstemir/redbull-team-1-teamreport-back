@@ -11,18 +11,18 @@ namespace TeamReport.WebAPI.Tests.Controllers;
 public class AuthorizationControllerTest
 {
     private readonly ControllerTestFixture _fixture;
-    private readonly IAuthorizationService _authService;
+    private readonly IMemberService _service;
 
     public AuthorizationControllerTest()
     {
         _fixture = new ControllerTestFixture();
-        _authService = new AuthorizationService(new MemberRepository(_fixture.GetContext()), _fixture.GetMapperMock());
+        _service = new MemberService(new MemberRepository(_fixture.GetContext()), _fixture.GetMapperMock());
     }
 
     [Fact]
     public void ShouldBeAbleToCreateAuthorizationController()
     {
-        var controller = new AuthorizationController(_authService, _fixture.GetMapperMock());
+        var controller = new MemberController(_service, _fixture.GetMapperMock());
         controller.Should().NotBeNull();
     }
 
@@ -31,7 +31,7 @@ public class AuthorizationControllerTest
     {
         _fixture.ClearDatabase();
 
-        var controller = new AuthorizationController(_authService, _fixture.GetMapperMock());
+        var controller = new MemberController(_service, _fixture.GetMapperMock());
         var request = _fixture.GetMemberRegistrationRequest();
         var response=await controller.Register(request);
 
@@ -44,7 +44,7 @@ public class AuthorizationControllerTest
     {
         _fixture.ClearDatabase();
 
-        var controller = new AuthorizationController(_authService, _fixture.GetMapperMock());
+        var controller = new MemberController(_service, _fixture.GetMapperMock());
 
         var memberRegistrationRequest = _fixture.GetMemberRegistrationRequest();
         var registerResponse=await controller.Register(memberRegistrationRequest);

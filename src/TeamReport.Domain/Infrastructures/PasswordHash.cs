@@ -1,6 +1,6 @@
 ﻿using System.Security.Cryptography;
 
-namespace TeamReport.Domain;
+namespace TeamReport.Domain.Infrastructures;
 public class PasswordHash
 {
     public const int SaltByteSize = 24;
@@ -17,7 +17,7 @@ public class PasswordHash
         cryptoProvider.GetBytes(salt);
 
         var hash = GetPbkdf2Bytes(password, salt, Pbkdf2Iterations, HashByteSize);
-        return $"{Pbkdf2Iterations}:{ Convert.ToBase64String(salt)}:{Convert.ToBase64String(hash)}";
+        return $"{Pbkdf2Iterations}:{Convert.ToBase64String(salt)}:{Convert.ToBase64String(hash)}";
     }
 
     public static bool ValidatePassword(string password, string correctHash)

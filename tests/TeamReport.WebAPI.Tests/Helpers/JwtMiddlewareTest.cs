@@ -42,7 +42,7 @@ public class JwtMiddlewareTest
         var memberRepository = new MemberRepository(_fixture.GetContext());
         var member =await memberRepository.Create(_fixture.GetMember());
         var mapper = _fixture.GetMapper();
-        var authService = new AuthorizationService(memberRepository, mapper);
+        var authService = new MemberService(memberRepository, mapper);
         
 
         httpContext.Request.Headers.Add("Authorization",await authService.GetToken(mapper.Map<Member,MemberModel>(member)));
@@ -61,7 +61,7 @@ public class JwtMiddlewareTest
         var memberRepository = new MemberRepository(_fixture.GetContext());
         var member = memberRepository.Create(_fixture.GetMember());
         var mapper = _fixture.GetMapper();
-        var authService = new AuthorizationService(memberRepository, mapper);
+        var authService = new MemberService(memberRepository, mapper);
         
 
         httpContext.Request.Headers.Add("Authorization","2012347192740912oaisfhoiahsdfoi");

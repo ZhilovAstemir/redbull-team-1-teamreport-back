@@ -1,7 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
-using TeamReport.Domain.Auth;
 using TeamReport.Domain.Exceptions;
+using TeamReport.Domain.Infrastructures;
 using TeamReport.Domain.Services.Interfaces;
 
 namespace TeamReport.WebAPI.Helpers;

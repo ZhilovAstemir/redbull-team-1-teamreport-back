@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Moq;
 using redbull_team_1_teamreport_back.Data.Entities;
 using redbull_team_1_teamreport_back.Data.Persistence;
-using redbull_team_1_teamreport_back.Data.Repositories;
 using redbull_team_1_teamreport_back.Data.Repositories.Interfaces;
-using TeamReport.Domain.Auth;
+using TeamReport.Domain.Infrastructures;
 using TeamReport.Domain.Models;
 
 namespace TeamReport.Domain.Tests.Services;

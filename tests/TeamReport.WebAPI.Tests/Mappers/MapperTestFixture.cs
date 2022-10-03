@@ -1,10 +1,6 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Builder;
-using redbull_team_1_teamreport_back.Data.Entities;
-using TeamReport.Domain.Auth;
-using TeamReport.Domain.Mappers;
+﻿using redbull_team_1_teamreport_back.Data.Entities;
 using TeamReport.Domain.Models;
-using Microsoft.Extensions.DependencyInjection;
+using TeamReport.Domain.Infrastructures;
 using TeamReport.Domain.Models.Requests;
 
 namespace TeamReport.Domain.Tests.Mappers;
@@ -20,15 +16,6 @@ public class MapperTestFixture
             FirstName = "FirstName",
             LastName = "LastName",
             Title = "Title"
-        };
-    }
-
-    public MemberModel GetMemberModel()
-    {
-        return new MemberModel()
-        {
-            Email = "email@email.com",
-            Password = "password",
         };
     }
 

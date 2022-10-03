@@ -4,7 +4,7 @@ using Moq;
 using redbull_team_1_teamreport_back.Data.Entities;
 using redbull_team_1_teamreport_back.Data.Persistence;
 using Respawn;
-using TeamReport.Domain.Auth;
+using TeamReport.Domain.Infrastructures;
 using TeamReport.Domain.Models;
 using TeamReport.Domain.Models.Requests;
 using TeamReport.Domain.Services.Interfaces;
