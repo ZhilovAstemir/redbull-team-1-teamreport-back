@@ -4,8 +4,7 @@ using redbull_team_1_teamreport_back.Data.Persistence;
 using redbull_team_1_teamreport_back.Data.Repositories.Interfaces;
 
 namespace redbull_team_1_teamreport_back.Data.Repositories;
-
-public class MemberRepository : IMemberRepository
+public class MemberRepository: IMemberRepository
 {
     private readonly ApplicationDbContext _context;
 

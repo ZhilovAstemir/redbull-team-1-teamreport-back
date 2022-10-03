@@ -1,11 +1,7 @@
 ﻿<SolutionConfiguration>
   <Settings>
     <AllowParallelTestExecution>True</AllowParallelTestExecution>
-    <MetricsExclusionList>
-      <Value>src\TeamReport.Data\TeamReport.Data.csproj\Migrations</Value>
-      <Value>Program.cs:src\TeamReport.WebAPI\TeamReport.WebAPI.csproj</Value>
-      <Value>ServiceConfiguration.cs:src\TeamReport.WebAPI\TeamReport.WebAPI.csproj</Value>
-    </MetricsExclusionList>
+    <MetricsExclusionList />
     <SolutionConfigured>True</SolutionConfigured>
   </Settings>
 </SolutionConfiguration>

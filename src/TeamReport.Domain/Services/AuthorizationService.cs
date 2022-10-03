@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.IdentityModel.Tokens;
 using redbull_team_1_teamreport_back.Data.Entities;
 using redbull_team_1_teamreport_back.Data.Repositories.Interfaces;
-using TeamReport.Domain.Auth;
 using TeamReport.Domain.Exceptions;
+using TeamReport.Domain.Infrastructures;
 using TeamReport.Domain.Models;
 using TeamReport.Domain.Services.Interfaces;
 
@@ -28,11 +28,11 @@ public class AuthorizationService: IAuthorizationService
         var member = await _memberRepository.ReadByEmail(email);
         if (member == null)
         {
-            throw new InvalidCreditalsException();
+            throw new EntityNotFoundException("Member not found");
         }
-        if (!PasswordHash.ValidatePassword(password,member.Password))
+        if (!PasswordHash.ValidatePassword(password, member.Password))
         {
-            throw new InvalidCreditalsException();
+            throw new EntityNotFoundException("Invalid creditals");
         }
         return _mapper.Map<Member,MemberModel>(member);
     }
@@ -46,13 +46,11 @@ public class AuthorizationService: IAuthorizationService
         }
 
         var jwt = new JwtSecurityToken(
-            issuer: AuthOptions.Issuer,
-            audience: AuthOptions.Audience,
-            expires: DateTime.UtcNow.Add(TimeSpan.FromDays(7)),
-            signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(),
-                SecurityAlgorithms.HmacSha256),
-            claims:new List<Claim>(){new Claim("user",member.Id.ToString())}
-            );
+                issuer: AuthOptions.Issuer,
+                audience: AuthOptions.Audience,
+                expires: DateTime.UtcNow.Add(TimeSpan.FromDays(1)),
+                signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256),
+                claims:new List<Claim>(){new Claim("user",member.Id.ToString())});
 
         return new JwtSecurityTokenHandler().WriteToken(jwt);
     }

@@ -7,11 +7,7 @@ using redbull_team_1_teamreport_back.Data.Repositories.Interfaces;
 using TeamReport.Domain.Models.Requests;
 using TeamReport.Domain.Services;
 using TeamReport.Domain.Services.Interfaces;
-using FluentValidation.AspNetCore;
-using TeamReport.Domain.Models.Requests;
-using TeamReport.WebAPI.Validators;
 using TeamReport.Domain.Validators;
-using TeamReport.WebAPI;
 
 namespace TeamReport.WebAPI;
 

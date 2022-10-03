@@ -7,6 +7,7 @@ using TeamReport.Domain.Auth;
 using TeamReport.Domain.Mappers;
 using TeamReport.Domain.Models;
 using TeamReport.Domain.Models.Requests;
+using TeamReport.WebAPI.MapperStorage;
 
 namespace TeamReport.WebAPI.Tests.Helpers;
 
@@ -23,7 +24,7 @@ public class HelpersTestFixture
 
     public IMapper GetMapper()
     {
-        var config = new MapperConfiguration(cfg => cfg.AddProfile<MapperProfile>());
+        var config = new MapperConfiguration(cfg => cfg.AddProfiles(new List<Profile>(){new MapperDomain(),new MapperAPI()}));
         return config.CreateMapper();
     }
     

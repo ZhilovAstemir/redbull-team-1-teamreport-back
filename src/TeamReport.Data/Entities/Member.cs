@@ -9,7 +9,4 @@ public class Member
     public string Email { get; set; }
     public string Password { get; set; }
     public Company? Company { get; set; }
-    public List<Leadership> Leaderships { get; set; }
-    public List<Leadership> Memberships { get; set; }
-    public List<Report> Reports { get; set; }
 }

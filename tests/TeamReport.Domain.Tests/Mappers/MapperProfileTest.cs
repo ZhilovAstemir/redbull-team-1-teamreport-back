@@ -18,7 +18,7 @@ public class MapperProfileTest
     [Fact]
     public void ShouldMapMemberToMemberModel()
     {
-        var config = new MapperConfiguration(cfg => cfg.AddProfile<MapperProfile>());
+        var config = new MapperConfiguration(cfg => cfg.AddProfile<MapperDomain>());
         var mapper = config.CreateMapper();
 
         var member = _fixture.GetMember();
@@ -34,7 +34,7 @@ public class MapperProfileTest
     [Fact]
     public void ShouldMapMemberModelToMember()
     {
-        var config = new MapperConfiguration(cfg => cfg.AddProfile<MapperProfile>());
+        var config = new MapperConfiguration(cfg => cfg.AddProfile<MapperDomain>());
         var mapper = config.CreateMapper();
 
         var memberModel = _fixture.GetMemberModel();
@@ -51,7 +51,7 @@ public class MapperProfileTest
     [Fact]
     public void ShouldMapMemberRegistrationRequestToMemberModel()
     {
-        var config = new MapperConfiguration(cfg => cfg.AddProfile<MapperProfile>());
+        var config = new MapperConfiguration(cfg => cfg.AddProfile<MapperDomain>());
         var mapper = config.CreateMapper();
 
         var registrationRequest = _fixture.GetMemberRegistrationRequest();

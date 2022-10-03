@@ -3,14 +3,12 @@ using redbull_team_1_teamreport_back.Data.Entities;
 using TeamReport.Domain.Models;
 using TeamReport.Domain.Models.Requests;
 
-namespace TeamReport.Domain.Mappers;
+namespace TeamReport.WebAPI.MapperStorage;
 
-public class MapperProfile: Profile
+public class MapperAPI: Profile
 {
-    public MapperProfile()
+   public MapperAPI()
     {
-        CreateMap<Member, MemberModel>().ReverseMap();
         CreateMap<MemberRegistrationRequest, MemberModel>();
     }
 }
-

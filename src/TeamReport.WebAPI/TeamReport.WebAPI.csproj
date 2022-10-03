@@ -29,11 +29,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TeamReport.Domain\TeamReport.Domain.csproj" />
+    <Folder Include="Helpers\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Helpers\" />
+    <ProjectReference Include="..\TeamReport.Domain\TeamReport.Domain.csproj" />
   </ItemGroup>
 
 </Project>
