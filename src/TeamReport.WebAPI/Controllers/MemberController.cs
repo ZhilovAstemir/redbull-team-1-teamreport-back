@@ -1,17 +1,15 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TeamReport.Domain.Models;
 using TeamReport.Domain.Services.Interfaces;
-using TeamReport.WebAPI.Extensions;
-using TeamReport.WebAPI.Models.Requests;
 
 namespace TeamReport.WebAPI.Controllers;
+
 [ApiController]
 [Authorize]
 [Produces("application/json")]
-[Route("[controller]")]
-public class MemberController : Controller
+[Route("api/members")]
+public class MemberController : ControllerBase
 {
     private readonly IMemberService _memberService;
     private readonly IMapper _mapper;
@@ -30,5 +28,11 @@ public class MemberController : Controller
     {
         var id = await _memberService.AddMember(_mapper.Map<MemberModel>(member));
         return Created($"{this.GetRequestPath()}/{id}", id);
+    }
+
+    [HttpGet]
+    public IActionResult GetAll()
+    {
+        return Ok(_memberService.GetAllMembers());
     }
 }

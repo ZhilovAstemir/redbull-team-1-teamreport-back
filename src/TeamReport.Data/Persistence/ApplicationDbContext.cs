@@ -1,18 +1,12 @@
-﻿using Duende.IdentityServer.EntityFramework.Options;
-using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using redbull_team_1_teamreport_back.Domain.Entities;
-using redbull_team_1_teamreport_back.Domain.Identity;
+﻿using Microsoft.EntityFrameworkCore;
+using redbull_team_1_teamreport_back.Data.Entities;
 
-namespace redbull_team_1_teamreport_back.Domain.Persistence;
+namespace redbull_team_1_teamreport_back.Data.Persistence;
 
 public class ApplicationDbContext: DbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> option)
-        : base(option)
-    {
-    }
+        : base(option) { }
 
     public DbSet<Company> Companies { get; set; }
     public DbSet<Member> Members { get; set; } 

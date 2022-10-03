@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[Member] (
+﻿CREATE TABLE [dbo].[Members] (
     [Id]        INT            IDENTITY (1, 1) NOT NULL,
     [FirstName] NVARCHAR (MAX) NOT NULL,
     [LastName]  NVARCHAR (MAX) NOT NULL,
@@ -6,12 +6,12 @@
     [Email]     NVARCHAR (MAX) NOT NULL,
     [Password]  NVARCHAR (MAX) NOT NULL,
     [CompanyId] INT            NULL,
-    CONSTRAINT [PK_Member] PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_Member_Company_CompanyId] FOREIGN KEY ([CompanyId]) REFERENCES [dbo].[Company] ([Id])
+    CONSTRAINT [PK_Members] PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [FK_Members_Companies_CompanyId] FOREIGN KEY ([CompanyId]) REFERENCES [dbo].[Companies] ([Id])
 );
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_Member_CompanyId]
-    ON [dbo].[Member]([CompanyId] ASC);
+CREATE NONCLUSTERED INDEX [IX_Members_CompanyId]
+    ON [dbo].[Members]([CompanyId] ASC);
 

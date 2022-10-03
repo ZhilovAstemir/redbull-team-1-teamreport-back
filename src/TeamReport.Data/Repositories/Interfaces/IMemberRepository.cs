@@ -1,6 +1,6 @@
-﻿using redbull_team_1_teamreport_back.Domain.Entities;
+﻿using redbull_team_1_teamreport_back.Data.Entities;
 
-namespace redbull_team_1_teamreport_back.Domain.Repositories.Interfaces;
+namespace redbull_team_1_teamreport_back.Data.Repositories.Interfaces;
 public interface IMemberRepository
 {
     public Task<Member?> GetMemberByEmail(string email);

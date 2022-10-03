@@ -2,8 +2,8 @@
 
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
-        <RootNamespace>redbull_team_1_teamreport_back.Domain</RootNamespace>
-        <AssemblyName>redbull_team_1_teamreport_back.Domain</AssemblyName>
+        <RootNamespace>redbull_team_1_teamreport_back.Data</RootNamespace>
+        <AssemblyName>redbull_team_1_teamreport_back.Data</AssemblyName>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>

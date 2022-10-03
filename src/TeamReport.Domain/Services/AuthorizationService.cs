@@ -1,7 +1,10 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using AutoMapper;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.IdentityModel.Tokens;
-using redbull_team_1_teamreport_back.Domain.Repositories.Interfaces;
+using redbull_team_1_teamreport_back.Data.Entities;
+using redbull_team_1_teamreport_back.Data.Repositories.Interfaces;
 using TeamReport.Domain.Exceptions;
 using TeamReport.Domain.Infrastructures;
 using TeamReport.Domain.Models;
@@ -30,11 +33,11 @@ public class AuthorizationServices: IAuthorizationServices
         }
         if (!PasswordHash.ValidatePassword(password, member.Password))
         {
-            throw new EntityNotFoundException("Invalid  password");
+            throw new EntityNotFoundException("Invalid creditals");
         }
-
-        return _mapper.Map<MemberModel>(member);
+        return _mapper.Map<Member,MemberModel>(member);
     }
+
 
     public async Task<string> GetToken(MemberModel member)
     {
@@ -50,5 +53,12 @@ public class AuthorizationServices: IAuthorizationServices
                 signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
 
         return new JwtSecurityTokenHandler().WriteToken(jwt);
+    }
+
+    public int Register(MemberModel memberModel)
+    {
+        var member = _mapper.Map<MemberModel, Member>(memberModel);
+
+        return _memberRepository.Add(member);
     }
 }

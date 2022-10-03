@@ -1,4 +1,4 @@
-﻿namespace redbull_team_1_teamreport_back.Domain.Entities;
+﻿namespace redbull_team_1_teamreport_back.Data.Entities;
 
 public class Week
 {

@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace redbull_team_1_teamreport_back.Domain.Migrations
 {
-    public partial class initial : Migration
+    [ExcludeFromCodeCoverage]
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -37,7 +39,7 @@ namespace redbull_team_1_teamreport_back.Domain.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Member",
+                name: "Members",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -51,9 +53,9 @@ namespace redbull_team_1_teamreport_back.Domain.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Member", x => x.Id);
+                    table.PrimaryKey("PK_Members", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Member_Companies_CompanyId",
+                        name: "FK_Members_Companies_CompanyId",
                         column: x => x.CompanyId,
                         principalTable: "Companies",
                         principalColumn: "Id");
@@ -72,14 +74,14 @@ namespace redbull_team_1_teamreport_back.Domain.Migrations
                 {
                     table.PrimaryKey("PK_Leaderships", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Leaderships_Member_LeaderId",
+                        name: "FK_Leaderships_Members_LeaderId",
                         column: x => x.LeaderId,
-                        principalTable: "Member",
+                        principalTable: "Members",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Leaderships_Member_MemberId",
+                        name: "FK_Leaderships_Members_MemberId",
                         column: x => x.MemberId,
-                        principalTable: "Member",
+                        principalTable: "Members",
                         principalColumn: "Id");
                 });
 
@@ -105,9 +107,9 @@ namespace redbull_team_1_teamreport_back.Domain.Migrations
                 {
                     table.PrimaryKey("PK_Reports", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Reports_Member_MemberId",
+                        name: "FK_Reports_Members_MemberId",
                         column: x => x.MemberId,
-                        principalTable: "Member",
+                        principalTable: "Members",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Reports_Weeks_WeekId",
@@ -127,8 +129,8 @@ namespace redbull_team_1_teamreport_back.Domain.Migrations
                 column: "MemberId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Member_CompanyId",
-                table: "Member",
+                name: "IX_Members_CompanyId",
+                table: "Members",
                 column: "CompanyId");
 
             migrationBuilder.CreateIndex(
@@ -151,7 +153,7 @@ namespace redbull_team_1_teamreport_back.Domain.Migrations
                 name: "Reports");
 
             migrationBuilder.DropTable(
-                name: "Member");
+                name: "Members");
 
             migrationBuilder.DropTable(
                 name: "Weeks");

@@ -2,8 +2,8 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using redbull_team_1_teamreport_back.Domain.Identity;
-using redbull_team_1_teamreport_back.Domain.Persistence;
+using redbull_team_1_teamreport_back.Data.Identity;
+using redbull_team_1_teamreport_back.Data.Persistence;
 using TeamReport.Domain.Mappers;
 using TeamReport.WebAPI.Extensions;
 using TeamReport.WebAPI.MapperStorage;
@@ -34,7 +34,6 @@ builder.Services.AddFluentValidation();
 
 builder.Services
     .AddDefaultIdentity<ApplicationUser>()
-    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 //builder.Services.AddIdentityServer()
@@ -42,7 +41,7 @@ builder.Services
 
 builder.Services.AddDbContext<ApplicationDbContext>(o =>
 {
-    o.UseSqlServer(@"Server=.;Database=TeamReport.DB;Trusted_Connection=True;");
+    o.UseSqlServer(@"Data Source=localhost;Initial Catalog=WeeklyReport;Persist Security Info=True;User ID=sa;Password=Qwerty123");
 
 });
 
@@ -50,7 +49,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDataRepositories();
 builder.Services.AddDomainServices();
 builder.Services.AddSwaggerGen();
-builder.Services.AddAutoMapper(typeof(MapperConfigStorage), typeof(MapperAPI));
+builder.Services.AddAutoMapper(typeof(MapperDomain), typeof(MapperAPI));
 
 
 var app = builder.Build();

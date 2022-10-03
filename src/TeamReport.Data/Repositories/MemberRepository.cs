@@ -3,7 +3,7 @@ using redbull_team_1_teamreport_back.Domain.Entities;
 using redbull_team_1_teamreport_back.Domain.Persistence;
 using redbull_team_1_teamreport_back.Domain.Repositories.Interfaces;
 
-namespace redbull_team_1_teamreport_back.Domain.Repositories;
+namespace redbull_team_1_teamreport_back.Data.Repositories;
 public class MemberRepository: IMemberRepository
 {
     private readonly ApplicationDbContext _context;
@@ -21,5 +21,10 @@ public class MemberRepository: IMemberRepository
         await _context.SaveChangesAsync();
 
         return member.Id;
+    }
+
+    public List<Member> GetAll()
+    {
+        return _context.Members.ToList();
     }
 }
