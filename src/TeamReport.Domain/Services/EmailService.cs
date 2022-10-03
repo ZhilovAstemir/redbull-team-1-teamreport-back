@@ -28,7 +28,8 @@ public class EmailService : IEmailService
     private MimeMessage CreateEmailMessage(Message message)
     {
         var emailMessage = new MimeMessage();
-        emailMessage.From.Add(new MailboxAddress("email", _emailConfig.From));
+        var address = new MailboxAddress(_emailConfig.UserName, _emailConfig.From);
+        emailMessage.From.Add(address);
         emailMessage.To.AddRange(message.To);
         emailMessage.Subject = message.Subject;
         emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Text) { Text = message.Content };
