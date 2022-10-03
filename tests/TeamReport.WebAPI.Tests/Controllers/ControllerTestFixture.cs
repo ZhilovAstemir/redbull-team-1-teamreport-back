@@ -8,6 +8,7 @@ using TeamReport.Domain.Infrastructures;
 using TeamReport.Domain.Models;
 using TeamReport.Domain.Models.Requests;
 using TeamReport.Domain.Services.Interfaces;
+using TeamReport.WebAPI.Models;
 
 namespace TeamReport.WebAPI.Tests.Controllers;
 
@@ -28,7 +29,16 @@ public class ControllerTestFixture
             Password = PasswordHash.HashPassword("password"),
             FirstName = "FirstName",
             LastName = "LastName",
-            Title = "Title"
+            Title = "Title",
+            Company = GetCompany()
+        };
+    }
+
+    public Company GetCompany()
+    {
+        return new Company()
+        {
+            Name = "CompanyName"
         };
     }
 
@@ -75,5 +85,20 @@ public class ControllerTestFixture
             .Options;
 
         return new ApplicationDbContext(dbContextOptions);
+    }
+
+    public CompanyRegistrationRequest GetCompanyRegistrationRequest()
+    {
+        var member = GetMember();
+
+        return new CompanyRegistrationRequest()
+        {
+            Email = member.Email,
+            Company = member.Company,
+            FirstName = member.FirstName,
+            LastName = member.LastName,
+            Password = member.Password,
+            Title = member.Title
+        };
     }
 }

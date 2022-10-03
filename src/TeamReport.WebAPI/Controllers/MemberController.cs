@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using TeamReport.Domain.Models;
 using TeamReport.Domain.Models.Requests;
 using TeamReport.Domain.Services.Interfaces;
+using TeamReport.WebAPI.Models;
 
 namespace TeamReport.WebAPI.Controllers;
 

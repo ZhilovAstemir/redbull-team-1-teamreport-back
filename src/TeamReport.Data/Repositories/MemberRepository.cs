@@ -23,17 +23,18 @@ public class MemberRepository: IMemberRepository
 
     public async Task<Member?> Read(int entityId)
     {
-        return await _context.Members.FirstOrDefaultAsync(c => c.Id == entityId);
+        var member=await _context.Members.Include(x=>x.Company).FirstOrDefaultAsync(c => c.Id == entityId);
+        return member;
     }
 
     public async Task<Member?> ReadByEmail(string email)
     {
-        return await _context.Members.FirstOrDefaultAsync(c => c.Email == email);
+        return await _context.Members.Include(x=>x.Company).FirstOrDefaultAsync(c => c.Email == email);
     }
 
     public async Task<List<Member>> ReadAll()
     {
-        return await _context.Members.ToListAsync();
+        return await _context.Members.Include(x=>x.Company).ToListAsync();
     }
 
 

@@ -1,4 +1,4 @@
-﻿namespace TeamReport.Domain.Models.Requests;
+﻿namespace TeamReport.WebAPI.Models;
 
 public class LoginRequest
 {

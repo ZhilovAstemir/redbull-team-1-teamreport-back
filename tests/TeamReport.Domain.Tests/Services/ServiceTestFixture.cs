@@ -35,7 +35,8 @@ public class ServiceTestFixture
             Password = PasswordHash.HashPassword("password"),
             FirstName = "FirstName",
             LastName = "LastName",
-            Title = "Title"
+            Title = "Title",
+            Company = new Company() { Id = 1, Name = "CompanyName" }
         };
     }
 

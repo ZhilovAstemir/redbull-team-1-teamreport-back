@@ -8,19 +8,19 @@ using TeamReport.WebAPI.Controllers;
 
 namespace TeamReport.WebAPI.Tests.Controllers;
 
-public class AuthorizationControllerTest
+public class MemberControllerTest
 {
     private readonly ControllerTestFixture _fixture;
     private readonly IMemberService _service;
 
-    public AuthorizationControllerTest()
+    public MemberControllerTest()
     {
         _fixture = new ControllerTestFixture();
         _service = new MemberService(new MemberRepository(_fixture.GetContext()), _fixture.GetMapperMock());
     }
 
     [Fact]
-    public void ShouldBeAbleToCreateAuthorizationController()
+    public void ShouldBeAbleToCreateMemberController()
     {
         var controller = new MemberController(_service, _fixture.GetMapperMock());
         controller.Should().NotBeNull();

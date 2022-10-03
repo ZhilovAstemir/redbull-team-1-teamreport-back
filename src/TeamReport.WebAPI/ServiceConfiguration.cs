@@ -8,6 +8,7 @@ using TeamReport.Domain.Models.Requests;
 using TeamReport.Domain.Services;
 using TeamReport.Domain.Services.Interfaces;
 using TeamReport.Domain.Validators;
+using TeamReport.WebAPI.Models;
 
 namespace TeamReport.WebAPI;
 
@@ -17,12 +18,14 @@ public static class ServiceConfiguration
     public static void AddDataRepositories(this IServiceCollection services)
     {
         services.AddScoped<IMemberRepository, MemberRepository>();
+        services.AddScoped<ICompanyRepository, CompanyRepository>();
     }
 
     public static void AddDomainServices(this IServiceCollection services)
     {
         services.AddScoped<IMemberService, MemberService>();
         services.AddScoped<ITeamService, TeamService>();
+        services.AddScoped<ICompanyService, CompanyService>();
     }
 
     public static void AddSwaggerGen(this IServiceCollection services)

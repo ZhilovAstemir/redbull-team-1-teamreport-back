@@ -8,17 +8,17 @@ using Xunit;
 
 namespace TeamReport.Domain.Tests.Services;
 
-public class AuthorizationServiceTest
+public class MemberServiceTest
 {
     private readonly ServiceTestFixture _fixture;
 
-    public AuthorizationServiceTest()
+    public MemberServiceTest()
     {
         _fixture = new ServiceTestFixture();
     }
 
     [Fact]
-    public void ShouldBeAbleToCreateAuthorizationService()
+    public void ShouldBeAbleToCreateMemberService()
     {
         var service = new MemberService(_fixture.GetMemberRepositoryMock().Object, _fixture.GetMapperDomainMock().Object);
         service.Should().NotBeNull();
