@@ -19,7 +19,7 @@ public static class ServiceCollectionsExtensions
 
     public static void AddDomainServices(this IServiceCollection services)
     {
-        services.AddScoped<IAuthorizationService, AuthorizationService>();
+        services.AddScoped<IAuthorizationServices, AuthorizationServices>();
         services.AddScoped<IMemberService, MemberService>();
     }
 

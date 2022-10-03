@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using redbull_team_1_teamreport_back.Domain.Entities;
-using redbull_team_1_teamreport_back.Domain.Persistence;
-using redbull_team_1_teamreport_back.Domain.Repositories.Interfaces;
+using redbull_team_1_teamreport_back.Data.Entities;
+using redbull_team_1_teamreport_back.Data.Persistence;
+using redbull_team_1_teamreport_back.Data.Repositories.Interfaces;
 
 namespace redbull_team_1_teamreport_back.Data.Repositories;
 public class MemberRepository: IMemberRepository
@@ -13,7 +13,7 @@ public class MemberRepository: IMemberRepository
         _context = context;
     }
 
-    public async Task<Member?> GetMemberByEmail(string email) => await _context.Members.FirstOrDefaultAsync(c => c.Email == email);
+    public async Task<Member> GetMemberByEmail(string email) => await _context.Members.FirstOrDefaultAsync(c => c.Email == email);
 
     public async Task<int> AddMember(Member member)
     {

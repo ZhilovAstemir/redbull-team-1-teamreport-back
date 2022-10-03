@@ -5,4 +5,5 @@ public interface IMemberRepository
 {
     public Task<Member?> GetMemberByEmail(string email);
     public Task<int> AddMember(Member member);
+    public List<Member> GetAll();
 }

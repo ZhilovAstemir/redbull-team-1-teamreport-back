@@ -16,13 +16,15 @@ public class MemberService: IMemberService
         _mapper = mapper;
     }
 
-    public Task<int> AddMember(MemberModel member{ 
+    public Task<int> AddMember(MemberModel member)
+    { 
         member.Password = PasswordHash.HashPassword(member.Password);
         return _memberRepository.AddMember(_mapper.Map<Member>(member));
     }
+
     public List<Member> GetAllMembers()
     {
         return _memberRepository.GetAll();
     }
 }
-}
+

@@ -55,10 +55,5 @@ public class AuthorizationServices: IAuthorizationServices
         return new JwtSecurityTokenHandler().WriteToken(jwt);
     }
 
-    public int Register(MemberModel memberModel)
-    {
-        var member = _mapper.Map<MemberModel, Member>(memberModel);
-
-        return _memberRepository.Add(member);
-    }
+    
 }

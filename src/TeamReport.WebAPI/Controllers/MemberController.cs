@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TeamReport.Domain.Models;
 using TeamReport.Domain.Services.Interfaces;
+using TeamReport.WebAPI.Extensions;
+using TeamReport.WebAPI.Models.Requests;
 
 namespace TeamReport.WebAPI.Controllers;
 
