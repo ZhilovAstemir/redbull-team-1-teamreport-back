@@ -25,14 +25,14 @@ public class TeamControllerTest
     }
 
     [Fact]
-    public void ShouldBeAbleToGetAllMembers()
+    public async Task ShouldBeAbleToGetAllMembers()
     {
         _fixture.ClearDatabase();
 
         var controller = new TeamController(_teamService,_fixture.GetMapperMock());
 
-        _teamService.Add(_fixture.GetMember());
+        await _teamService.Add(_fixture.GetMember());
 
-        controller.GetAll().Should().BeOfType<OkObjectResult>().Which.Value.Should().BeOfType<List<Member>>().Which.Count.Should().Be(1);
+        (await controller.GetAll()).Should().BeOfType<OkObjectResult>().Which.Value.Should().BeOfType<List<Member>>().Which.Count.Should().Be(1);
     }
 }

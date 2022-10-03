@@ -16,18 +16,18 @@ public class TeamService: ITeamService
         _mapper = mapper;
     }
 
-    public Member Add(Member member)
+    public async Task<Member> Add(Member member)
     {
-        return _memberRepository.Create(member);
+        return await _memberRepository.Create(member);
     }
 
-    public Member? Get(int id)
+    public async Task<Member?> Get(int id)
     {
-        return _memberRepository.Read(id);
+        return await _memberRepository.Read(id);
     }
 
-    public List<Member> GetAll()
+    public async Task<List<Member>> GetAll()
     {
-        return _memberRepository.ReadAll();
+        return await _memberRepository.ReadAll();
     }
 }

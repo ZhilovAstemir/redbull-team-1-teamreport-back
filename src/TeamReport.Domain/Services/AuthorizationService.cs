@@ -23,9 +23,9 @@ public class AuthorizationService: IAuthorizationService
         _mapper = mapper;
     }
 
-    public MemberModel Login(string email, string password)
+    public async Task<MemberModel> Login(string email, string password)
     {
-        var member = _memberRepository.ReadByEmail(email);
+        var member =await _memberRepository.ReadByEmail(email);
         if (member == null)
         {
             throw new InvalidCreditalsException();
@@ -38,7 +38,7 @@ public class AuthorizationService: IAuthorizationService
     }
 
 
-    public string GetToken(MemberModel member)
+    public async Task<string> GetToken(MemberModel member)
     {
         if (member is null || member.Email is null)
         {
@@ -57,13 +57,13 @@ public class AuthorizationService: IAuthorizationService
         return new JwtSecurityTokenHandler().WriteToken(jwt);
     }
 
-    public int Register(MemberModel memberModel)
+    public async Task<int> Register(MemberModel memberModel)
     {
         memberModel.Password = PasswordHash.HashPassword(memberModel.Password);
 
         var member = _mapper.Map<MemberModel, Member>(memberModel);
 
-        var addedMember= _memberRepository.Create(member);
+        var addedMember=await _memberRepository.Create(member);
 
         return addedMember.Id;
     }

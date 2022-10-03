@@ -25,18 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-<<<<<<<< HEAD:tests/TeamReport.Data.Tests/TeamReport.Data.Tests.csproj
     <ProjectReference Include="..\..\src\TeamReport.Data\TeamReport.Data.csproj" />
-========
-    <Folder Include="TeamReport.Data.Tests\" />
-    <Folder Include="TeamReport.Domain.Tests\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\src\TeamReport.Data\TeamReport.Data.csproj" />
-    <ProjectReference Include="..\src\TeamReport.Domain\TeamReport.Domain.csproj" />
-    <ProjectReference Include="..\src\TeamReport.WebAPI\TeamReport.WebAPI.csproj" />
->>>>>>>> b27ee489b0eea8f05dd90a0c6a79e73021017dc0:TeamReport.Tests/TeamReport.Tests.csproj
   </ItemGroup>
 
 </Project>

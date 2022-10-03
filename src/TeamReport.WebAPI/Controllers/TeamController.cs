@@ -21,8 +21,8 @@ public class TeamController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        return Ok(_teamService.GetAll());
+        return Ok(await _teamService.GetAll());
     }
 }

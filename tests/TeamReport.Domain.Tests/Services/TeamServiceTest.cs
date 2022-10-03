@@ -22,14 +22,14 @@ public class TeamServiceTest
     }
 
     [Fact]
-    public void ShouldBeAbleToAddAndGetMember()
+    public async Task ShouldBeAbleToAddAndGetMember()
     {
         var service = new TeamService(_fixture.GetMemberRepositoryMock().Object, _fixture.GetMapperDomainMock().Object);
         var member = _fixture.GetMember();
 
         service.Add(member);
 
-        var createdMember = service.Get(member.Id);
+        var createdMember = await service.Get(member.Id);
         createdMember?.Email.Should().Be(member.Email);
     }
 

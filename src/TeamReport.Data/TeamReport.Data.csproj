@@ -10,11 +10,11 @@
 
     <ItemGroup>
       <Compile Remove="Exceptions\**" />
-      <Compile Remove="Contexts\Migrations\**" />
+      <Compile Remove="Context\Migrations\**" />
       <EmbeddedResource Remove="Exceptions\**" />
-      <EmbeddedResource Remove="Contexts\Migrations\**" />
+      <EmbeddedResource Remove="Context\Migrations\**" />
       <None Remove="Exceptions\**" />
-      <None Remove="Contexts\Migrations\**" />
+      <None Remove="Context\Migrations\**" />
     </ItemGroup>
 
     <ItemGroup>
