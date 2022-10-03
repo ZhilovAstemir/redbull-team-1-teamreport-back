@@ -44,7 +44,7 @@ public class AuthorizationServiceTest
 
         var memberModel = _fixture.GetMemberModel();
 
-       ( await service.Login(memberModel.Email,memberModel.Password)).Should().BeOfType(typeof(MemberModel));
+       (await service.Login(memberModel.Email,memberModel.Password)).Should().BeOfType(typeof(MemberModel));
     }
 
     [Fact]
@@ -59,7 +59,7 @@ public class AuthorizationServiceTest
 
         var memberModel = _fixture.GetMemberModel();
 
-        var loginAction= () => service.Login(memberModel.Email,memberModel.Password);
+        var loginAction= async () => await service.Login(memberModel.Email,memberModel.Password);
         loginAction.Should().ThrowAsync<InvalidCreditalsException>();
     }
 

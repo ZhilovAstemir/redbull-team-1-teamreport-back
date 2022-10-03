@@ -25,7 +25,7 @@ public class AuthorizationService: IAuthorizationService
 
     public async Task<MemberModel> Login(string email, string password)
     {
-        var member =await _memberRepository.ReadByEmail(email);
+        var member = await _memberRepository.ReadByEmail(email);
         if (member == null)
         {
             throw new InvalidCreditalsException();
@@ -63,7 +63,7 @@ public class AuthorizationService: IAuthorizationService
 
         var member = _mapper.Map<MemberModel, Member>(memberModel);
 
-        var addedMember=await _memberRepository.Create(member);
+        var addedMember= await _memberRepository.Create(member);
 
         return addedMember.Id;
     }

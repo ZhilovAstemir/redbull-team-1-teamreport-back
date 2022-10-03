@@ -27,39 +27,39 @@ public class AuthorizationControllerTest
     }
 
     [Fact]
-    public async Task ShouldBeAbleToRegisterAsync()
+    public async Task ShouldBeAbleToRegister()
     {
         _fixture.ClearDatabase();
 
         var controller = new AuthorizationController(_authService, _fixture.GetMapperMock());
         var request = _fixture.GetMemberRegistrationRequest();
-        var response = await controller.Register(request);
+        var response=await controller.Register(request);
 
         response.Should().BeAssignableTo<OkObjectResult>();
         (response as OkObjectResult)?.Value.Should().BeOfType<string>();
     }
 
     [Fact]
-    public async Task ShouldBeAbleToLoginAsync()
+    public async Task ShouldBeAbleToLogin()
     {
         _fixture.ClearDatabase();
 
         var controller = new AuthorizationController(_authService, _fixture.GetMapperMock());
 
         var memberRegistrationRequest = _fixture.GetMemberRegistrationRequest();
-        var registerResponse =await controller.Register(memberRegistrationRequest);
+        var registerResponse=await controller.Register(memberRegistrationRequest);
         registerResponse.Should().BeAssignableTo<OkObjectResult>();
 
         _fixture.GetContext().Members.Should().Contain(x => x.Email == memberRegistrationRequest.Email);
 
         var loginRequest = _fixture.GetLoginRequest();
-        var loginResponse =await controller.Login(loginRequest);
+        var loginResponse=await controller.Login(loginRequest);
 
         loginResponse.Should().NotBeNull();
     }
 
     [Fact]
-    public async Task ShouldValidateTokenAsync()
+    public async Task ShouldValidateToken()
     {
         _fixture.ClearDatabase();
 
@@ -67,19 +67,19 @@ public class AuthorizationControllerTest
 
         var memberRegistrationRequest = _fixture.GetMemberRegistrationRequest();
 
-        var token = ((await controller.Register(memberRegistrationRequest)) as OkObjectResult)?.Value as string;
+        var token=((await controller.Register(memberRegistrationRequest)) as OkObjectResult)?.Value as string;
 
-        controller.ValidateToken(token).Should().BeOfType<OkObjectResult>().Which.Value.Should().BeOfType<string>();
+        (await controller.ValidateToken(token)).Should().BeOfType<OkObjectResult>().Which.Value.Should().BeOfType<string>();
     }
 
     [Fact]
-    public void ShouldReturnUnauthorizedIfInvalidToken()
+    public async Task ShouldReturnUnauthorizedIfInvalidToken()
     {
         _fixture.ClearDatabase();
 
         var controller = new AuthorizationController(_authService, _fixture.GetMapperMock());
 
-        controller.ValidateToken(It.IsAny<string>()).Should().BeOfType<UnauthorizedResult>();
+        (await controller.ValidateToken(It.IsAny<string>())).Should().BeOfType<UnauthorizedResult>();
     }
 
 }

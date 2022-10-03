@@ -1,6 +1,4 @@
 using System.Text.Json.Serialization;
-using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using redbull_team_1_teamreport_back.Data.Identity;
@@ -9,8 +7,6 @@ using TeamReport.Domain.Mappers;
 using TeamReport.WebAPI;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
 
 builder.Services.AddControllers()
     .ConfigureApiBehaviorOptions(options =>
@@ -28,6 +24,7 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
         options.JsonSerializerOptions.WriteIndented = true;
     });
+builder.Services.AddFluentValidation();
 
 builder.Services.AddFluentValidation();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

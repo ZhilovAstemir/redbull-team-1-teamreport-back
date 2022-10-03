@@ -25,33 +25,29 @@ public class AuthorizationController : ControllerBase
 
     [HttpPost]
     [Route("login")]
-    public async Task<ActionResult<string>> Login([FromBody] LoginRequest request)
+    public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
         var user = await _authService.Login(request.Email, request.Password);
-        if(user == null)
-        {
-            return NotFound();
-        }
 
-        return Ok(await _authService.GetToken(user));
+        return Ok( await _authService.GetToken(user));
     }
     
     [HttpPost]
     [Route("register")]
     [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-    public async Task<ActionResult> Register([FromBody] MemberRegistrationRequest member)
+    public async Task<IActionResult> Register([FromBody] MemberRegistrationRequest member)
     {
         var memberModel = _mapper.Map<MemberRegistrationRequest, MemberModel>(member);
 
-        var id =await _authService.Register(memberModel);
+        var id = await _authService.Register(memberModel);
         
-        return Ok(await _authService.GetToken(memberModel));
+        return Ok( await _authService.GetToken(memberModel));
     }
 
     [HttpPost]
     [Route("token")]
-    public IActionResult ValidateToken([FromBody] string token)
+    public async Task<IActionResult> ValidateToken([FromBody] string token)
     {
         try
         {

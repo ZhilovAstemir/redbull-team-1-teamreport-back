@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using Microsoft.EntityFrameworkCore;
 using redbull_team_1_teamreport_back.Data.Entities;
 using redbull_team_1_teamreport_back.Data.Persistence;
 using redbull_team_1_teamreport_back.Data.Repositories;
@@ -46,7 +45,7 @@ public class MemberRepositoryTest
     }
 
     [Fact]
-    public void ShouldBeAbleToGetMemberByEmail()
+    public async Task ShouldBeAbleToGetMemberByEmail()
     {
         _fixture.ClearDatabase(_context);
 
@@ -61,13 +60,13 @@ public class MemberRepositoryTest
         };
         repository.Create(member);
 
-        var addedMember = repository.ReadByEmail("email@email.com");
+        var addedMember = await repository.ReadByEmail("email@email.com");
 
         addedMember.FirstName.Should().Be(member.FirstName);
     }
 
     [Fact]
-    public void ShouldBeAbleToGetMemberById()
+    public async Task ShouldBeAbleToGetMemberById()
     {
         _fixture.ClearDatabase(_context);
 
@@ -80,9 +79,9 @@ public class MemberRepositoryTest
             LastName = "LastName",
             Password = "Password"
         };
-        var addedMember = repository.Create(member);
+        var addedMember = await repository.Create(member);
 
-        var gotMember = repository.Read(addedMember.Id);
+        var gotMember = await repository.Read(addedMember.Id);
 
         gotMember?.Email.Should().Be(member.Email);
         gotMember?.FirstName.Should().Be(member.FirstName);
@@ -90,7 +89,7 @@ public class MemberRepositoryTest
     }
 
     [Fact]
-    public void ShouldBeAbleToGetAllMembers()
+    public async Task ShouldBeAbleToGetAllMembers()
     {
         _fixture.ClearDatabase(_context);
 
@@ -103,15 +102,15 @@ public class MemberRepositoryTest
             LastName = "LastName",
             Password = "Password"
         };
-        repository.Create(member);
+        await repository.Create(member);
 
-        var members=repository.ReadAll();
+        var members = await repository.ReadAll();
 
         members.Should().Contain(member);
     }
 
     [Fact]
-    public void ShouldBeAbleToUpdateMember()
+    public async Task ShouldBeAbleToUpdateMember()
     {
         _fixture.ClearDatabase(_context);
 
@@ -125,17 +124,17 @@ public class MemberRepositoryTest
             Password = "Password"
         };
         repository.Create(member);
-        
+
         member.Email = "newEmail@gmail.com";
 
-        repository.Update(member).Should().BeTrue();
+        (await repository.Update(member)).Should().BeTrue();
 
-        var updatedMember = repository.Read(member.Id);
+        var updatedMember = await repository.Read(member.Id);
         updatedMember.Email.Should().Be(member.Email);
     }
 
     [Fact]
-    public void ShouldBeAbleToDeleteMember()
+    public async Task ShouldBeAbleToDeleteMember()
     {
         _fixture.ClearDatabase(_context);
 
@@ -148,21 +147,21 @@ public class MemberRepositoryTest
             LastName = "LastName",
             Password = "Password"
         };
-        repository.Create(member);
-        repository.Read(member.Id).Should().NotBeNull();
+        await repository.Create(member);
+        (await repository.Read(member.Id)).Should().NotBeNull();
 
-        repository.Delete(member.Id).Should().BeTrue();
+        (await repository.Delete(member.Id)).Should().BeTrue();
 
-        repository.Read(member.Id).Should().BeNull();
+        (await repository.Read(member.Id)).Should().BeNull();
     }
 
     [Fact]
-    public void ShouldDeleteReturnFalseIfNothingToDelete()
+    public async Task ShouldDeleteReturnFalseIfNothingToDelete()
     {
         _fixture.ClearDatabase(_context);
 
         var repository = new MemberRepository(_context);
 
-        repository.Delete(0).Should().BeFalse();
+        (await repository.Delete(0)).Should().BeFalse();
     }
 }

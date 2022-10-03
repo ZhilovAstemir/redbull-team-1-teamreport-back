@@ -14,11 +14,12 @@ public class MemberRepository : IMemberRepository
         _context = context;
     }
 
-    public async Task<Member> Create(Member entity)
+    public async Task<Member> Create(Member member)
     {
-        _context.Members.Add(entity);
+        _context.Members.Add(member);
         await _context.SaveChangesAsync();
-        return entity;
+
+        return member;
     }
 
     public async Task<Member?> Read(int entityId)
@@ -26,13 +27,16 @@ public class MemberRepository : IMemberRepository
         return await _context.Members.FirstOrDefaultAsync(c => c.Id == entityId);
     }
 
-    public async Task<Member?> ReadByEmail(string email) =>
-        await _context.Members.FirstOrDefaultAsync(c => c.Email == email);
+    public async Task<Member?> ReadByEmail(string email)
+    {
+        return await _context.Members.FirstOrDefaultAsync(c => c.Email == email);
+    }
 
     public async Task<List<Member>> ReadAll()
     {
         return await _context.Members.ToListAsync();
     }
+
 
     public async Task<bool> Update(Member entity)
     {
@@ -43,7 +47,7 @@ public class MemberRepository : IMemberRepository
 
     public async Task<bool> Delete(int entityId)
     {
-        var member =await Read(entityId);
+        var member = await Read(entityId);
         if (member == null)
         {
             return false;
