@@ -1,0 +1,79 @@
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using AutoMapper;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.IdentityModel.Tokens;
+using redbull_team_1_teamreport_back.Data.Entities;
+using redbull_team_1_teamreport_back.Data.Repositories.Interfaces;
+using TeamReport.Domain.Exceptions;
+using TeamReport.Domain.Infrastructures;
+using TeamReport.Domain.Models;
+using TeamReport.Domain.Services.Interfaces;
+
+namespace TeamReport.Domain.Services;
+
+public class AuthorizationService: IAuthorizationService
+{
+    public readonly IMemberRepository _memberRepository;
+    public readonly IMapper _mapper;
+
+    public AuthorizationService(IMemberRepository memberRepository, IMapper mapper)
+    {
+        _memberRepository = memberRepository;
+        _mapper = mapper;
+    }
+
+<<<<<<< HEAD:src/TeamReport.Domain/Services/AuthorizationServices.cs
+    public async Task<MemberModel> GetUserForLogin(string email, string password)
+    {
+        var member = await _memberRepository.GetMemberByEmail(email);
+
+        if(member is null)
+        {
+            throw new EntityNotFoundException("Member not found");
+        }
+        if (!PasswordHash.ValidatePassword(password, member.Password))
+=======
+    public MemberModel Login(string email, string password)
+    {
+        var member = _memberRepository.GetByEmail(email);
+        if (member == null)
+>>>>>>> upstream/master:src/TeamReport.Domain/Services/AuthorizationService.cs
+        {
+            throw new EntityNotFoundException("Invalid creditals");
+        }
+        if (!PasswordHash.ValidatePassword(password,member.Password))
+        {
+            throw new EntityNotFoundException("Invalid creditals");
+        }
+        return _mapper.Map<Member,MemberModel>(member);
+    }
+
+<<<<<<< HEAD:src/TeamReport.Domain/Services/AuthorizationServices.cs
+    public async Task<string> GetToken(MemberModel member)
+=======
+
+    public string GetToken(MemberModel member)
+>>>>>>> upstream/master:src/TeamReport.Domain/Services/AuthorizationService.cs
+    {
+        if (member is null || member.Email is null)
+        {
+            throw new DataException("Object or part of it is empty");
+        }
+
+        var jwt = new JwtSecurityToken(
+                issuer: AuthOptions.Issuer,
+                audience: AuthOptions.Audience,
+                expires: DateTime.UtcNow.Add(TimeSpan.FromDays(1)),
+                signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+
+        return new JwtSecurityTokenHandler().WriteToken(jwt);
+    }
+
+    public int Register(MemberModel memberModel)
+    {
+        var member = _mapper.Map<MemberModel, Member>(memberModel);
+
+        return _memberRepository.Add(member);
+    }
+}
