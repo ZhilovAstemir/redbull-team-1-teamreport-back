@@ -53,10 +53,10 @@ public class ServiceTestFixture
     public Mock<IMemberRepository> GetMemberRepositoryMock()
     {
         var repositoryMock = new Mock<IMemberRepository>();
-        repositoryMock.Setup(x => x.Read(It.IsAny<int>())).Returns(GetMember());
-        repositoryMock.Setup(x => x.Create(It.IsAny<Member>())).Returns(GetMember());
-        repositoryMock.Setup(x => x.ReadByEmail(It.IsAny<string>())).Returns(GetMember());
-        repositoryMock.Setup(x => x.ReadAll()).Returns(new List<Member>() { GetMember() });
+        repositoryMock.Setup(x => x.Read(It.IsAny<int>())).Returns(Task.FromResult(GetMember()));
+        repositoryMock.Setup(x => x.Create(It.IsAny<Member>())).Returns(Task.FromResult(GetMember()));
+        repositoryMock.Setup(x => x.ReadByEmail(It.IsAny<string>())).Returns(Task.FromResult(GetMember()));
+        repositoryMock.Setup(x => x.ReadAll()).Returns(Task.FromResult(new List<Member>() { GetMember() }));
         return repositoryMock;
     }
 

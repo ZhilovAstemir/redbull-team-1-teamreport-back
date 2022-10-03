@@ -24,7 +24,7 @@ public class JwtMiddleware
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
             if (token != null)
-                AttachUserToContext(context, teamService, token);
+                await AttachUserToContext(context, teamService, token);
         }
         catch
         {
@@ -33,7 +33,7 @@ public class JwtMiddleware
         await _next(context);
     }
 
-    public void AttachUserToContext(HttpContext context, ITeamService teamService, string token)
+    public async Task AttachUserToContext(HttpContext context, ITeamService teamService, string token)
     {
 
         var tokenHandler = new JwtSecurityTokenHandler();
@@ -49,7 +49,6 @@ public class JwtMiddleware
         var jwtToken = (JwtSecurityToken)validatedToken;
         var userId = int.Parse(jwtToken.Claims.First(x => x.Type == "user").Value);
 
-        context.Items["Member"] = teamService.Get(userId);
-
+        context.Items["Member"] = await teamService.Get(userId);
     }
 }

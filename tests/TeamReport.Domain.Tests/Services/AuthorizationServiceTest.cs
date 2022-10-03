@@ -24,7 +24,7 @@ public class AuthorizationServiceTest
     }
 
     [Fact]
-    public void ShouldBeAbleToRegister()
+    public async Task ShouldBeAbleToRegister()
     {
         _fixture.ClearDatabase();
 
@@ -32,11 +32,11 @@ public class AuthorizationServiceTest
 
         var memberModel = _fixture.GetMemberModel();
 
-        service.Register(memberModel).Should().BeOfType(typeof(int));
+        (await service.Register(memberModel)).Should().BeOfType(typeof(int));
     }
 
     [Fact]
-    public void ShouldBeAbleToLogin()
+    public async Task ShouldBeAbleToLogin()
     {
         _fixture.ClearDatabase();
 
@@ -44,7 +44,7 @@ public class AuthorizationServiceTest
 
         var memberModel = _fixture.GetMemberModel();
 
-        service.Login(memberModel.Email,memberModel.Password).Should().BeOfType(typeof(MemberModel));
+       ( await service.Login(memberModel.Email,memberModel.Password)).Should().BeOfType(typeof(MemberModel));
     }
 
     [Fact]
@@ -53,14 +53,14 @@ public class AuthorizationServiceTest
         _fixture.ClearDatabase();
 
         var repository = _fixture.GetMemberRepositoryMock();
-        repository.Setup(x => x.ReadByEmail(It.IsAny<string>())).Returns((Member?)null);
+        repository.Setup(x => x.ReadByEmail(It.IsAny<string>())).Returns(Task.FromResult((Member?)null));
 
         var service = new AuthorizationService(repository.Object, _fixture.GetMapperDomainMock().Object);
 
         var memberModel = _fixture.GetMemberModel();
 
         var loginAction= () => service.Login(memberModel.Email,memberModel.Password);
-        loginAction.Should().Throw<InvalidCreditalsException>();
+        loginAction.Should().ThrowAsync<InvalidCreditalsException>();
     }
 
     [Fact]
@@ -77,7 +77,7 @@ public class AuthorizationServiceTest
 
         var loginAction= () => service.Login(memberModel.Email,memberModel.Password);
 
-        loginAction.Should().Throw<InvalidCreditalsException>();
+        loginAction.Should().ThrowAsync<InvalidCreditalsException>();
     }
 
     [Fact]
@@ -94,6 +94,6 @@ public class AuthorizationServiceTest
 
         var getTokenAction= () => service.GetToken(memberModel);
 
-        getTokenAction.Should().Throw<DataException>();
+        getTokenAction.Should().ThrowAsync<DataException>();
     }
 }

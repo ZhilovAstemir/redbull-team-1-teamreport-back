@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using redbull_team_1_teamreport_back.Data.Entities;
 
-namespace redbull_team_1_teamreport_back.Data.Persistence;
+namespace redbull_team_1_teamreport_back.Data.Context;
 
 public class ApplicationDbContext: DbContext
 {
