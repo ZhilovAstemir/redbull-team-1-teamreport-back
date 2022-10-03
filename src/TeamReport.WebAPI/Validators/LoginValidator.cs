@@ -1,7 +1,7 @@
-﻿using FluentValidation;
-using TeamReport.WebAPI.Models.Requests;
+using FluentValidation;
+using TeamReport.Domain.Models.Requests;
 
-namespace TeamReport.WebAPI.Validators;
+namespace TeamReport.Domain.Validators;
 
 public class LoginValidator: AbstractValidator<LoginRequest>
 {
@@ -9,9 +9,9 @@ public class LoginValidator: AbstractValidator<LoginRequest>
     {
         RuleFor(loginRequest =>
         loginRequest.Email)
-            .NotEmpty().WithMessage("Email is requared");
+            .NotEmpty().WithMessage("Email is required");
         RuleFor(loginRequest =>
         loginRequest.Password)
-            .NotEmpty().Length(8, 30).WithMessage("Password is requared");
+            .NotEmpty().Length(5, 30).WithMessage("Password is too short or empty");
     }
 }

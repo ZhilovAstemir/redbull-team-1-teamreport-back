@@ -3,6 +3,6 @@
 public class Leadership
 {
     public int Id { get; set; }
-    public List<Member> Leaders { get; set; }
-    public List<Member> Members { get; set; }
+    public Member Leader { get; set; }
+    public Member Member { get; set; }
 }

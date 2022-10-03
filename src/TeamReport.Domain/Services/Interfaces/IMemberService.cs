@@ -4,6 +4,10 @@ using TeamReport.Domain.Models;
 namespace TeamReport.Domain.Services.Interfaces;
 public interface IMemberService
 {
-    public Task<int> AddMember(MemberModel member);
-    public List<Member> GetAllMembers();
+    public Task<Member> Register(MemberModel member);
+    public Task<List<Member>> GetAll();
+    public Task<string> GetToken(MemberModel member);
+
+    public Task<MemberModel> Login(string email, string password);
+
 }

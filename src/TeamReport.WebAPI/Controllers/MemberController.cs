@@ -2,14 +2,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TeamReport.Domain.Models;
+using TeamReport.Domain.Models.Requests;
 using TeamReport.Domain.Services.Interfaces;
-using TeamReport.WebAPI.Extensions;
-using TeamReport.WebAPI.Models.Requests;
 
 namespace TeamReport.WebAPI.Controllers;
 
 [ApiController]
-[Authorize]
 [Produces("application/json")]
 [Route("api/members")]
 public class MemberController : ControllerBase
@@ -23,19 +21,24 @@ public class MemberController : ControllerBase
         _mapper = mapper;
     }
 
-    [AllowAnonymous]
     [HttpPost]
+    [Route("login")]
+    public async Task<IActionResult> Login([FromBody] LoginRequest request)
+    {
+        var user = await _memberService.Login(request.Email, request.Password);
+        return Ok( await _memberService.GetToken(user));
+    }
+    
+    [HttpPost]
+    [Route("register")]
     [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-    public async Task<ActionResult<int>> AddClient([FromBody] MemberRegistrationRequest member)
+    public async Task<IActionResult> Register([FromBody] MemberRegistrationRequest member)
     {
-        var id = await _memberService.AddMember(_mapper.Map<MemberModel>(member));
-        return Created($"{this.GetRequestPath()}/{id}", id);
-    }
+        var memberModel = _mapper.Map<MemberRegistrationRequest, MemberModel>(member);
 
-    [HttpGet]
-    public IActionResult GetAll()
-    {
-        return Ok(_memberService.GetAllMembers());
+        var id = await _memberService.Register(memberModel);
+        
+        return Ok( await _memberService.GetToken(memberModel));
     }
 }

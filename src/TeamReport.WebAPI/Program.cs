@@ -5,12 +5,11 @@ using Microsoft.EntityFrameworkCore;
 using redbull_team_1_teamreport_back.Data.Identity;
 using redbull_team_1_teamreport_back.Data.Persistence;
 using TeamReport.Domain.Mappers;
-using TeamReport.WebAPI.Extensions;
+using TeamReport.WebAPI;
+using TeamReport.WebAPI.Helpers;
 using TeamReport.WebAPI.MapperStorage;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
 
 builder.Services.AddControllers()
     .ConfigureApiBehaviorOptions(options =>
@@ -29,22 +28,23 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.WriteIndented = true;
     });
 builder.Services.AddFluentValidation();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 
 builder.Services
     .AddDefaultIdentity<ApplicationUser>()
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-//builder.Services.AddIdentityServer()
-//    .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(o =>
 {
-    o.UseSqlServer(@"Data Source=localhost;Initial Catalog=WeeklyReport;Persist Security Info=True;User ID=sa;Password=Qwerty123");
+    o.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 
 });
 
+builder.Services.AddCors();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDataRepositories();
 builder.Services.AddDomainServices();
@@ -60,6 +60,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<JwtMiddleware>();
 
 app.UseHttpsRedirection();
 
