@@ -4,7 +4,7 @@ using TeamReport.Domain.Models;
 namespace TeamReport.Domain.Services.Interfaces;
 public interface ITeamService
 {
-    public Member Add(Member member);
-    public Member? Get(int id);
-    public List<Member> GetAll();
+    public Task<Member> Add(Member member);
+    public Task<Member?> Get(int id);
+    public Task<List<Member>> GetAll();
 }

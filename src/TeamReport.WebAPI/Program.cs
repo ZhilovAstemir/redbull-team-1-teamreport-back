@@ -1,5 +1,5 @@
-using System.Collections.Immutable;
-using Microsoft.AspNetCore.Identity;
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using redbull_team_1_teamreport_back.Data.Identity;
 using redbull_team_1_teamreport_back.Data.Persistence;
@@ -9,7 +9,23 @@ using TeamReport.WebAPI.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .ConfigureApiBehaviorOptions(options =>
+    {
+        options.InvalidModelStateResponseFactory = context =>
+        {
+            var result = new BadRequestObjectResult(context.ModelState);
+            result.StatusCode = StatusCodes.Status422UnprocessableEntity;
+
+            return result;
+        };
+    })
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.WriteIndented = true;
+    });
+builder.Services.AddFluentValidation();
 
 builder.Services
     .AddDefaultIdentity<ApplicationUser>()

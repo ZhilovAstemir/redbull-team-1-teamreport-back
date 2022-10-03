@@ -1,10 +1,14 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.OpenApi.Models;
 using redbull_team_1_teamreport_back.Data.Repositories;
 using redbull_team_1_teamreport_back.Data.Repositories.Interfaces;
+using TeamReport.Domain.Models.Requests;
 using TeamReport.Domain.Services;
 using TeamReport.Domain.Services.Interfaces;
 using TeamReport.WebAPI;
+using TeamReport.WebAPI.Validators;
 
 namespace TeamReport.WebAPI;
 
@@ -52,6 +56,13 @@ public static class ServiceConfiguration
                     },
                });
         });
+    }
+
+    public static void AddFluentValidation(this IServiceCollection services)
+    {
+        services.AddFluentValidationAutoValidation(config => config.DisableDataAnnotationsValidation = true);
+
+        services.AddScoped<IValidator<LoginRequest>, LoginValidator>();
     }
 
 }

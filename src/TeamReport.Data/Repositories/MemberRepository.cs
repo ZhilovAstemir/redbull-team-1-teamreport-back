@@ -14,46 +14,46 @@ public class MemberRepository : IMemberRepository
         _context = context;
     }
 
-    public Member Create(Member member)
+    public async Task<Member> Create(Member member)
     {
         _context.Members.Add(member);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
         return member;
     }
 
-    public Member? Read(int entityId)
+    public async Task<Member?> Read(int entityId)
     {
-        return _context.Members.FirstOrDefault(c => c.Id == entityId);
+        return await _context.Members.FirstOrDefaultAsync(c => c.Id == entityId);
     }
 
-    public Member? ReadByEmail(string email)
+    public async Task<Member?> ReadByEmail(string email)
     {
-        return _context.Members.FirstOrDefault(c => c.Email == email);
+        return await _context.Members.FirstOrDefaultAsync(c => c.Email == email);
     }
 
-    public List<Member> ReadAll()
+    public async Task<List<Member>> ReadAll()
     {
-        return _context.Members.ToList();
+        return await _context.Members.ToListAsync();
     }
 
 
-    public bool Update(Member entity)
+    public async Task<bool> Update(Member entity)
     {
         _context.Entry(entity).State = EntityState.Modified;
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
         return true;
     }
 
-    public bool Delete(int entityId)
+    public async Task<bool> Delete(int entityId)
     {
-        var member = Read(entityId);
+        var member = await Read(entityId);
         if (member == null)
         {
             return false;
         }
         _context.Members.Remove(member);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
         return true;
     }
 }

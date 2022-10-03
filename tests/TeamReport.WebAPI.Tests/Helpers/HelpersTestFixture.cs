@@ -39,12 +39,12 @@ public class HelpersTestFixture
         };
     }
 
-    public MemberModel GetMemberModel()
-    {
-        return new MemberModel()
-        {
-            Email = "email@email.com",
-            Password = PasswordHash.HashPassword("password")
-        };
-    }
+    //public MemberModel GetMemberModel()
+    //{
+    //    return new MemberModel()
+    //    {
+    //        Email = "email@email.com",
+    //        Password = PasswordHash.HashPassword("password")
+    //    };
+    //}
 }
