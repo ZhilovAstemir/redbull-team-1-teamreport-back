@@ -14,12 +14,12 @@ public class EmailService : IEmailService
         _emailConfig = emailConfig.Value;
     }
 
-    public void InviteMember(InviteMemberRequest request)
+    public void InviteMember(InviteMemberRequest request, string path)
     {
         var message = new Message(new string[]
            { request.Email },
            "Invitation",
-           $"Dear {request.FirstName} {request.LastName} we invite you");
+           $"Dear {request.FirstName} {request.LastName} we invite you {path}");
         var emailMessage = CreateEmailMessage(message);
 
         Send(emailMessage);

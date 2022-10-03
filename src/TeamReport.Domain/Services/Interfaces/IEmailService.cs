@@ -4,5 +4,5 @@ namespace TeamReport.Domain.Services;
 
 public interface IEmailService
 {
-    void InviteMember(InviteMemberRequest inviteMember);
+    void InviteMember(InviteMemberRequest inviteMember, string path);
 }

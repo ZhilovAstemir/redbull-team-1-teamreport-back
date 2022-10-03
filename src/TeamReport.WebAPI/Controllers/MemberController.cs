@@ -5,6 +5,7 @@ using TeamReport.Domain.Models;
 using TeamReport.Domain.Models.Requests;
 using TeamReport.Domain.Services;
 using TeamReport.Domain.Services.Interfaces;
+using TeamReport.WebAPI.Extensions;
 
 namespace TeamReport.WebAPI.Controllers;
 
@@ -48,7 +49,8 @@ public class MemberController : ControllerBase
     [HttpPost("invite")]
     public async Task<IActionResult> InviteMember([FromBody] InviteMemberRequest request)
     {
-        _emailService.InviteMember(request);
+        var path = this.GetRequestPath();
+        _emailService.InviteMember(request, path);
         return Ok();
     }
 }
