@@ -5,9 +5,9 @@ namespace TeamReport.Domain.Services.Interfaces;
 
 public interface ICompanyService
 {
-    public Task<Company?> GetCompany(int memberId);
+    public Task<CompanyModel?> GetCompany(int memberId);
 
-    public Task<Company?> SetName(int memberId, string newCompanyName);
+    public Task<CompanyModel?> SetName(int memberId, string newCompanyName);
 
-    public Task<Member?> Register(MemberModel memberModel);
+    public Task<MemberModel?> Register(MemberModel memberModel);
 }

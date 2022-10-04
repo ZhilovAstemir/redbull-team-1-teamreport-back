@@ -16,13 +16,13 @@ public class MemberControllerTest
     public MemberControllerTest()
     {
         _fixture = new ControllerTestFixture();
-        _service = new MemberService(new MemberRepository(_fixture.GetContext()), _fixture.GetMapperMock());
+        _service = new MemberService(new MemberRepository(_fixture.GetContext()), _fixture.GetMapper());
     }
 
     [Fact]
     public void ShouldBeAbleToCreateMemberController()
     {
-        var controller = new MemberController(_service, _fixture.GetMapperMock());
+        var controller = new MemberController(_service, _fixture.GetMapper());
         controller.Should().NotBeNull();
     }
 
@@ -31,7 +31,7 @@ public class MemberControllerTest
     {
         _fixture.ClearDatabase();
 
-        var controller = new MemberController(_service, _fixture.GetMapperMock());
+        var controller = new MemberController(_service, _fixture.GetMapper());
         var request = _fixture.GetMemberRegistrationRequest();
         var response=await controller.Register(request);
 
@@ -44,7 +44,7 @@ public class MemberControllerTest
     {
         _fixture.ClearDatabase();
 
-        var controller = new MemberController(_service, _fixture.GetMapperMock());
+        var controller = new MemberController(_service, _fixture.GetMapper());
 
         var memberRegistrationRequest = _fixture.GetMemberRegistrationRequest();
         var registerResponse=await controller.Register(memberRegistrationRequest);

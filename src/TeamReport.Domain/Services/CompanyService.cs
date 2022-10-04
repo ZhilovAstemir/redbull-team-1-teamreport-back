@@ -24,27 +24,29 @@ public class CompanyService:ICompanyService
     }
     
 
-    public async Task<Company?> GetCompany(int memberId)
+    public async Task<CompanyModel?> GetCompany(int memberId)
     {
         var member = await _memberRepository.Read(memberId);
-        return member?.Company;
-    }
-
-    public async Task<Company?> SetName(int memberId, string newCompanyName)
-    {
-        var company =await GetCompany(memberId);
-        if (company != null)
+        if (member?.Company != null)
         {
-            company.Name = newCompanyName;
-            if (await _companyRepository.Update(company))
-            {
-                return company;
-            }
+            return _mapper.Map<Company, CompanyModel>(member.Company);
         }
         return null;
     }
 
-    public async Task<Member?> Register(MemberModel memberModel)
+    public async Task<CompanyModel?> SetName(int memberId, string newCompanyName)
+    {
+        var member = await _memberRepository.Read(memberId);
+        if (member?.Company != null)
+        {
+            member.Company.Name = newCompanyName;
+            await _memberRepository.Update(member);
+            return _mapper.Map<Company, CompanyModel>(member.Company);
+        }
+        return null;
+    }
+
+    public async Task<MemberModel?> Register(MemberModel memberModel)
     {
         var member = _mapper.Map<MemberModel,Member>(memberModel);
         if (member.Company?.Name != null)
@@ -52,7 +54,7 @@ public class CompanyService:ICompanyService
            member.Password = PasswordHash.HashPassword(member.Password);
            var createdMember =await _memberRepository.Create(member);
 
-           return createdMember;
+           return _mapper.Map<Member,MemberModel>(createdMember);
         }
 
         return null;

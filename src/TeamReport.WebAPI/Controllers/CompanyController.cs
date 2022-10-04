@@ -1,6 +1,8 @@
-﻿using AutoMapper;
+﻿using System.Security.Authentication;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using redbull_team_1_teamreport_back.Data.Entities;
+using TeamReport.Domain.Exceptions;
 using TeamReport.Domain.Models;
 using TeamReport.Domain.Services.Interfaces;
 using TeamReport.WebAPI.Helpers;
@@ -28,7 +30,7 @@ public class CompanyController : ControllerBase
     {
         try
         {
-            var member = (Member)HttpContext.Items["Member"] ?? throw new Exception();
+            var member = (Member)HttpContext.Items["Member"] ?? throw new EntityNotFoundException("Authorized member should have data in HttpContext");
             var company = await _service.GetCompany(member.Id);
             return Ok(company);
         }
@@ -52,7 +54,7 @@ public class CompanyController : ControllerBase
                 return Ok(registeredMemberWithCompany);
             }
 
-            return UnprocessableEntity(request);
+            return BadRequest(request);
         }
         catch (Exception ex)
         {
@@ -63,19 +65,19 @@ public class CompanyController : ControllerBase
     [HttpPut]
     [Authorize]
     [Route("update")]
-    public async Task<IActionResult> UpdateCompanyName([FromBody] string newCompanyName)
+    public async Task<IActionResult> UpdateCompanyName([FromBody] UpdateCompanyNameRequest request)
     {
         try
         {
-            var member = (Member)HttpContext.Items["Member"] ?? throw new Exception();
-            var updated = await _service.SetName(member.Id, newCompanyName);
+            var member = (Member)HttpContext.Items["Member"] ?? throw new EntityNotFoundException("Authorized member should have data in HttpContext");
+            var updated = await _service.SetName(member.Id, request.NewCompanyName);
 
             if (updated != null)
             {
                 return Ok(updated);
             }
 
-            return UnprocessableEntity(newCompanyName);
+            return BadRequest(request);
         }
         catch (Exception ex)
         {

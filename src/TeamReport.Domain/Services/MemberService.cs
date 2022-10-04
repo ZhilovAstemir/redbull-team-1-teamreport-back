@@ -60,9 +60,8 @@ public class MemberService: IMemberService
 
     public async Task<Member> Register(MemberModel memberModel)
     {
-        memberModel.Password = PasswordHash.HashPassword(memberModel.Password);
-
         var member = _mapper.Map<MemberModel, Member>(memberModel);
+        member.Password = PasswordHash.HashPassword(member.Password);
 
         var addedMember= await _memberRepository.Create(member);
 

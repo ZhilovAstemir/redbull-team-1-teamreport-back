@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using Moq;
 using redbull_team_1_teamreport_back.Data.Entities;
 using redbull_team_1_teamreport_back.Data.Persistence;
-using Respawn;
 using TeamReport.Domain.Infrastructures;
+using TeamReport.Domain.Mappers;
 using TeamReport.Domain.Models;
 using TeamReport.Domain.Models.Requests;
-using TeamReport.Domain.Services.Interfaces;
+using TeamReport.WebAPI.Mappers;
 using TeamReport.WebAPI.Models;
 
 namespace TeamReport.WebAPI.Tests.Controllers;
@@ -42,12 +42,25 @@ public class ControllerTestFixture
         };
     }
 
+    public CompanyModel GetCompanyModel()
+    {
+        return new CompanyModel()
+        {
+            Id = 1,
+            Name = "CompanyName"
+        };
+    }
+
     public MemberModel GetMemberModel()
     {
         return new MemberModel()
         {
             Email = "email@email.com",
-            Password = PasswordHash.HashPassword("password")
+            Password = PasswordHash.HashPassword("password"),
+            FirstName = "FirstName",
+            LastName = "LastName",
+            Title = "Title",
+            Company = GetCompanyModel()
         };
     }
 
@@ -68,25 +81,6 @@ public class ControllerTestFixture
         return new LoginRequest() { Email = "email@email.com", Password = "password" };
     }
 
-    public IMapper GetMapperMock()
-    {
-        var mapperMock = new Mock<IMapper>();
-        mapperMock.Setup(x => x.Map<Member, MemberModel>(It.IsAny<Member>())).Returns(GetMemberModel());
-        mapperMock.Setup(x => x.Map<MemberModel, Member>(It.IsAny<MemberModel>())).Returns(GetMember());
-        mapperMock.Setup(x => x.Map<MemberRegistrationRequest, MemberModel>(It.IsAny<MemberRegistrationRequest>())).Returns(GetMemberModel());
-
-        return mapperMock.Object;
-    }
-
-    public ApplicationDbContext GetContext()
-    {
-        var dbContextOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseInMemoryDatabase(databaseName: "TestDb")
-            .Options;
-
-        return new ApplicationDbContext(dbContextOptions);
-    }
-
     public CompanyRegistrationRequest GetCompanyRegistrationRequest()
     {
         var member = GetMember();
@@ -101,4 +95,34 @@ public class ControllerTestFixture
             Title = member.Title
         };
     }
+
+    public UpdateCompanyNameRequest GetUpdateCompanyNameRequest()
+    {
+        var member = GetMember();
+
+        return new UpdateCompanyNameRequest() { MemberId = member.Id, NewCompanyName = "New Comapny Name" };
+
+    }
+
+    public IMapper GetMapper()
+    {
+        var mapperConfig = new MapperConfiguration(cfg => {
+            cfg.AddProfile<MapperDomain>();
+            cfg.AddProfile<MapperAPI>();
+        });
+        var mapper = new Mapper(mapperConfig);
+
+        return mapper;
+    }
+
+    public ApplicationDbContext GetContext()
+    {
+        var dbContextOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
+            .UseInMemoryDatabase(databaseName: "TestDb")
+            .Options;
+
+        return new ApplicationDbContext(dbContextOptions);
+    }
+
+
 }

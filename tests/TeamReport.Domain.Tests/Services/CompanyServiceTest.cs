@@ -23,7 +23,7 @@ public class CompanyServiceTest
     {
         var context = _fixture.GetContext();
         var service = new CompanyService(new CompanyRepository(context),
-            new MemberRepository(context), _fixture.GetMapperDomainMock().Object);
+            new MemberRepository(context), _fixture.GetMapper());
         service.Should().NotBeNull().And.BeOfType<CompanyService>();
     }
 
@@ -34,7 +34,7 @@ public class CompanyServiceTest
 
         var context = _fixture.GetContext();
         var service = new CompanyService(new CompanyRepository(context),
-            new MemberRepository(context), _fixture.GetMapperDomainMock().Object);
+            new MemberRepository(context), _fixture.GetMapper());
 
         var member = _fixture.GetMember();
         context.Members.Add(member);
@@ -52,7 +52,7 @@ public class CompanyServiceTest
 
         var context = _fixture.GetContext();
         var service = new CompanyService(new CompanyRepository(context),
-            new MemberRepository(context), _fixture.GetMapperDomainMock().Object);
+            new MemberRepository(context), _fixture.GetMapper());
 
         var member = _fixture.GetMember();
         member.Company = null;
@@ -70,7 +70,7 @@ public class CompanyServiceTest
 
         var context = _fixture.GetContext();
         var service = new CompanyService(new CompanyRepository(context),
-            new MemberRepository(context), _fixture.GetMapperDomainMock().Object);
+            new MemberRepository(context), _fixture.GetMapper());
 
         var member = _fixture.GetMember();
         context.Members.Add(member);
@@ -93,18 +93,15 @@ public class CompanyServiceTest
         _fixture.ClearDatabase();
 
         var context = _fixture.GetContext();
-        var companyRepositoryMock = new Mock<ICompanyRepository>();
-        companyRepositoryMock.Setup(x => x.Update(It.IsAny<Company>())).Returns(Task.FromResult(false));
-        var service = new CompanyService(companyRepositoryMock.Object,
-            new MemberRepository(context), _fixture.GetMapperDomainMock().Object);
+        var memberRepositoryMock = new Mock<IMemberRepository>();
+        memberRepositoryMock.Setup(x => x.Update(It.IsAny<Member>())).Returns(Task.FromResult(false));
+
+        var service = new CompanyService(new CompanyRepository(context),
+            memberRepositoryMock.Object, _fixture.GetMapper());
 
         var member = _fixture.GetMember();
         context.Members.Add(member);
         await context.SaveChangesAsync();
-            
-        var company = await service.GetCompany(member.Id);
-        company.Should().NotBeNull();
-        company.Name.Should().Be(member.Company.Name);
 
         var newCompanyName = "New Company Name";
         var updatedCompany = await service.SetName(member.Id, newCompanyName);
@@ -119,7 +116,7 @@ public class CompanyServiceTest
 
         var context = _fixture.GetContext();
         var service = new CompanyService(new CompanyRepository(context),
-            new MemberRepository(context), _fixture.GetMapperDomainMock().Object);
+            new MemberRepository(context), _fixture.GetMapper());
 
         var member = _fixture.GetMember();
         member.Company = null;
@@ -137,7 +134,7 @@ public class CompanyServiceTest
 
         var context = _fixture.GetContext();
         var service = new CompanyService(new CompanyRepository(context),
-            new MemberRepository(context), _fixture.GetMapperDomainMock().Object);
+            new MemberRepository(context), _fixture.GetMapper());
 
         var memberModel = _fixture.GetMemberModel();
         var createdMember = await service.Register(memberModel);
@@ -155,12 +152,11 @@ public class CompanyServiceTest
         _fixture.ClearDatabase();
 
         var context = _fixture.GetContext();
-        var mapperMock = _fixture.GetMapperDomainMock();
-        mapperMock.Setup(x => x.Map<MemberModel, Member>(It.IsAny<MemberModel>())).Returns(new Member());
         var service = new CompanyService(new CompanyRepository(context),
-            new MemberRepository(context), mapperMock.Object);
+            new MemberRepository(context), _fixture.GetMapper());
 
         var memberModel = _fixture.GetMemberModel();
+        memberModel.Company = null;
         var createMember = await service.Register(memberModel);
 
         createMember.Should().BeNull();
