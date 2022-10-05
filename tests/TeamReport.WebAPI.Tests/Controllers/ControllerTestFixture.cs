@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Moq;
 using redbull_team_1_teamreport_back.Data.Entities;
 using redbull_team_1_teamreport_back.Data.Persistence;
-using Respawn;
 using TeamReport.Domain.Infrastructures;
+using TeamReport.Domain.Mappers;
 using TeamReport.Domain.Models;
 using TeamReport.Domain.Models.Requests;
-using TeamReport.Domain.Services.Interfaces;
+using TeamReport.WebAPI.Mappers;
+using TeamReport.WebAPI.Models;
 
 namespace TeamReport.WebAPI.Tests.Controllers;
 
@@ -28,7 +28,25 @@ public class ControllerTestFixture
             Password = PasswordHash.HashPassword("password"),
             FirstName = "FirstName",
             LastName = "LastName",
-            Title = "Title"
+            Title = "Title",
+            Company = GetCompany()
+        };
+    }
+
+    public Company GetCompany()
+    {
+        return new Company()
+        {
+            Name = "CompanyName"
+        };
+    }
+
+    public CompanyModel GetCompanyModel()
+    {
+        return new CompanyModel()
+        {
+            Id = 1,
+            Name = "CompanyName"
         };
     }
 
@@ -37,7 +55,11 @@ public class ControllerTestFixture
         return new MemberModel()
         {
             Email = "email@email.com",
-            Password = PasswordHash.HashPassword("password")
+            Password = PasswordHash.HashPassword("password"),
+            FirstName = "FirstName",
+            LastName = "LastName",
+            Title = "Title",
+            Company = GetCompanyModel()
         };
     }
 
@@ -58,14 +80,36 @@ public class ControllerTestFixture
         return new LoginRequest() { Email = "email@email.com", Password = "password" };
     }
 
-    public IMapper GetMapperMock()
+    public CompanyRegistrationRequest GetCompanyRegistrationRequest()
     {
-        var mapperMock = new Mock<IMapper>();
-        mapperMock.Setup(x => x.Map<Member, MemberModel>(It.IsAny<Member>())).Returns(GetMemberModel());
-        mapperMock.Setup(x => x.Map<MemberModel, Member>(It.IsAny<MemberModel>())).Returns(GetMember());
-        mapperMock.Setup(x => x.Map<MemberRegistrationRequest, MemberModel>(It.IsAny<MemberRegistrationRequest>())).Returns(GetMemberModel());
+        var member = GetMember();
 
-        return mapperMock.Object;
+        return new CompanyRegistrationRequest()
+        {
+            Email = member.Email,
+            Company = member.Company,
+            FirstName = member.FirstName,
+            LastName = member.LastName,
+            Password = member.Password,
+            Title = member.Title
+        };
+    }
+
+    public UpdateCompanyNameRequest GetUpdateCompanyNameRequest()
+    {
+        return new UpdateCompanyNameRequest() { NewCompanyName = "New Comapny Name" };
+    }
+
+    public IMapper GetMapper()
+    {
+        var mapperConfig = new MapperConfiguration(cfg =>
+        {
+            cfg.AddProfile<MapperDomain>();
+            cfg.AddProfile<MapperAPI>();
+        });
+        var mapper = new Mapper(mapperConfig);
+
+        return mapper;
     }
 
     public ApplicationDbContext GetContext()
@@ -76,4 +120,6 @@ public class ControllerTestFixture
 
         return new ApplicationDbContext(dbContextOptions);
     }
+
+
 }

@@ -2,7 +2,7 @@
 using FluentAssertions;
 using TeamReport.Domain.Models;
 using TeamReport.Domain.Models.Requests;
-using TeamReport.WebAPI.MapperStorage;
+using TeamReport.WebAPI.Mappers;
 
 namespace TeamReport.Domain.Tests.Mappers;
 

@@ -4,7 +4,6 @@ using redbull_team_1_teamreport_back.Data.Entities;
 using TeamReport.Domain.Mappers;
 using TeamReport.Domain.Models;
 using TeamReport.Domain.Models.Requests;
-using TeamReport.WebAPI.MapperStorage;
 
 namespace TeamReport.Domain.Tests.Mappers;
 

@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Moq;
 using redbull_team_1_teamreport_back.Data.Entities;
+using redbull_team_1_teamreport_back.Data.Repositories;
 using TeamReport.Domain.Exceptions;
 using TeamReport.Domain.Models;
 using TeamReport.Domain.Services;
@@ -8,19 +9,19 @@ using Xunit;
 
 namespace TeamReport.Domain.Tests.Services;
 
-public class AuthorizationServiceTest
+public class MemberServiceTest
 {
     private readonly ServiceTestFixture _fixture;
 
-    public AuthorizationServiceTest()
+    public MemberServiceTest()
     {
         _fixture = new ServiceTestFixture();
     }
 
     [Fact]
-    public void ShouldBeAbleToCreateAuthorizationService()
+    public void ShouldBeAbleToCreateMemberService()
     {
-        var service = new MemberService(_fixture.GetMemberRepositoryMock().Object, _fixture.GetMapperDomainMock().Object);
+        var service = new MemberService(_fixture.GetMemberRepositoryMock().Object, _fixture.GetMapper());
         service.Should().NotBeNull();
     }
 
@@ -29,7 +30,7 @@ public class AuthorizationServiceTest
     {
         _fixture.ClearDatabase();
 
-        var service = new MemberService(_fixture.GetMemberRepositoryMock().Object, _fixture.GetMapperDomainMock().Object);
+        var service = new MemberService(_fixture.GetMemberRepositoryMock().Object, _fixture.GetMapper());
 
         var memberModel = _fixture.GetMemberModel();
 
@@ -41,11 +42,14 @@ public class AuthorizationServiceTest
     {
         _fixture.ClearDatabase();
 
-        var service = new MemberService(_fixture.GetMemberRepositoryMock().Object, _fixture.GetMapperDomainMock().Object);
+        var service = new MemberService(new MemberRepository(_fixture.GetContext()), _fixture.GetMapper());
 
         var memberModel = _fixture.GetMemberModel();
+        memberModel.Password="password";
 
-       (await service.Login(memberModel.Email,memberModel.Password)).Should().BeOfType(typeof(MemberModel));
+        await service.Register(memberModel);
+
+       (await service.Login(memberModel.Email, memberModel.Password)).Should().BeOfType(typeof(MemberModel));
     }
 
     [Fact]
@@ -56,7 +60,7 @@ public class AuthorizationServiceTest
         var repository = _fixture.GetMemberRepositoryMock();
         repository.Setup(x => x.ReadByEmail(It.IsAny<string>())).Returns(Task.FromResult((Member?)null));
 
-        var service = new MemberService(repository.Object, _fixture.GetMapperDomainMock().Object);
+        var service = new MemberService(repository.Object, _fixture.GetMapper());
 
         var memberModel = _fixture.GetMemberModel();
 
@@ -71,7 +75,7 @@ public class AuthorizationServiceTest
 
         var repository = _fixture.GetMemberRepositoryMock();
 
-        var service = new MemberService(repository.Object, _fixture.GetMapperDomainMock().Object);
+        var service = new MemberService(repository.Object, _fixture.GetMapper());
 
         var memberModel = _fixture.GetMemberModel();
         memberModel.Password = "newwrongpass";
@@ -88,7 +92,7 @@ public class AuthorizationServiceTest
 
         var repository = _fixture.GetMemberRepositoryMock();
 
-        var service = new MemberService(repository.Object, _fixture.GetMapperDomainMock().Object);
+        var service = new MemberService(repository.Object, _fixture.GetMapper());
 
         var memberModel = _fixture.GetMemberModel();
         memberModel.Email = null;

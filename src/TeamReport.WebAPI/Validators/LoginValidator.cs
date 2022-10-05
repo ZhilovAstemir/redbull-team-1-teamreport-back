@@ -1,5 +1,6 @@
 using FluentValidation;
 using TeamReport.Domain.Models.Requests;
+using TeamReport.WebAPI.Models;
 
 namespace TeamReport.Domain.Validators;
 

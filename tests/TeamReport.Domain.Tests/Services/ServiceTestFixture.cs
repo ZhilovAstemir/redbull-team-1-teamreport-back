@@ -5,7 +5,11 @@ using redbull_team_1_teamreport_back.Data.Entities;
 using redbull_team_1_teamreport_back.Data.Persistence;
 using redbull_team_1_teamreport_back.Data.Repositories.Interfaces;
 using TeamReport.Domain.Infrastructures;
+using TeamReport.Domain.Mappers;
 using TeamReport.Domain.Models;
+using TeamReport.Domain.Models.Requests;
+using TeamReport.WebAPI.Mappers;
+using TeamReport.WebAPI.Models;
 
 namespace TeamReport.Domain.Tests.Services;
 
@@ -35,7 +39,17 @@ public class ServiceTestFixture
             Password = PasswordHash.HashPassword("password"),
             FirstName = "FirstName",
             LastName = "LastName",
-            Title = "Title"
+            Title = "Title",
+            Company = new Company() { Id = 1, Name = "CompanyName" }
+        };
+    }
+
+    public Company GetCompany()
+    {
+        return new Company()
+        {
+            Id = 1,
+            Name = "CompanyName"
         };
     }
 
@@ -44,7 +58,19 @@ public class ServiceTestFixture
         return new MemberModel()
         {
             Email = "email@email.com",
-            Password = "password"
+            Password = PasswordHash.HashPassword("password"),
+            FirstName = "FirstName",
+            LastName = "LastName",
+            Title = "Title",
+            Company = GetCompanyModel()
+        };
+    }
+    public CompanyModel GetCompanyModel()
+    {
+        return new CompanyModel()
+        {
+            Id = 1,
+            Name = "CompanyName"
         };
     }
 
@@ -58,11 +84,14 @@ public class ServiceTestFixture
         return repositoryMock;
     }
 
-    public Mock<IMapper> GetMapperDomainMock()
+    public IMapper GetMapper()
     {
-        var mapperMock = new Mock<IMapper>();
-        mapperMock.Setup(x => x.Map<Member, MemberModel>(It.IsAny<Member>())).Returns(GetMemberModel());
-        mapperMock.Setup(x => x.Map<MemberModel, Member>(It.IsAny<MemberModel>())).Returns(GetMember());
-        return mapperMock;
+        var mapperConfig = new MapperConfiguration(cfg => {
+            cfg.AddProfile<MapperDomain>();
+            cfg.AddProfile<MapperAPI>();
+        });
+        var mapper = new Mapper(mapperConfig);
+
+        return mapper;
     }
 }

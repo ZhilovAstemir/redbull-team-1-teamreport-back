@@ -15,13 +15,13 @@ public class TeamControllerTest
     public TeamControllerTest()
     {
         _fixture = new ControllerTestFixture();
-        _teamService = new TeamService(new MemberRepository(_fixture.GetContext()), _fixture.GetMapperMock());
+        _teamService = new TeamService(new MemberRepository(_fixture.GetContext()), _fixture.GetMapper());
     }
 
     [Fact]
     public void ShouldBeAbleToCreateController()
     {
-        var controller = new TeamController(_teamService,_fixture.GetMapperMock());
+        var controller = new TeamController(_teamService,_fixture.GetMapper());
         controller.Should().NotBeNull();
     }
 
@@ -30,7 +30,7 @@ public class TeamControllerTest
     {
         _fixture.ClearDatabase();
 
-        var controller = new TeamController(_teamService,_fixture.GetMapperMock());
+        var controller = new TeamController(_teamService,_fixture.GetMapper());
 
         await _teamService.Add(_fixture.GetMember());
 

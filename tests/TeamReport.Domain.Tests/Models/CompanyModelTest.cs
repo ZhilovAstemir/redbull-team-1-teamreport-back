@@ -17,8 +17,8 @@ public class CompanyModelTest
     {
         var model = new CompanyModel()
         {
-           Id = 1,
-           Name = "Name"
+            Id = 1,
+            Name = "Name"
         };
 
         model.Id.Should().BeOfType(typeof(int));

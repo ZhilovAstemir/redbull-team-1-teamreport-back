@@ -7,7 +7,7 @@ using redbull_team_1_teamreport_back.Data.Persistence;
 using TeamReport.Domain.Mappers;
 using TeamReport.WebAPI;
 using TeamReport.WebAPI.Helpers;
-using TeamReport.WebAPI.MapperStorage;
+using TeamReport.WebAPI.Mappers;
 
 var builder = WebApplication.CreateBuilder(args);
 
