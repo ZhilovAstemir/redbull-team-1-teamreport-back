@@ -6,9 +6,12 @@ using redbull_team_1_teamreport_back.Data.Entities;
 using redbull_team_1_teamreport_back.Data.Persistence;
 using Respawn;
 using TeamReport.Domain.Infrastructures;
+using TeamReport.Domain.Mappers;
 using TeamReport.Domain.Models;
 using TeamReport.Domain.Models.Requests;
 using TeamReport.Domain.Services.Interfaces;
+using TeamReport.WebAPI.MapperStorage;
+using TeamReport.WebAPI.Models;
 
 namespace TeamReport.WebAPI.Tests.Controllers;
 
@@ -69,6 +72,18 @@ public class ControllerTestFixture
         return mapperMock.Object;
     }
 
+    public IMapper GetMapper()
+    {
+        var mapperConfig = new MapperConfiguration(cfg =>
+        {
+            cfg.AddProfile<MapperDomain>();
+            cfg.AddProfile<MapperAPI>();
+        });
+        var mapper = new Mapper(mapperConfig);
+
+        return mapper;
+    }
+
     public ApplicationDbContext GetContext()
     {
         var dbContextOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
@@ -95,6 +110,16 @@ public class ControllerTestFixture
             Port = 465, 
             UserName = "teamreports111@gmail.com", 
             Password = "btpyftfbrhibrgan"
+        };
+    }
+
+    public InviteMemberModelRequest GetInviteMemberRequest()
+    {
+        return new InviteMemberModelRequest()
+        {
+            FirstName = "John",
+            LastName = "Smith",
+            Email = "misterjohn@gmail.com"
         };
     }
 }
