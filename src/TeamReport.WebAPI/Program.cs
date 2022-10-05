@@ -8,7 +8,7 @@ using TeamReport.Domain.Infrastructures;
 using TeamReport.Domain.Mappers;
 using TeamReport.WebAPI;
 using TeamReport.WebAPI.Helpers;
-using TeamReport.WebAPI.MapperStorage;
+using TeamReport.WebAPI.Mappers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,7 +44,23 @@ builder.Services.AddDbContext<ApplicationDbContext>(o =>
 
 });
 
-builder.Services.AddCors();
+var _aspnetCorsFromOut = Environment.GetEnvironmentVariable("ASPNET_CORS")?.Split(",") != null ? Environment.GetEnvironmentVariable("ASPNET_CORS")?.Split(",") : new string[] { };
+
+string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+var _aspnetCorsDefault = new string[] { "http://localhost:3000", "http://localhost:7030" };
+
+var corsDomains = _aspnetCorsDefault.Concat(_aspnetCorsFromOut).ToArray();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+        builder =>
+        {
+            builder.WithOrigins(corsDomains).AllowAnyHeader().AllowAnyMethod();
+        });
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDataRepositories();
 builder.Services.AddDomainServices();
@@ -66,6 +82,8 @@ if (app.Environment.IsDevelopment())
 app.UseMiddleware<JwtMiddleware>();
 
 app.UseHttpsRedirection();
+
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseAuthorization();
 app.UseAuthentication();

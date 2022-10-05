@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TeamReport.Domain.Models;
 using TeamReport.Domain.Models.Requests;
@@ -21,6 +20,7 @@ public class MemberController : ControllerBase
 
     public MemberController(IMemberService memberService, IMapper mapper, IEmailService emailService)
     {
+
         _memberService = memberService;
         _mapper = mapper;
         _emailService = emailService;   
@@ -30,21 +30,36 @@ public class MemberController : ControllerBase
     [Route("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
-        var user = await _memberService.Login(request.Email, request.Password);
-        return Ok( await _memberService.GetToken(user));
+        try
+        {
+            var user = await _memberService.Login(request.Email, request.Password);
+            return Ok(await _memberService.GetToken(user));
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex);
+        }
+
     }
-    
+
     [HttpPost]
     [Route("register")]
     [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     public async Task<IActionResult> Register([FromBody] MemberRegistrationRequest member)
     {
-        var memberModel = _mapper.Map<MemberRegistrationRequest, MemberModel>(member);
+        try
+        {
+            var memberModel = _mapper.Map<MemberRegistrationRequest, MemberModel>(member);
 
-        var id = await _memberService.Register(memberModel);
-        
-        return Ok( await _memberService.GetToken(memberModel));
+            var id = await _memberService.Register(memberModel);
+
+            return Ok(await _memberService.GetToken(memberModel));
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex);
+        }
     }
 
     [HttpPost("invite")]

@@ -19,12 +19,10 @@ public class CompanyTest
         var company = new Company()
         {
             Id = 1,
-            Name = "Company",
-            Member = new List<Member>()
+            Name = "Company"
         };
         
         company.Id.Should().Be(1);
         company.Name.Should().Be("Company");
-        company.Member.Should().BeOfType<List<Member>>();
     }
 }
