@@ -10,6 +10,8 @@ using TeamReport.Domain.Models.Requests;
 using TeamReport.Domain.Services;
 using TeamReport.Domain.Services.Interfaces;
 using TeamReport.Domain.Validators;
+using TeamReport.WebAPI.Models;
+using TeamReport.WebAPI.Validators;
 
 namespace TeamReport.WebAPI;
 
@@ -66,15 +68,7 @@ public static class ServiceConfiguration
 
         services.AddScoped<IValidator<LoginRequest>, LoginValidator>();
         services.AddScoped<IValidator<MemberRegistrationRequest>, MemberRegistrationValidator>();
-
-    }
-
-    public static void D(this IServiceCollection services, IConfiguration configuration)
-    {
-        var emailConfig = configuration
-        .GetSection("EmailConfiguration")
-        .Get<EmailConfiguration>();
-        services.AddSingleton(emailConfig);
+        services.AddScoped<IValidator<InviteMemberModelRequest>, InviteMemberValidator>();
     }
 
 }

@@ -6,11 +6,11 @@
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "From": "yogurtcleaning@gmail.com",
+        "From": "teamreports111@gmail.com",
         "SmtpServer": "smtp.gmail.com",
         "Port": 465,
-        "Username": "yogurtcleaning@gmail.com",
-        "Password": "gmwtczapktzqdnxb"
+        "Username": "teamreports111@gmail.com",
+        "Password": "btpyftfbrhibrgan"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "https://localhost:7030;http://localhost:5030"
