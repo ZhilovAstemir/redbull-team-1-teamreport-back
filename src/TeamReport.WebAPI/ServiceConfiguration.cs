@@ -9,6 +9,7 @@ using TeamReport.Domain.Services;
 using TeamReport.Domain.Services.Interfaces;
 using TeamReport.Domain.Validators;
 using TeamReport.WebAPI.Models;
+using TeamReport.WebAPI.Validators;
 
 namespace TeamReport.WebAPI;
 
@@ -66,6 +67,8 @@ public static class ServiceConfiguration
 
         services.AddScoped<IValidator<LoginRequest>, LoginValidator>();
         services.AddScoped<IValidator<MemberRegistrationRequest>, MemberRegistrationValidator>();
+        services.AddScoped<IValidator<CompanyRegistrationRequest>, CompanyRegistrationValidator>();
+        services.AddScoped<IValidator<UpdateCompanyNameRequest>, UpdateCompanyNameValidator>();
     }
 
 }

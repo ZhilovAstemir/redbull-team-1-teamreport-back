@@ -2,7 +2,5 @@
 
 public class UpdateCompanyNameRequest
 {
-    public int MemberId { get; set; }
-
     public string NewCompanyName { get; set; }
 }

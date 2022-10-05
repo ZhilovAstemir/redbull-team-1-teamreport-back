@@ -98,10 +98,7 @@ public class ControllerTestFixture
 
     public UpdateCompanyNameRequest GetUpdateCompanyNameRequest()
     {
-        var member = GetMember();
-
-        return new UpdateCompanyNameRequest() { MemberId = member.Id, NewCompanyName = "New Comapny Name" };
-
+        return new UpdateCompanyNameRequest() { NewCompanyName = "New Comapny Name" };
     }
 
     public IMapper GetMapper()
