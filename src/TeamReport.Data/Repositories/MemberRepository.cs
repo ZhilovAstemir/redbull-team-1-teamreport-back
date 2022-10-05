@@ -4,7 +4,7 @@ using redbull_team_1_teamreport_back.Data.Persistence;
 using redbull_team_1_teamreport_back.Data.Repositories.Interfaces;
 
 namespace redbull_team_1_teamreport_back.Data.Repositories;
-public class MemberRepository: IMemberRepository
+public class MemberRepository : IMemberRepository
 {
     private readonly ApplicationDbContext _context;
 
@@ -23,18 +23,18 @@ public class MemberRepository: IMemberRepository
 
     public async Task<Member?> Read(int entityId)
     {
-        var member=await _context.Members.Include(x=>x.Company).FirstOrDefaultAsync(c => c.Id == entityId);
+        var member = await _context.Members.Include(x => x.Company).FirstOrDefaultAsync(c => c.Id == entityId);
         return member;
     }
 
     public async Task<Member?> ReadByEmail(string email)
     {
-        return await _context.Members.Include(x=>x.Company).FirstOrDefaultAsync(c => c.Email == email);
+        return await _context.Members.Include(x => x.Company).FirstOrDefaultAsync(c => c.Email == email);
     }
 
     public async Task<List<Member>> ReadAll()
     {
-        return await _context.Members.Include(x=>x.Company).ToListAsync();
+        return await _context.Members.Include(x => x.Company).ToListAsync();
     }
 
 

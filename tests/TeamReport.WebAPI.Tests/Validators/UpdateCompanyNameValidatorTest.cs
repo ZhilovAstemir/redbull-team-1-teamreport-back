@@ -25,11 +25,11 @@ public class UpdateCompanyNameValidatorTest
         var validator = new UpdateCompanyNameValidator();
         var model = _fixture.GetUpdateCompanyNameRequest();
 
-        var result=validator.Validate(model);
+        var result = validator.Validate(model);
         result.IsValid.Should().BeTrue();
     }
 
-    
+
     [Fact]
     public void ShouldUpdateCompanyNameValidatorValidateShortCompanyName()
     {
@@ -37,7 +37,7 @@ public class UpdateCompanyNameValidatorTest
         var model = _fixture.GetUpdateCompanyNameRequest();
         model.NewCompanyName = "aaa";
 
-        var result=validator.Validate(model);
+        var result = validator.Validate(model);
         result.IsValid.Should().BeFalse();
         result.Errors[0].PropertyName.Should().Be("NewCompanyName");
     }
@@ -49,7 +49,7 @@ public class UpdateCompanyNameValidatorTest
         var model = _fixture.GetUpdateCompanyNameRequest();
         model.NewCompanyName = null;
 
-        var result=validator.Validate(model);
+        var result = validator.Validate(model);
         result.IsValid.Should().BeFalse();
         result.Errors[0].PropertyName.Should().Be("NewCompanyName");
     }

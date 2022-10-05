@@ -1,10 +1,8 @@
-﻿using Castle.Components.DictionaryAdapter.Xml;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Moq;
 using redbull_team_1_teamreport_back.Data.Entities;
 using redbull_team_1_teamreport_back.Data.Repositories;
 using redbull_team_1_teamreport_back.Data.Repositories.Interfaces;
-using TeamReport.Domain.Models;
 using TeamReport.Domain.Services;
 
 namespace TeamReport.Domain.Tests.Services;
@@ -39,7 +37,7 @@ public class CompanyServiceTest
         var member = _fixture.GetMember();
         context.Members.Add(member);
         await context.SaveChangesAsync();
-            
+
         var company = await service.GetCompany(member.Id);
         company.Should().NotBeNull();
         company.Name.Should().Be(member.Company.Name);
@@ -58,7 +56,7 @@ public class CompanyServiceTest
         member.Company = null;
         context.Members.Add(member);
         await context.SaveChangesAsync();
-            
+
         var company = await service.GetCompany(member.Id);
         company.Should().BeNull();
     }
@@ -75,14 +73,14 @@ public class CompanyServiceTest
         var member = _fixture.GetMember();
         context.Members.Add(member);
         await context.SaveChangesAsync();
-            
+
         var company = await service.GetCompany(member.Id);
         company.Should().NotBeNull();
         company.Name.Should().Be(member.Company.Name);
 
         var newCompanyName = "New Company Name";
         var updatedCompany = await service.SetName(member.Id, newCompanyName);
-        
+
         updatedCompany.Should().NotBeNull();
         updatedCompany.Name.Should().Be(newCompanyName);
     }
@@ -105,7 +103,7 @@ public class CompanyServiceTest
 
         var newCompanyName = "New Company Name";
         var updatedCompany = await service.SetName(member.Id, newCompanyName);
-        
+
         updatedCompany.Should().BeNull();
     }
 
@@ -123,7 +121,7 @@ public class CompanyServiceTest
 
         var newCompanyName = "New Company Name";
         var updatedCompany = await service.SetName(member.Id, newCompanyName);
-        
+
         updatedCompany.Should().BeNull();
     }
 

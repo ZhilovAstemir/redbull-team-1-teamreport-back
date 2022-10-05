@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Moq;
 using redbull_team_1_teamreport_back.Data.Entities;
 using redbull_team_1_teamreport_back.Data.Persistence;
 using TeamReport.Domain.Infrastructures;
@@ -103,7 +102,8 @@ public class ControllerTestFixture
 
     public IMapper GetMapper()
     {
-        var mapperConfig = new MapperConfiguration(cfg => {
+        var mapperConfig = new MapperConfiguration(cfg =>
+        {
             cfg.AddProfile<MapperDomain>();
             cfg.AddProfile<MapperAPI>();
         });

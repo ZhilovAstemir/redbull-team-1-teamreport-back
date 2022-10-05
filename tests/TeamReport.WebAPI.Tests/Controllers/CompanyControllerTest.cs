@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using redbull_team_1_teamreport_back.Data.Entities;
 using redbull_team_1_teamreport_back.Data.Repositories;
 using TeamReport.Domain.Models;
 using TeamReport.Domain.Services;
@@ -59,7 +58,7 @@ public class CompanyControllerTest
         httpContext.Items["Member"] = member;
         controllerContext.HttpContext = httpContext;
         controller.ControllerContext = controllerContext;
-        
+
 
         var request = _fixture.GetCompanyRegistrationRequest();
         var response = await controller.RegisterCompany(request);
@@ -88,7 +87,7 @@ public class CompanyControllerTest
         httpContext.Items["Member"] = member;
         controllerContext.HttpContext = httpContext;
         controller.ControllerContext = controllerContext;
-        
+
 
         var request = _fixture.GetUpdateCompanyNameRequest();
         var updateResponse = await controller.UpdateCompanyName(request);
@@ -99,7 +98,7 @@ public class CompanyControllerTest
         getResponse.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeOfType<CompanyModel>();
     }
 
-    
+
     [Fact]
     public async Task ShouldUpdateCompanyNameReturnBadRequestIfServiceCanNotUpdate()
     {
@@ -120,7 +119,7 @@ public class CompanyControllerTest
         httpContext.Items["Member"] = member;
         controllerContext.HttpContext = httpContext;
         controller.ControllerContext = controllerContext;
-        
+
 
         var request = _fixture.GetUpdateCompanyNameRequest();
         var updateResponse = await controller.UpdateCompanyName(request);
@@ -133,7 +132,7 @@ public class CompanyControllerTest
         _fixture.ClearDatabase();
 
         var controller = new CompanyController(_companyService, _fixture.GetMapper());
-        
+
         var request = _fixture.GetUpdateCompanyNameRequest();
         var updateResponse = await controller.UpdateCompanyName(request);
 
@@ -147,7 +146,7 @@ public class CompanyControllerTest
         _fixture.ClearDatabase();
 
         var controller = new CompanyController(_companyService, _fixture.GetMapper());
-        
+
         var getResponse = await controller.GetCompanyName();
 
         getResponse.Should().BeOfType<BadRequestObjectResult>();
@@ -163,7 +162,7 @@ public class CompanyControllerTest
             .Throws(new Exception());
 
         var controller = new CompanyController(companyServiceMock.Object, _fixture.GetMapper());
-        
+
         var getResponse = await controller.RegisterCompany(_fixture.GetCompanyRegistrationRequest());
 
         getResponse.Should().BeOfType<BadRequestObjectResult>().Which.Value.Should().BeOfType<Exception>();
@@ -179,7 +178,7 @@ public class CompanyControllerTest
             .Returns(Task.FromResult(((MemberModel?)null)));
 
         var controller = new CompanyController(companyServiceMock.Object, _fixture.GetMapper());
-        
+
         var getResponse = await controller.RegisterCompany(_fixture.GetCompanyRegistrationRequest());
 
         getResponse.Should().BeOfType<BadRequestObjectResult>().Which.Value.Should().BeOfType<CompanyRegistrationRequest>();

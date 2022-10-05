@@ -1,6 +1,4 @@
 ﻿using FluentAssertions;
-using TeamReport.Domain.Validators;
-using TeamReport.WebAPI.Models;
 using TeamReport.WebAPI.Validators;
 
 namespace TeamReport.WebAPI.Tests.Validators;
@@ -51,7 +49,7 @@ public class CompanyRegistrationValidatorTest
 
         result.IsValid.Should().BeFalse();
         result.Errors.Should().HaveCount(1).And.Contain(x => x.ErrorMessage.Contains("Password"));
-        
+
     }
 
     [Fact]
@@ -65,7 +63,7 @@ public class CompanyRegistrationValidatorTest
 
         result.IsValid.Should().BeFalse();
         result.Errors.Should().HaveCount(1).And.Contain(x => x.ErrorMessage.Contains("Password"));
-        
+
     }
 
     [Fact]

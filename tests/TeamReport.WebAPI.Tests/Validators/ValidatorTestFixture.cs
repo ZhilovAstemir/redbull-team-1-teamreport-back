@@ -1,5 +1,4 @@
 ﻿using redbull_team_1_teamreport_back.Data.Entities;
-using TeamReport.Domain.Infrastructures;
 using TeamReport.WebAPI.Models;
 
 namespace TeamReport.WebAPI.Tests.Validators;

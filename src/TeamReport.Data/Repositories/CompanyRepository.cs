@@ -4,7 +4,7 @@ using redbull_team_1_teamreport_back.Data.Persistence;
 using redbull_team_1_teamreport_back.Data.Repositories.Interfaces;
 
 namespace redbull_team_1_teamreport_back.Data.Repositories;
-public class CompanyRepository:ICompanyRepository
+public class CompanyRepository : ICompanyRepository
 {
     private readonly ApplicationDbContext _context;
 
@@ -14,7 +14,7 @@ public class CompanyRepository:ICompanyRepository
     }
     public async Task<Company> Create(Company entity)
     {
-        var company=_context.Companies.Add(entity);
+        var company = _context.Companies.Add(entity);
         await _context.SaveChangesAsync();
         return company.Entity;
     }

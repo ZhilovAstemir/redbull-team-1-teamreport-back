@@ -30,11 +30,11 @@ public class MemberRegistrationValidatorTest
         var validator = new MemberRegistrationValidator();
         var model = new MemberRegistrationRequest()
         {
-            Email="email@email.email",
+            Email = "email@email.email",
             Password = "Some password for test",
             FirstName = "FirstName",
             LastName = "LastName",
-            Title="Title"
+            Title = "Title"
         };
         var result = validator.Validate(model);
 
@@ -50,7 +50,7 @@ public class MemberRegistrationValidatorTest
             Password = "Some password for test",
             FirstName = "FirstName",
             LastName = "LastName",
-            Title="Title"
+            Title = "Title"
         };
         var result = validator.Validate(model);
 
@@ -64,11 +64,11 @@ public class MemberRegistrationValidatorTest
         var validator = new MemberRegistrationValidator();
         var model = new MemberRegistrationRequest()
         {
-            Email="email@email.email",
+            Email = "email@email.email",
             Password = "pass",
             FirstName = "FirstName",
             LastName = "LastName",
-            Title="Title"
+            Title = "Title"
         };
         var result = validator.Validate(model);
 
@@ -82,10 +82,10 @@ public class MemberRegistrationValidatorTest
         var validator = new MemberRegistrationValidator();
         var model = new MemberRegistrationRequest()
         {
-            Email="email@email.email",
+            Email = "email@email.email",
             Password = "Some password for test",
             LastName = "LastName",
-            Title="Title"
+            Title = "Title"
         };
         var result = validator.Validate(model);
 
@@ -99,24 +99,24 @@ public class MemberRegistrationValidatorTest
         var validator = new MemberRegistrationValidator();
         var model = new MemberRegistrationRequest()
         {
-            Email="email@email.email",
+            Email = "email@email.email",
             Password = "Some password for test",
             FirstName = "FirstName",
-            Title="Title"
+            Title = "Title"
         };
         var result = validator.Validate(model);
 
         result.IsValid.Should().BeFalse();
         result.Errors.Should().HaveCount(1).And.Contain(x => x.ErrorMessage.Contains("Last Name"));
     }
-    
+
     [Fact]
     public void ShouldMemberRegistrationValidatorValidateTitle()
     {
         var validator = new MemberRegistrationValidator();
         var model = new MemberRegistrationRequest()
         {
-            Email="email@email.email",
+            Email = "email@email.email",
             Password = "Some password for test",
             FirstName = "FirstName",
             LastName = "LastName"
