@@ -9,7 +9,6 @@ using TeamReport.Domain.Infrastructures;
 using TeamReport.Domain.Mappers;
 using TeamReport.Domain.Models;
 using TeamReport.Domain.Models.Requests;
-using TeamReport.Domain.Services.Interfaces;
 using TeamReport.WebAPI.MapperStorage;
 using TeamReport.WebAPI.Models;
 
@@ -60,16 +59,6 @@ public class ControllerTestFixture
     public LoginRequest GetLoginRequest()
     {
         return new LoginRequest() { Email = "email@email.com", Password = "password" };
-    }
-
-    public IMapper GetMapperMock()
-    {
-        var mapperMock = new Mock<IMapper>();
-        mapperMock.Setup(x => x.Map<Member, MemberModel>(It.IsAny<Member>())).Returns(GetMemberModel());
-        mapperMock.Setup(x => x.Map<MemberModel, Member>(It.IsAny<MemberModel>())).Returns(GetMember());
-        mapperMock.Setup(x => x.Map<MemberRegistrationRequest, MemberModel>(It.IsAny<MemberRegistrationRequest>())).Returns(GetMemberModel());
-
-        return mapperMock.Object;
     }
 
     public IMapper GetMapper()

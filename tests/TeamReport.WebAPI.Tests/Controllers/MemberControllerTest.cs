@@ -20,14 +20,14 @@ public class MemberControllerTest
     public MemberControllerTest()
     {
         _fixture = new ControllerTestFixture();
-        _service = new MemberService(new MemberRepository(_fixture.GetContext()), _fixture.GetMapperMock());
+        _service = new MemberService(new MemberRepository(_fixture.GetContext()), _fixture.GetMapper());
         _emailService = new EmailService(_fixture.GetNewOptions());
     }
 
     [Fact]
     public void ShouldBeAbleToCreateMemberController()
     {
-        var controller = new MemberController(_service, _fixture.GetMapperMock(), _emailService);
+        var controller = new MemberController(_service, _fixture.GetMapper(), _emailService);
         controller.Should().NotBeNull();
     }
 

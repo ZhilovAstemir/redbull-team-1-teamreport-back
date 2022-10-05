@@ -1,10 +1,6 @@
 ﻿using FluentAssertions;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Moq;
 using redbull_team_1_teamreport_back.Data.Repositories;
-using TeamReport.Domain.Infrastructures;
 using TeamReport.Domain.Services;
 using TeamReport.Domain.Services.Interfaces;
 using TeamReport.WebAPI.Controllers;
@@ -21,14 +17,14 @@ public class AuthorizationControllerTest
     public AuthorizationControllerTest()
     {
         _fixture = new ControllerTestFixture();
-        _service = new MemberService(new MemberRepository(_fixture.GetContext()), _fixture.GetMapperMock());
+        _service = new MemberService(new MemberRepository(_fixture.GetContext()), _fixture.GetMapper());
         _emailService = new EmailService(_fixture.GetNewOptions());
     }
 
     [Fact]
     public void ShouldBeAbleToCreateAuthorizationController()
     {
-        var controller = new MemberController(_service, _fixture.GetMapperMock(), _emailService);
+        var controller = new MemberController(_service, _fixture.GetMapper(), _emailService);
         controller.Should().NotBeNull();
     }
 
@@ -37,7 +33,7 @@ public class AuthorizationControllerTest
     {
         _fixture.ClearDatabase();
 
-        var controller = new MemberController(_service, _fixture.GetMapperMock(), _emailService);
+        var controller = new MemberController(_service, _fixture.GetMapper(), _emailService);
         var request = _fixture.GetMemberRegistrationRequest();
         var response=await controller.Register(request);
 
@@ -50,7 +46,7 @@ public class AuthorizationControllerTest
     {
         _fixture.ClearDatabase();
 
-        var controller = new MemberController(_service, _fixture.GetMapperMock(), _emailService);
+        var controller = new MemberController(_service, _fixture.GetMapper(), _emailService);
 
         var memberRegistrationRequest = _fixture.GetMemberRegistrationRequest();
         var registerResponse=await controller.Register(memberRegistrationRequest);
