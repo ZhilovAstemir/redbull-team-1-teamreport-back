@@ -3,12 +3,9 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using redbull_team_1_teamreport_back.Data.Repositories;
-using TeamReport.Domain.Mappers;
 using TeamReport.Domain.Services;
 using TeamReport.Domain.Services.Interfaces;
 using TeamReport.WebAPI.Controllers;
-using TeamReport.WebAPI.MapperStorage;
-using TeamReport.WebAPI.Models;
 using Moq;
 using TeamReport.Domain.Models;
 
@@ -50,7 +47,7 @@ public class MemberControllerTest
     {
         _fixture.ClearDatabase();
 
-        var controller = new MemberController(_service, _fixture.GetMapper());
+        var controller = new MemberController(_service, _fixture.GetMapper(),_emailService);
         var request = _fixture.GetMemberRegistrationRequest();
         var response = await controller.Register(request);
 
@@ -63,7 +60,7 @@ public class MemberControllerTest
     {
         _fixture.ClearDatabase();
 
-        var controller = new MemberController(_service, _fixture.GetMapper());
+        var controller = new MemberController(_service, _fixture.GetMapper(), _emailService);
 
         var memberRegistrationRequest = _fixture.GetMemberRegistrationRequest();
         var registerResponse = await controller.Register(memberRegistrationRequest);
@@ -85,7 +82,7 @@ public class MemberControllerTest
         var serviceMock = new Mock<IMemberService>();
         serviceMock.Setup(x => x.Login(It.IsAny<string>(), It.IsAny<string>())).Throws(new Exception());
 
-        var controller = new MemberController(serviceMock.Object, _fixture.GetMapper());
+        var controller = new MemberController(serviceMock.Object, _fixture.GetMapper(),_emailService);
 
         var loginRequest = _fixture.GetLoginRequest();
         var loginResponse = await controller.Login(loginRequest);
@@ -101,7 +98,7 @@ public class MemberControllerTest
         var serviceMock = new Mock<IMemberService>();
         serviceMock.Setup(x => x.Register(It.IsAny<MemberModel>())).Throws(new Exception());
 
-        var controller = new MemberController(serviceMock.Object, _fixture.GetMapper());
+        var controller = new MemberController(serviceMock.Object, _fixture.GetMapper(),_emailService);
 
         var registrationRequest = _fixture.GetMemberRegistrationRequest();
         var response = await controller.Register(registrationRequest);

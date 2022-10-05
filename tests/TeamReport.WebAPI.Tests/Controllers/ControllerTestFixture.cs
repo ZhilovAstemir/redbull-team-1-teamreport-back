@@ -8,7 +8,6 @@ using TeamReport.Domain.Infrastructures;
 using TeamReport.Domain.Mappers;
 using TeamReport.Domain.Models;
 using TeamReport.Domain.Models.Requests;
-using TeamReport.WebAPI.MapperStorage;
 using TeamReport.WebAPI.Mappers;
 using TeamReport.WebAPI.Models;
 
