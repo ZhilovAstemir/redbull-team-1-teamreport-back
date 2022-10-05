@@ -1,11 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.OpenApi.Models;
 using redbull_team_1_teamreport_back.Data.Repositories;
 using redbull_team_1_teamreport_back.Data.Repositories.Interfaces;
-using TeamReport.Domain.Infrastructures;
 using TeamReport.Domain.Models.Requests;
 using TeamReport.Domain.Services;
 using TeamReport.Domain.Services.Interfaces;
