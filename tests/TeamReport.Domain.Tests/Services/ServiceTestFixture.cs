@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Moq;
 using redbull_team_1_teamreport_back.Data.Entities;
 using redbull_team_1_teamreport_back.Data.Persistence;
@@ -93,5 +94,25 @@ public class ServiceTestFixture
         var mapper = new Mapper(mapperConfig);
 
         return mapper;
+    }
+
+    public IOptions<EmailConfiguration> GetNewOptions()
+    {
+        var optionMock = new Mock<IOptions<EmailConfiguration>>();
+        optionMock.Setup(x => x.Value).Returns(GetEmailConfiguration());
+
+        return optionMock.Object;
+    }
+
+    public EmailConfiguration GetEmailConfiguration()
+    {
+        return new EmailConfiguration()
+        {
+            From = "teamreports111@gmail.com",
+            SmtpServer = "smtp.gmail.com",
+            Port = 465,
+            UserName = "teamreports111@gmail.com",
+            Password = "btpyftfbrhibrgan"
+        };
     }
 }

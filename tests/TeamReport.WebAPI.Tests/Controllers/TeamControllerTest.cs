@@ -4,7 +4,6 @@ using redbull_team_1_teamreport_back.Data.Entities;
 using redbull_team_1_teamreport_back.Data.Repositories;
 using TeamReport.Domain.Services;
 using TeamReport.WebAPI.Controllers;
-using Xunit;
 
 namespace TeamReport.WebAPI.Tests.Controllers;
 
