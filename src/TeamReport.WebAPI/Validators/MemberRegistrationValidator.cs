@@ -9,7 +9,7 @@ public class MemberRegistrationValidator : AbstractValidator<MemberRegistrationR
     {
         RuleFor(request =>
                 request.Email)
-            .NotEmpty().WithMessage("Email is required");
+            .NotEmpty().EmailAddress().WithMessage("Email is required");
         RuleFor(request =>
                 request.Password)
             .NotEmpty().Length(5, 30).WithMessage("Password is too short or empty");
