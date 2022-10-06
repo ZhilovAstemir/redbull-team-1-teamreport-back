@@ -165,7 +165,7 @@ public class CompanyControllerTest
 
         var getResponse = await controller.RegisterCompany(_fixture.GetCompanyRegistrationRequest());
 
-        getResponse.Should().BeOfType<BadRequestObjectResult>().Which.Value.Should().BeOfType<Exception>();
+        getResponse.Should().BeOfType<BadRequestObjectResult>().Which.Value.Should().BeOfType<string>();
     }
 
     [Fact]

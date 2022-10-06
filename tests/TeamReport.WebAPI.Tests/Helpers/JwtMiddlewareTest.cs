@@ -30,7 +30,7 @@ public class JwtMiddlewareTest
     public void ShouldJwtMiddlewareDoNothingIfNoToken()
     {
         var middleware = new JwtMiddleware(null, WebApplication.CreateBuilder().Configuration);
-        var task=middleware.Invoke(new DefaultHttpContext(), new TeamService(new MemberRepository(_fixture.GetContext()), _fixture.GetMapper()));
+        var task = middleware.Invoke(new DefaultHttpContext(), new TeamService(new MemberRepository(_fixture.GetContext()), _fixture.GetMapper()));
         task.IsCompleted.Should().BeTrue();
     }
 
@@ -40,13 +40,14 @@ public class JwtMiddlewareTest
         var httpContext = new DefaultHttpContext();
         var middleware = new JwtMiddleware(It.IsAny<RequestDelegate>(), WebApplication.CreateBuilder().Configuration);
         var memberRepository = new MemberRepository(_fixture.GetContext());
-        var member =await memberRepository.Create(_fixture.GetMember());
+        var companyRepository = new CompanyRepository(_fixture.GetContext());
+        var member = await memberRepository.Create(_fixture.GetMember());
         var mapper = _fixture.GetMapper();
-        var authService = new MemberService(memberRepository, mapper);
-        
+        var authService = new MemberService(memberRepository, companyRepository, mapper);
 
-        httpContext.Request.Headers.Add("Authorization",await authService.GetToken(mapper.Map<Member,MemberModel>(member)));
-        var task=middleware.Invoke(httpContext, new TeamService(memberRepository,mapper));
+
+        httpContext.Request.Headers.Add("Authorization", await authService.GetToken(mapper.Map<Member, MemberModel>(member)));
+        var task = middleware.Invoke(httpContext, new TeamService(memberRepository, mapper));
 
         task.IsCompleted.Should().BeTrue();
 
@@ -59,13 +60,14 @@ public class JwtMiddlewareTest
         var httpContext = new DefaultHttpContext();
         var middleware = new JwtMiddleware(It.IsAny<RequestDelegate>(), WebApplication.CreateBuilder().Configuration);
         var memberRepository = new MemberRepository(_fixture.GetContext());
+        var companyRepository = new CompanyRepository(_fixture.GetContext());
         var member = memberRepository.Create(_fixture.GetMember());
         var mapper = _fixture.GetMapper();
-        var authService = new MemberService(memberRepository, mapper);
-        
+        var authService = new MemberService(memberRepository, companyRepository, mapper);
 
-        httpContext.Request.Headers.Add("Authorization","2012347192740912oaisfhoiahsdfoi");
-        var task=()=>middleware.Invoke(httpContext, new TeamService(memberRepository,mapper));
+
+        httpContext.Request.Headers.Add("Authorization", "2012347192740912oaisfhoiahsdfoi");
+        var task = () => middleware.Invoke(httpContext, new TeamService(memberRepository, mapper));
 
         task.Should().ThrowAsync<TokenValidationException>();
     }

@@ -17,7 +17,8 @@ public class MemberControllerTest
     public MemberControllerTest()
     {
         _fixture = new ControllerTestFixture();
-        _service = new MemberService(new MemberRepository(_fixture.GetContext()), _fixture.GetMapper());
+        var context = _fixture.GetContext();
+        _service = new MemberService(new MemberRepository(context), new CompanyRepository(context), _fixture.GetMapper());
     }
 
     [Fact]
@@ -72,7 +73,7 @@ public class MemberControllerTest
         var loginRequest = _fixture.GetLoginRequest();
         var loginResponse = await controller.Login(loginRequest);
 
-        loginResponse.Should().BeOfType<BadRequestObjectResult>().Which.Value.Should().BeOfType<Exception>();
+        loginResponse.Should().BeOfType<BadRequestObjectResult>().Which.Value.Should().BeOfType<string>();
     }
 
     [Fact]
@@ -88,6 +89,6 @@ public class MemberControllerTest
         var registrationRequest = _fixture.GetMemberRegistrationRequest();
         var response = await controller.Register(registrationRequest);
 
-        response.Should().BeOfType<BadRequestObjectResult>().Which.Value.Should().BeOfType<Exception>();
+        response.Should().BeOfType<BadRequestObjectResult>().Which.Value.Should().BeOfType<string>();
     }
 }

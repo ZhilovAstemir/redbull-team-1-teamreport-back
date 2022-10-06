@@ -1,27 +1,29 @@
 ﻿using FluentAssertions;
 using Moq;
 using redbull_team_1_teamreport_back.Data.Entities;
+using redbull_team_1_teamreport_back.Data.Persistence;
 using redbull_team_1_teamreport_back.Data.Repositories;
 using TeamReport.Domain.Exceptions;
 using TeamReport.Domain.Models;
 using TeamReport.Domain.Services;
-using Xunit;
 
 namespace TeamReport.Domain.Tests.Services;
 
 public class MemberServiceTest
 {
     private readonly ServiceTestFixture _fixture;
+    private readonly ApplicationDbContext _context;
 
     public MemberServiceTest()
     {
         _fixture = new ServiceTestFixture();
+        _context = _fixture.GetContext();
     }
 
     [Fact]
     public void ShouldBeAbleToCreateMemberService()
     {
-        var service = new MemberService(_fixture.GetMemberRepositoryMock().Object, _fixture.GetMapper());
+        var service = new MemberService(new MemberRepository(_context), new CompanyRepository(_context), _fixture.GetMapper());
         service.Should().NotBeNull();
     }
 
@@ -30,11 +32,11 @@ public class MemberServiceTest
     {
         _fixture.ClearDatabase();
 
-        var service = new MemberService(_fixture.GetMemberRepositoryMock().Object, _fixture.GetMapper());
+        var service = new MemberService(new MemberRepository(_context), new CompanyRepository(_context), _fixture.GetMapper());
 
         var memberModel = _fixture.GetMemberModel();
 
-        (await service.Register(memberModel)).Should().BeOfType(typeof(Member));
+        (await service.Register(memberModel)).Should().BeOfType<MemberModel>();
     }
 
     [Fact]
@@ -42,14 +44,14 @@ public class MemberServiceTest
     {
         _fixture.ClearDatabase();
 
-        var service = new MemberService(new MemberRepository(_fixture.GetContext()), _fixture.GetMapper());
+        var service = new MemberService(new MemberRepository(_context), new CompanyRepository(_context), _fixture.GetMapper());
 
         var memberModel = _fixture.GetMemberModel();
-        memberModel.Password="password";
+        memberModel.Password = "password";
 
         await service.Register(memberModel);
 
-       (await service.Login(memberModel.Email, memberModel.Password)).Should().BeOfType(typeof(MemberModel));
+        (await service.Login(memberModel.Email, memberModel.Password)).Should().BeOfType(typeof(MemberModel));
     }
 
     [Fact]
@@ -60,11 +62,11 @@ public class MemberServiceTest
         var repository = _fixture.GetMemberRepositoryMock();
         repository.Setup(x => x.ReadByEmail(It.IsAny<string>())).Returns(Task.FromResult((Member?)null));
 
-        var service = new MemberService(repository.Object, _fixture.GetMapper());
+        var service = new MemberService(new MemberRepository(_context), new CompanyRepository(_context), _fixture.GetMapper());
 
         var memberModel = _fixture.GetMemberModel();
 
-        var loginAction= async () => await service.Login(memberModel.Email,memberModel.Password);
+        var loginAction = async () => await service.Login(memberModel.Email, memberModel.Password);
         loginAction.Should().ThrowAsync<InvalidCreditalsException>();
     }
 
@@ -75,12 +77,12 @@ public class MemberServiceTest
 
         var repository = _fixture.GetMemberRepositoryMock();
 
-        var service = new MemberService(repository.Object, _fixture.GetMapper());
+        var service = new MemberService(new MemberRepository(_context), new CompanyRepository(_context), _fixture.GetMapper());
 
         var memberModel = _fixture.GetMemberModel();
         memberModel.Password = "newwrongpass";
 
-        var loginAction= () => service.Login(memberModel.Email,memberModel.Password);
+        var loginAction = () => service.Login(memberModel.Email, memberModel.Password);
 
         loginAction.Should().ThrowAsync<InvalidCreditalsException>();
     }
@@ -92,12 +94,12 @@ public class MemberServiceTest
 
         var repository = _fixture.GetMemberRepositoryMock();
 
-        var service = new MemberService(repository.Object, _fixture.GetMapper());
+        var service = new MemberService(new MemberRepository(_context), new CompanyRepository(_context), _fixture.GetMapper());
 
         var memberModel = _fixture.GetMemberModel();
         memberModel.Email = null;
 
-        var getTokenAction= () => service.GetToken(memberModel);
+        var getTokenAction = () => service.GetToken(memberModel);
 
         getTokenAction.Should().ThrowAsync<DataException>();
     }
