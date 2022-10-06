@@ -25,4 +25,22 @@ public class RepositoryTestFixture
     {
         return new Company() { Id = 1, Name = "CompanyName" };
     }
+
+    public Leadership GetLeadership()
+    {
+        return new Leadership() { Id = 1, Leader = GetMember(), Member = GetMember() };
+    }
+
+    public Member GetMember()
+    {
+        return new Member()
+        {
+            Email = "email@email.com",
+            Password = "password",
+            FirstName = "FirstName",
+            LastName = "LastName",
+            Title = "Title",
+            Company = new Company() { Id = 1, Name = "CompanyName" }
+        };
+    }
 }
