@@ -6,7 +6,6 @@ using redbull_team_1_teamreport_back.Data.Identity;
 using redbull_team_1_teamreport_back.Data.Persistence;
 using TeamReport.Domain.Infrastructures;
 using TeamReport.Domain.Mappers;
-using TeamReport.Domain.Services;
 using TeamReport.WebAPI;
 using TeamReport.WebAPI.Helpers;
 using TeamReport.WebAPI.Mappers;
