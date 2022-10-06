@@ -1,7 +1,8 @@
-﻿namespace TeamReport.Data.Entities;
-
-public class Company
+﻿namespace TeamReport.Data.Entities
 {
-    public int Id { get; set; }
-    public string? Name { get; set; }
+    public class Company
+    {
+        public int Id { get; set; }
+        public string? Name { get; set; }
+    }
 }

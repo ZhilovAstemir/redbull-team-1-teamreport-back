@@ -164,4 +164,27 @@ public class MemberRepositoryTest
 
         (await repository.Delete(0)).Should().BeFalse();
     }
+
+    [Fact]
+    public async Task ShouldReadMembersByCompanyId()
+    {
+        _fixture.ClearDatabase(_context);
+
+        var repository = new MemberRepository(_context);
+
+        var member = _fixture.GetMember();
+        _context.Members.Add(member);
+        await _context.SaveChangesAsync();
+        member = await repository.Read(1);
+        var member2 = _fixture.GetMember();
+        member2.Company = member.Company;
+        var member3 = _fixture.GetMember();
+        member3.Company = member.Company;
+        _context.Members.Add(member2);
+        _context.Members.Add(member3);
+        await _context.SaveChangesAsync();
+
+
+        (await repository.ReadByCompany(member.Company.Id)).Should().HaveCount(3).And.Contain(member).And.Contain(member2).And.Contain(member3);
+    }
 }

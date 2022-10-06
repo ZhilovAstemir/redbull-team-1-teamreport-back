@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
-using Moq;
-using TeamReport.Data.Entities;
+using TeamReport.Data.Persistence;
+using TeamReport.Data.Repositories;
 using TeamReport.Domain.Services;
 
 namespace TeamReport.Domain.Tests.Services;
@@ -8,42 +8,38 @@ namespace TeamReport.Domain.Tests.Services;
 public class TeamServiceTest
 {
     private readonly ServiceTestFixture _fixture;
+    private readonly ApplicationDbContext _context;
 
     public TeamServiceTest()
     {
         _fixture = new ServiceTestFixture();
+        _context = _fixture.GetContext();
     }
 
     [Fact]
     public void ShouldBeAbleToCreateTeamService()
     {
-        var service = new TeamService(_fixture.GetMemberRepositoryMock().Object, _fixture.GetMapper());
-        service.Should().NotBeNull();
+        var service = new TeamService(new MemberRepository(_context), new LeadershipRepository(_context), new CompanyRepository(_context), _fixture.GetMapper());
+        service.Should().NotBeNull().And.BeOfType<TeamService>();
     }
 
     [Fact]
-    public async Task ShouldBeAbleToAddAndGetMember()
+    public async Task ShouldBeAbleToGetAllTeamMembers()
     {
-        var service = new TeamService(_fixture.GetMemberRepositoryMock().Object, _fixture.GetMapper());
-        var member = _fixture.GetMember();
+        _fixture.ClearDatabase();
 
-        service.Add(member);
+        var memberRepository = new MemberRepository(_context);
+        var service = new TeamService(memberRepository, new LeadershipRepository(_context), new CompanyRepository(_context), _fixture.GetMapper());
+        service.Should().NotBeNull().And.BeOfType<TeamService>();
 
-        var createdMember = await service.Get(member.Id);
-        createdMember?.Email.Should().Be(member.Email);
+        var member = await memberRepository.Create(_fixture.GetMember());
+        var member2 = _fixture.GetMember();
+        member2.Company = member.Company;
+        await memberRepository.Create(member2);
+
+        var teamMembers = await service.GetAllTeamMembers(member.Company.Id);
     }
 
-    [Fact]
-    public async Task ShouldBeAbleToGetAllMembers()
-    {
-        var repository = _fixture.GetMemberRepositoryMock();
-        var service = new TeamService(repository.Object, _fixture.GetMapper());
 
-        await service.Add(_fixture.GetMember());
-        await service.Add(_fixture.GetMember());
-        repository.Verify(x => x.Create(It.IsAny<Member>()), Times.Exactly(2));
 
-        var members = service.GetAll();
-        repository.Verify(x => x.ReadAll(), Times.Exactly(1));
-    }
 }

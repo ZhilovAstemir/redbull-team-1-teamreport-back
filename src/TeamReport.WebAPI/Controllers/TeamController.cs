@@ -20,9 +20,5 @@ public class TeamController : ControllerBase
         _mapper = mapper;
     }
 
-    [HttpGet]
-    public async Task<IActionResult> GetAll()
-    {
-        return Ok(await _teamService.GetAll());
-    }
+
 }

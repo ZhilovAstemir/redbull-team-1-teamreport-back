@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TeamReport.Data.Entities;
+using TeamReport.Data.Exceptions;
 using TeamReport.Data.Persistence;
 using TeamReport.Data.Repositories.Interfaces;
 
@@ -51,14 +52,62 @@ public class LeadershipRepository : ILeadershipRepository
         return await _context.Leaderships.ToListAsync();
     }
 
-    public async Task<List<Member>> ReadLeaders(int memberId)
+    public async Task<List<Member>> ReadLeaders(int reporterId)
     {
-        return await _context.Leaderships.Where(x => x.Member.Id == memberId).Select(x => x.Leader).ToListAsync();
+        return await _context.Leaderships.Where(x => x.Member.Id == reporterId).Select(x => x.Leader).ToListAsync();
     }
 
     public async Task<List<Member>> ReadReporters(int leaderId)
     {
         return await _context.Leaderships.Where(x => x.Leader.Id == leaderId).Select(x => x.Member).ToListAsync();
+    }
+
+    public async Task<List<Member>> UpdateLeaders(int reporterId, List<Member> leaders)
+    {
+        await DeleteLeaders(reporterId);
+
+        var reporter = await _context.Members.FirstOrDefaultAsync(x => x.Id == reporterId);
+        if (reporter is null) throw new EntityNotFoundException("Can't find reporter to update his leaders");
+        foreach (Member leader in leaders)
+        {
+            _context.Add(new Leadership() { Leader = leader, Member = reporter });
+        }
+
+        await _context.SaveChangesAsync();
+
+        return await ReadLeaders(reporterId);
+    }
+
+    public async Task<List<Member>> UpdateReporters(int leaderId, List<Member> reporters)
+    {
+        await DeleteReporters(leaderId);
+
+        var leader = await _context.Members.FirstOrDefaultAsync(x => x.Id == leaderId);
+        if (leader is null) throw new EntityNotFoundException("Can't find leader to update his reporters");
+        foreach (Member reporter in reporters)
+        {
+            _context.Add(new Leadership() { Leader = leader, Member = reporter });
+        }
+
+        await _context.SaveChangesAsync();
+
+        return await ReadReporters(leaderId);
+    }
+
+    public async Task<bool> DeleteLeaders(int reporterId)
+    {
+        var leadershipsToDelete = await _context.Leaderships.Where(x => x.Member.Id == reporterId).ToListAsync();
+        _context.Leaderships.RemoveRange(leadershipsToDelete);
+        await _context.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<bool> DeleteReporters(int leaderId)
+    {
+        var leadershipsToDelete = await _context.Leaderships.Where(x => x.Leader.Id == leaderId).ToListAsync();
+        _context.Leaderships.RemoveRange(leadershipsToDelete);
+        await _context.SaveChangesAsync();
+        return true;
     }
 
     public async Task<bool> DeleteLeaderships(int memberId)

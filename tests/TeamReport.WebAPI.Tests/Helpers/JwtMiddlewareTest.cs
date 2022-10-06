@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Moq;
 using TeamReport.Data.Entities;
+using TeamReport.Data.Exceptions;
 using TeamReport.Data.Repositories;
-using TeamReport.Domain.Exceptions;
 using TeamReport.Domain.Models;
 using TeamReport.Domain.Services;
 using TeamReport.WebAPI.Helpers;
@@ -30,7 +30,9 @@ public class JwtMiddlewareTest
     public void ShouldJwtMiddlewareDoNothingIfNoToken()
     {
         var middleware = new JwtMiddleware(null, WebApplication.CreateBuilder().Configuration);
-        var task = middleware.Invoke(new DefaultHttpContext(), new TeamService(new MemberRepository(_fixture.GetContext()), _fixture.GetMapper()));
+        var context = _fixture.GetContext();
+        var memberRepository = new MemberRepository(context);
+        var task = middleware.Invoke(new DefaultHttpContext(), memberRepository);
         task.IsCompleted.Should().BeTrue();
     }
 
@@ -46,7 +48,7 @@ public class JwtMiddlewareTest
 
 
         httpContext.Request.Headers.Add("Authorization", await authService.GetToken(mapper.Map<Member, MemberModel>(member)));
-        var task = middleware.Invoke(httpContext, new TeamService(memberRepository, mapper));
+        var task = middleware.Invoke(httpContext, memberRepository);
 
         task.IsCompleted.Should().BeTrue();
 
@@ -65,7 +67,7 @@ public class JwtMiddlewareTest
 
 
         httpContext.Request.Headers.Add("Authorization", "2012347192740912oaisfhoiahsdfoi");
-        var task = () => middleware.Invoke(httpContext, new TeamService(memberRepository, mapper));
+        var task = () => middleware.Invoke(httpContext, memberRepository);
 
         task.Should().ThrowAsync<TokenValidationException>();
     }

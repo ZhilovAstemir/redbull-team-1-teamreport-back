@@ -1,8 +1,9 @@
 ﻿using FluentAssertions;
 using Moq;
 using TeamReport.Data.Entities;
+using TeamReport.Data.Exceptions;
 using TeamReport.Data.Repositories;
-using TeamReport.Domain.Exceptions;
+using TeamReport.Data.Repositories.Interfaces;
 using TeamReport.Domain.Models;
 using TeamReport.Domain.Services;
 
@@ -20,7 +21,7 @@ public class MemberServiceTest
     [Fact]
     public void ShouldBeAbleToCreateMemberService()
     {
-        var service = new MemberService(_fixture.GetMemberRepositoryMock().Object, _fixture.GetMapper());
+        var service = new MemberService(new MemberRepository(_fixture.GetContext()), _fixture.GetMapper());
         service.Should().NotBeNull();
     }
 
@@ -29,7 +30,7 @@ public class MemberServiceTest
     {
         _fixture.ClearDatabase();
 
-        var service = new MemberService(_fixture.GetMemberRepositoryMock().Object, _fixture.GetMapper());
+        var service = new MemberService(new MemberRepository(_fixture.GetContext()), _fixture.GetMapper());
 
         var memberModel = _fixture.GetMemberModel();
 
@@ -56,7 +57,7 @@ public class MemberServiceTest
     {
         _fixture.ClearDatabase();
 
-        var repository = _fixture.GetMemberRepositoryMock();
+        var repository = new Mock<IMemberRepository>();
         repository.Setup(x => x.ReadByEmail(It.IsAny<string>())).Returns(Task.FromResult((Member?)null));
 
         var service = new MemberService(repository.Object, _fixture.GetMapper());
@@ -72,9 +73,9 @@ public class MemberServiceTest
     {
         _fixture.ClearDatabase();
 
-        var repository = _fixture.GetMemberRepositoryMock();
+        var repository = new MemberRepository(_fixture.GetContext());
 
-        var service = new MemberService(repository.Object, _fixture.GetMapper());
+        var service = new MemberService(repository, _fixture.GetMapper());
 
         var memberModel = _fixture.GetMemberModel();
         memberModel.Password = "newwrongpass";
@@ -89,9 +90,9 @@ public class MemberServiceTest
     {
         _fixture.ClearDatabase();
 
-        var repository = _fixture.GetMemberRepositoryMock();
+        var repository = new MemberRepository(_fixture.GetContext());
 
-        var service = new MemberService(repository.Object, _fixture.GetMapper());
+        var service = new MemberService(repository, _fixture.GetMapper());
 
         var memberModel = _fixture.GetMemberModel();
         memberModel.Email = null;

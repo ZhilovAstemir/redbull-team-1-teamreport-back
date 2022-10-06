@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using TeamReport.Data.Entities;
-using TeamReport.Domain.Exceptions;
+using TeamReport.Data.Exceptions;
 using TeamReport.Domain.Models;
 using TeamReport.Domain.Services.Interfaces;
 using TeamReport.WebAPI.Helpers;

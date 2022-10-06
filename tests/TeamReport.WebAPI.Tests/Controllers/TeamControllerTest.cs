@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
-using Microsoft.AspNetCore.Mvc;
-using TeamReport.Data.Entities;
+using TeamReport.Data.Persistence;
 using TeamReport.Data.Repositories;
 using TeamReport.Domain.Services;
 using TeamReport.WebAPI.Controllers;
@@ -11,28 +10,19 @@ public class TeamControllerTest
 {
     private readonly ControllerTestFixture _fixture;
     private readonly TeamService _teamService;
+    private readonly ApplicationDbContext _context;
     public TeamControllerTest()
     {
         _fixture = new ControllerTestFixture();
-        _teamService = new TeamService(new MemberRepository(_fixture.GetContext()), _fixture.GetMapper());
+        _context = _fixture.GetContext();
+        _teamService = new TeamService(new MemberRepository(_context), new LeadershipRepository(_context), new CompanyRepository(_context), _fixture.GetMapper());
     }
 
     [Fact]
     public void ShouldBeAbleToCreateController()
     {
         var controller = new TeamController(_teamService, _fixture.GetMapper());
-        controller.Should().NotBeNull();
+        controller.Should().NotBeNull().And.BeOfType<TeamController>();
     }
 
-    [Fact]
-    public async Task ShouldBeAbleToGetAllMembers()
-    {
-        _fixture.ClearDatabase();
-
-        var controller = new TeamController(_teamService, _fixture.GetMapper());
-
-        await _teamService.Add(_fixture.GetMember());
-
-        (await controller.GetAll()).Should().BeOfType<OkObjectResult>().Which.Value.Should().BeOfType<List<Member>>().Which.Count.Should().Be(1);
-    }
 }

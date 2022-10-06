@@ -260,4 +260,147 @@ public class LeadershipRepositoryTest
 
         _context.Leaderships.Should().HaveCount(1).And.Contain(leadership);
     }
+
+    [Fact]
+    public async Task ShouldDeleteAllLeadersOfMember()
+    {
+        _fixture.ClearDatabase(_context);
+
+        _context.Members.Add(_fixture.GetMember());
+        _context.SaveChanges();
+        var leader = _context.Members.First();
+        var company = leader.Company;
+        var leader2 = _fixture.GetMember();
+        leader2.Company = company;
+        var member = _fixture.GetMember();
+        member.Company = company;
+        var member2 = _fixture.GetMember();
+        member2.Company = company;
+        _context.Members.Add(member2);
+        _context.Members.Add(member);
+        _context.SaveChanges();
+
+        var leadership = new Leadership() { Id = 1, Leader = leader, Member = member };
+        var leadership2 = new Leadership() { Id = 2, Leader = leader, Member = member2 };
+        var leadership3 = new Leadership() { Id = 3, Leader = leader2, Member = member2 };
+
+        _context.Leaderships.Add(leadership);
+        _context.Leaderships.Add(leadership2);
+        _context.Leaderships.Add(leadership3);
+        _context.SaveChanges();
+
+        var repository = new LeadershipRepository(_context);
+
+        (await repository.DeleteLeaders(member.Id)).Should().BeTrue();
+
+        _context.Leaderships.Should().HaveCount(2).And.NotContain(leadership);
+    }
+
+    [Fact]
+    public async Task ShouldDeleteAllReportersOfMember()
+    {
+        _fixture.ClearDatabase(_context);
+
+        _context.Members.Add(_fixture.GetMember());
+        _context.SaveChanges();
+        var leader = _context.Members.First();
+        var company = leader.Company;
+        var leader2 = _fixture.GetMember();
+        leader2.Company = company;
+        var member = _fixture.GetMember();
+        member.Company = company;
+        var member2 = _fixture.GetMember();
+        member2.Company = company;
+        _context.Members.Add(member2);
+        _context.Members.Add(member);
+        _context.Members.Add(leader2);
+        _context.SaveChanges();
+
+        var leadership = new Leadership() { Id = 1, Leader = leader, Member = member };
+        var leadership2 = new Leadership() { Id = 2, Leader = leader, Member = member2 };
+        var leadership3 = new Leadership() { Id = 3, Leader = leader2, Member = member2 };
+
+        _context.Leaderships.Add(leadership);
+        _context.Leaderships.Add(leadership2);
+        _context.Leaderships.Add(leadership3);
+        _context.SaveChanges();
+
+        var repository = new LeadershipRepository(_context);
+
+        (await repository.DeleteReporters(leader.Id)).Should().BeTrue();
+
+        _context.Leaderships.Should().HaveCount(1).And.Contain(leadership3);
+    }
+
+    [Fact]
+    public async Task ShouldUpdateReportersOfMember()
+    {
+        _fixture.ClearDatabase(_context);
+
+        _context.Members.Add(_fixture.GetMember());
+        _context.SaveChanges();
+        var leader = _context.Members.First();
+        var company = leader.Company;
+        var leader2 = _fixture.GetMember();
+        leader2.Company = company;
+        var member = _fixture.GetMember();
+        member.Company = company;
+        var member2 = _fixture.GetMember();
+        member2.Company = company;
+        _context.Members.Add(member2);
+        _context.Members.Add(member);
+        _context.Members.Add(leader2);
+        _context.SaveChanges();
+
+        var leadership = new Leadership() { Id = 1, Leader = leader, Member = member };
+        var leadership2 = new Leadership() { Id = 2, Leader = leader, Member = member2 };
+        var leadership3 = new Leadership() { Id = 3, Leader = leader2, Member = member2 };
+
+        _context.Leaderships.Add(leadership);
+        _context.Leaderships.Add(leadership2);
+        _context.Leaderships.Add(leadership3);
+        _context.SaveChanges();
+
+        var repository = new LeadershipRepository(_context);
+
+        var updated = await repository.UpdateReporters(leader.Id, new List<Member>() { member });
+
+        updated.Should().HaveCount(1).And.Contain(member).And.NotContain(member2);
+    }
+
+    [Fact]
+    public async Task ShouldUpdateLeadersOfMember()
+    {
+        _fixture.ClearDatabase(_context);
+
+        _context.Members.Add(_fixture.GetMember());
+        _context.SaveChanges();
+        var leader = _context.Members.First();
+        var company = leader.Company;
+        var leader2 = _fixture.GetMember();
+        leader2.Company = company;
+        var member = _fixture.GetMember();
+        member.Company = company;
+        var member2 = _fixture.GetMember();
+        member2.Company = company;
+        _context.Members.Add(member2);
+        _context.Members.Add(member);
+        _context.Members.Add(leader2);
+        _context.SaveChanges();
+
+        var leadership = new Leadership() { Id = 1, Leader = leader, Member = member };
+        var leadership2 = new Leadership() { Id = 2, Leader = leader, Member = member2 };
+        var leadership3 = new Leadership() { Id = 3, Leader = leader2, Member = member2 };
+
+        _context.Leaderships.Add(leadership);
+        _context.Leaderships.Add(leadership2);
+        _context.Leaderships.Add(leadership3);
+        _context.SaveChanges();
+
+        var repository = new LeadershipRepository(_context);
+
+        var updated = await repository.UpdateLeaders(member2.Id, new List<Member>() { leader2 });
+
+        updated.Should().HaveCount(1).And.Contain(leader2).And.NotContain(leader);
+    }
 }

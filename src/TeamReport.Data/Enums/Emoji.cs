@@ -1,10 +1,11 @@
-﻿namespace TeamReport.Data.Enums;
-
-public enum Emotion
+﻿namespace TeamReport.Data.Enums
 {
-    VeryLow,
-    Low,
-    Okay,
-    Good,
-    Great
+    public enum Emotion
+    {
+        VeryLow,
+        Low,
+        Okay,
+        Good,
+        Great
+    }
 }

@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Moq;
 using TeamReport.Data.Entities;
 using TeamReport.Data.Persistence;
-using TeamReport.Data.Repositories.Interfaces;
 using TeamReport.Domain.Infrastructures;
 using TeamReport.Domain.Mappers;
 using TeamReport.Domain.Models;
@@ -72,16 +70,6 @@ public class ServiceTestFixture
         };
     }
 
-    public Mock<IMemberRepository> GetMemberRepositoryMock()
-    {
-        var repositoryMock = new Mock<IMemberRepository>();
-        repositoryMock.Setup(x => x.Read(It.IsAny<int>())).Returns(Task.FromResult(GetMember()));
-        repositoryMock.Setup(x => x.Create(It.IsAny<Member>())).Returns(Task.FromResult(GetMember()));
-        repositoryMock.Setup(x => x.ReadByEmail(It.IsAny<string>())).Returns(Task.FromResult(GetMember()));
-        repositoryMock.Setup(x => x.ReadAll()).Returns(Task.FromResult(new List<Member>() { GetMember() }));
-        return repositoryMock;
-    }
-
     public IMapper GetMapper()
     {
         var mapperConfig = new MapperConfiguration(cfg =>
@@ -93,4 +81,6 @@ public class ServiceTestFixture
 
         return mapper;
     }
+
+
 }
