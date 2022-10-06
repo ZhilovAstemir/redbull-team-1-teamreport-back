@@ -43,11 +43,9 @@ public class EmailService : IEmailService
         {
             try
             {
-
                 client.Connect(_emailConfig.SmtpServer, _emailConfig.Port, true);
                 client.AuthenticationMechanisms.Remove("XOAUTH2");
                 client.Authenticate(_emailConfig.UserName, _emailConfig.Password);
-
                 client.Send(mailMessage);
             }
             catch

@@ -6,6 +6,7 @@ using redbull_team_1_teamreport_back.Data.Identity;
 using redbull_team_1_teamreport_back.Data.Persistence;
 using TeamReport.Domain.Infrastructures;
 using TeamReport.Domain.Mappers;
+using TeamReport.Domain.Services;
 using TeamReport.WebAPI;
 using TeamReport.WebAPI.Helpers;
 using TeamReport.WebAPI.Mappers;
@@ -66,9 +67,7 @@ builder.Services.AddDataRepositories();
 builder.Services.AddDomainServices();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(MapperDomain), typeof(MapperAPI));
-builder.Services.Configure<EmailConfiguration>(builder.Configuration);
-//builder.Services.D(builder.Configuration);
-
+builder.Services.Configure<EmailConfiguration>(builder.Configuration.GetSection(nameof(EmailConfiguration)));
 
 var app = builder.Build();
 

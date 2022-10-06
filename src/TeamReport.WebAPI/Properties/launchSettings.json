@@ -5,12 +5,7 @@
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "From": "teamreports111@gmail.com",
-        "SmtpServer": "smtp.gmail.com",
-        "Port": 465,
-        "Username": "teamreports111@gmail.com",
-        "Password": "btpyftfbrhibrgan"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "https://localhost:7030;http://localhost:5030"
