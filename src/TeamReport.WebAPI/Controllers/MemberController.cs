@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using TeamReport.Data.Entities;
 using TeamReport.Domain.Exceptions;
 using TeamReport.Domain.Models;
+using TeamReport.Domain.Services;
 using TeamReport.Domain.Services.Interfaces;
+using TeamReport.WebAPI.Extensions;
 using TeamReport.WebAPI.Helpers;
 using TeamReport.WebAPI.Models;
 
@@ -16,12 +18,14 @@ public class MemberController : ControllerBase
 {
     private readonly IMemberService _memberService;
     private readonly IMapper _mapper;
+    private readonly IEmailService _emailService;
 
-    public MemberController(IMemberService memberService, IMapper mapper)
+    public MemberController(IMemberService memberService, IMapper mapper, IEmailService emailService)
     {
 
         _memberService = memberService;
         _mapper = mapper;
+        _emailService = emailService;
     }
 
     [HttpPost]
@@ -102,5 +106,14 @@ public class MemberController : ControllerBase
         {
             return BadRequest("Something went wrong during processing your request. Please try again later.");
         }
+    }
+
+    [HttpPost("invite")]
+    public async Task<IActionResult> InviteMember([FromBody] InviteMemberModelRequest member)
+    {
+        var path = this.GetRequestPath();
+        var request = _mapper.Map<InviteMemberModelRequest, InviteMemberRequest>(member);
+        _emailService.InviteMember(request, path);
+        return Ok();
     }
 }

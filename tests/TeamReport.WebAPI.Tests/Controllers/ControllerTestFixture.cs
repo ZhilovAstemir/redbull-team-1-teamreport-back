@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Moq;
 using TeamReport.Data.Entities;
 using TeamReport.Data.Persistence;
 using TeamReport.Domain.Infrastructures;
@@ -124,5 +126,33 @@ public class ControllerTestFixture
         return new ApplicationDbContext(dbContextOptions);
     }
 
+    public IOptions<EmailConfiguration> GetNewOptions()
+    {
+        var optionMock = new Mock<IOptions<EmailConfiguration>>();
+        optionMock.Setup(x => x.Value).Returns(GetEmailConfiguration());
 
+        return optionMock.Object;
+    }
+
+    public EmailConfiguration GetEmailConfiguration()
+    {
+        return new EmailConfiguration()
+        {
+            From = "teamreports111@gmail.com",
+            SmtpServer = "smtp.gmail.com",
+            Port = 465,
+            UserName = "teamreports111@gmail.com",
+            Password = "btpyftfbrhibrgan"
+        };
+    }
+
+    public InviteMemberModelRequest GetInviteMemberRequest()
+    {
+        return new InviteMemberModelRequest()
+        {
+            FirstName = "John",
+            LastName = "Smith",
+            Email = "misterjohn@gmail.com"
+        };
+    }
 }

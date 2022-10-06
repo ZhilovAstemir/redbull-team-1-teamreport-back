@@ -24,6 +24,7 @@ public static class ServiceConfiguration
     {
         services.AddScoped<IMemberService, MemberService>();
         services.AddScoped<ITeamService, TeamService>();
+        services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<ICompanyService, CompanyService>();
     }
 
@@ -65,8 +66,8 @@ public static class ServiceConfiguration
 
         services.AddScoped<IValidator<LoginRequest>, LoginValidator>();
         services.AddScoped<IValidator<MemberRegistrationRequest>, MemberRegistrationValidator>();
+        services.AddScoped<IValidator<InviteMemberModelRequest>, InviteMemberValidator>();
         services.AddScoped<IValidator<CompanyRegistrationRequest>, CompanyRegistrationValidator>();
         services.AddScoped<IValidator<UpdateCompanyNameRequest>, UpdateCompanyNameValidator>();
     }
-
 }
