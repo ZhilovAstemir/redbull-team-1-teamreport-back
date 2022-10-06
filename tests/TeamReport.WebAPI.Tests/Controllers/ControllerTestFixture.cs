@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using redbull_team_1_teamreport_back.Data.Entities;
-using redbull_team_1_teamreport_back.Data.Persistence;
+using TeamReport.Data.Entities;
+using TeamReport.Data.Persistence;
 using TeamReport.Domain.Infrastructures;
 using TeamReport.Domain.Mappers;
 using TeamReport.Domain.Models;
-using TeamReport.Domain.Models.Requests;
 using TeamReport.WebAPI.Mappers;
 using TeamReport.WebAPI.Models;
 

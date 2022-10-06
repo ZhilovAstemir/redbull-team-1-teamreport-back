@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using redbull_team_1_teamreport_back.Data.Entities;
+using TeamReport.Data.Entities;
 
 namespace TeamReport.Data.Tests.Entities;
 
@@ -24,7 +24,7 @@ public class LeadershipTest
             Leader = leader,
             Member = member
         };
-        
+
         leadership.Id.Should().Be(1);
         leadership.Leader.Should().Be(leader);
         leadership.Member.Should().Be(member);

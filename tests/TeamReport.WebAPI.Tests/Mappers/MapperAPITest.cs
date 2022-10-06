@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using FluentAssertions;
 using TeamReport.Domain.Models;
-using TeamReport.Domain.Models.Requests;
 using TeamReport.WebAPI.Mappers;
+using TeamReport.WebAPI.Models;
 
-namespace TeamReport.Domain.Tests.Mappers;
+namespace TeamReport.WebAPI.Tests.Mappers;
 
 public class MapperAPITest
 {

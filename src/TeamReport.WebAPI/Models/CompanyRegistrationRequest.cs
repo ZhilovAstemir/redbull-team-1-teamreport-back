@@ -1,5 +1,4 @@
-﻿using redbull_team_1_teamreport_back.Data.Entities;
-using TeamReport.Domain.Models;
+﻿using TeamReport.Data.Entities;
 
 namespace TeamReport.WebAPI.Models;
 

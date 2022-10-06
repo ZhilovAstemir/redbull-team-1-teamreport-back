@@ -1,6 +1,6 @@
-﻿using redbull_team_1_teamreport_back.Data.Enums;
+﻿using TeamReport.Data.Enums;
 
-namespace redbull_team_1_teamreport_back.Data.Entities;
+namespace TeamReport.Data.Entities;
 
 public class Report
 {
@@ -20,5 +20,5 @@ public class Report
     public string? Low { get; set; }
     public string? Else { get; set; }
 
-    public Week? Week { get; set; } 
+    public Week? Week { get; set; }
 }

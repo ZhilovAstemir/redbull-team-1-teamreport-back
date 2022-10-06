@@ -1,15 +1,15 @@
 ﻿using AutoMapper;
-using redbull_team_1_teamreport_back.Data.Entities;
+using TeamReport.Data.Entities;
 using TeamReport.Domain.Models;
 
 namespace TeamReport.Domain.Mappers;
 
-public class MapperDomain: Profile
+public class MapperDomain : Profile
 {
     public MapperDomain()
     {
         CreateMap<Member, MemberModel>().ReverseMap();
-        CreateMap<Company,CompanyModel>().ReverseMap();
+        CreateMap<Company, CompanyModel>().ReverseMap();
     }
 }
 

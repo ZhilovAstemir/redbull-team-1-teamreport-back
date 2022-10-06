@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
-using redbull_team_1_teamreport_back.Data.Entities;
-using redbull_team_1_teamreport_back.Data.Persistence;
-using redbull_team_1_teamreport_back.Data.Repositories;
+using TeamReport.Data.Persistence;
+using TeamReport.Data.Repositories;
 
 namespace TeamReport.Data.Tests.Repositories;
 
@@ -17,7 +16,7 @@ public class CompanyRepositoryTests
         _context = _fixture.GetContext();
     }
 
-    
+
     [Fact]
     public void ShouldBeAbleToCreateCompanyRepository()
     {

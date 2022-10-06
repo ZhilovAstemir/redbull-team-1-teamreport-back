@@ -2,7 +2,7 @@
 
 namespace TeamReport.Data.Repositories.Interfaces;
 
-public interface ICompanyRepository : IRepository<Company>
+public interface ILeadershipRepository : IRepository<Leadership>
 {
 
 }

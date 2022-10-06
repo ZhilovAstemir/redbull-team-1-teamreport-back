@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using redbull_team_1_teamreport_back.Data.Entities;
+using TeamReport.Data.Entities;
 
 namespace TeamReport.Data.Tests.Entities;
 
@@ -26,7 +26,7 @@ public class MemberTest
             Email = "email@email.com",
             Title = "Title"
         };
-        
+
         member.Id.Should().Be(1);
         member.Company.Should().Be(company);
         member.FirstName.Should().Be("FirstName");

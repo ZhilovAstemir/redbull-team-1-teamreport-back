@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Moq;
-using redbull_team_1_teamreport_back.Data.Entities;
-using redbull_team_1_teamreport_back.Data.Repositories;
+using TeamReport.Data.Entities;
+using TeamReport.Data.Repositories;
 using TeamReport.Domain.Exceptions;
 using TeamReport.Domain.Models;
 using TeamReport.Domain.Services;
@@ -30,7 +30,7 @@ public class JwtMiddlewareTest
     public void ShouldJwtMiddlewareDoNothingIfNoToken()
     {
         var middleware = new JwtMiddleware(null, WebApplication.CreateBuilder().Configuration);
-        var task=middleware.Invoke(new DefaultHttpContext(), new TeamService(new MemberRepository(_fixture.GetContext()), _fixture.GetMapper()));
+        var task = middleware.Invoke(new DefaultHttpContext(), new TeamService(new MemberRepository(_fixture.GetContext()), _fixture.GetMapper()));
         task.IsCompleted.Should().BeTrue();
     }
 
@@ -40,13 +40,13 @@ public class JwtMiddlewareTest
         var httpContext = new DefaultHttpContext();
         var middleware = new JwtMiddleware(It.IsAny<RequestDelegate>(), WebApplication.CreateBuilder().Configuration);
         var memberRepository = new MemberRepository(_fixture.GetContext());
-        var member =await memberRepository.Create(_fixture.GetMember());
+        var member = await memberRepository.Create(_fixture.GetMember());
         var mapper = _fixture.GetMapper();
         var authService = new MemberService(memberRepository, mapper);
-        
 
-        httpContext.Request.Headers.Add("Authorization",await authService.GetToken(mapper.Map<Member,MemberModel>(member)));
-        var task=middleware.Invoke(httpContext, new TeamService(memberRepository,mapper));
+
+        httpContext.Request.Headers.Add("Authorization", await authService.GetToken(mapper.Map<Member, MemberModel>(member)));
+        var task = middleware.Invoke(httpContext, new TeamService(memberRepository, mapper));
 
         task.IsCompleted.Should().BeTrue();
 
@@ -62,10 +62,10 @@ public class JwtMiddlewareTest
         var member = memberRepository.Create(_fixture.GetMember());
         var mapper = _fixture.GetMapper();
         var authService = new MemberService(memberRepository, mapper);
-        
 
-        httpContext.Request.Headers.Add("Authorization","2012347192740912oaisfhoiahsdfoi");
-        var task=()=>middleware.Invoke(httpContext, new TeamService(memberRepository,mapper));
+
+        httpContext.Request.Headers.Add("Authorization", "2012347192740912oaisfhoiahsdfoi");
+        var task = () => middleware.Invoke(httpContext, new TeamService(memberRepository, mapper));
 
         task.Should().ThrowAsync<TokenValidationException>();
     }
