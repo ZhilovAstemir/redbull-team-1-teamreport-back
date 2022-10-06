@@ -2,8 +2,8 @@
 using System.Security.Claims;
 using AutoMapper;
 using Microsoft.IdentityModel.Tokens;
-using redbull_team_1_teamreport_back.Data.Entities;
-using redbull_team_1_teamreport_back.Data.Repositories.Interfaces;
+using TeamReport.Data.Entities;
+using TeamReport.Data.Repositories.Interfaces;
 using TeamReport.Domain.Exceptions;
 using TeamReport.Domain.Infrastructures;
 using TeamReport.Domain.Models;
@@ -33,12 +33,28 @@ public class MemberService : IMemberService
         var member = await _memberRepository.ReadByEmail(email);
         if (member == null)
         {
-            throw new EntityNotFoundException("Member not found");
+            throw new InvalidCreditalsException("Member not found");
         }
         if (!PasswordHash.ValidatePassword(password, member.Password))
         {
-            throw new EntityNotFoundException("Invalid creditals");
+            throw new InvalidCreditalsException("Invalid creditals");
         }
+        return _mapper.Map<Member, MemberModel>(member);
+    }
+
+    public async Task<MemberModel> ContinueRegistration(MemberModel memberModel)
+    {
+        var member = await _memberRepository.Read(memberModel.Id);
+
+        if (member is null)
+            throw new EntityNotFoundException("Can't find user to continue registration");
+
+        member.Title = memberModel.Title;
+        member.Password = PasswordHash.HashPassword(memberModel.Password);
+
+        if (!(await _memberRepository.Update(member)))
+            throw new EntityNotFoundException("Can't update user to continue registration");
+
         return _mapper.Map<Member, MemberModel>(member);
     }
 

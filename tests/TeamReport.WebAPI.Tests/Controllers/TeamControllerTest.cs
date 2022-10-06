@@ -1,10 +1,9 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using redbull_team_1_teamreport_back.Data.Entities;
-using redbull_team_1_teamreport_back.Data.Repositories;
+using TeamReport.Data.Entities;
+using TeamReport.Data.Repositories;
 using TeamReport.Domain.Services;
 using TeamReport.WebAPI.Controllers;
-using Xunit;
 
 namespace TeamReport.WebAPI.Tests.Controllers;
 
@@ -21,7 +20,7 @@ public class TeamControllerTest
     [Fact]
     public void ShouldBeAbleToCreateController()
     {
-        var controller = new TeamController(_teamService,_fixture.GetMapper());
+        var controller = new TeamController(_teamService, _fixture.GetMapper());
         controller.Should().NotBeNull();
     }
 
@@ -30,7 +29,7 @@ public class TeamControllerTest
     {
         _fixture.ClearDatabase();
 
-        var controller = new TeamController(_teamService,_fixture.GetMapper());
+        var controller = new TeamController(_teamService, _fixture.GetMapper());
 
         await _teamService.Add(_fixture.GetMember());
 

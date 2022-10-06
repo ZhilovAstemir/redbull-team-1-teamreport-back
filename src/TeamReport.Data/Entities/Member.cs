@@ -1,4 +1,4 @@
-﻿namespace redbull_team_1_teamreport_back.Data.Entities;
+﻿namespace TeamReport.Data.Entities;
 
 public class Member
 {

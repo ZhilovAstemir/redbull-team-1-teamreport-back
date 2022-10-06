@@ -18,9 +18,9 @@ public class MemberModelTest
         var model = new MemberModel()
         {
             Company = new CompanyModel(),
-            Email="email@email.email",
+            Email = "email@email.email",
             FirstName = "FirstName",
-            Id=1,
+            Id = 1,
             LastName = "LastName",
             Password = "Password",
             Title = "Title"
@@ -33,5 +33,26 @@ public class MemberModelTest
         model.Password.Should().BeOfType<string>();
         model.Title.Should().BeOfType<string>();
         model.Company.Should().BeOfType<CompanyModel>();
+    }
+
+    [Fact]
+    public void ShouldMemberModelHaveIsRegisteredMethod()
+    {
+        var model = new MemberModel()
+        {
+            Company = new CompanyModel(),
+            Email = "email@email.email",
+            FirstName = "FirstName",
+            Id = 1,
+            LastName = "LastName",
+            Password = "Password",
+            Title = "Title"
+        };
+
+        model.IsRegistrationCompleted().Should().BeTrue();
+
+        model.Password = null;
+
+        model.IsRegistrationCompleted().Should().BeFalse();
     }
 }

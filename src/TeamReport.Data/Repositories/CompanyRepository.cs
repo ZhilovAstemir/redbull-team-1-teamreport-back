@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using redbull_team_1_teamreport_back.Data.Entities;
-using redbull_team_1_teamreport_back.Data.Persistence;
-using redbull_team_1_teamreport_back.Data.Repositories.Interfaces;
+using TeamReport.Data.Entities;
+using TeamReport.Data.Persistence;
+using TeamReport.Data.Repositories.Interfaces;
 
-namespace redbull_team_1_teamreport_back.Data.Repositories;
+namespace TeamReport.Data.Repositories;
 public class CompanyRepository : ICompanyRepository
 {
     private readonly ApplicationDbContext _context;

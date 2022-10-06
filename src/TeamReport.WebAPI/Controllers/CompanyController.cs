@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using redbull_team_1_teamreport_back.Data.Entities;
+using TeamReport.Data.Entities;
 using TeamReport.Domain.Exceptions;
 using TeamReport.Domain.Models;
 using TeamReport.Domain.Services.Interfaces;

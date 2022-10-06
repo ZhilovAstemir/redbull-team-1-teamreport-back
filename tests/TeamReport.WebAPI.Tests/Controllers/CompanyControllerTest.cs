@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using redbull_team_1_teamreport_back.Data.Repositories;
+using TeamReport.Data.Repositories;
 using TeamReport.Domain.Models;
 using TeamReport.Domain.Services;
 using TeamReport.Domain.Services.Interfaces;

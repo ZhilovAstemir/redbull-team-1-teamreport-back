@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
-using TeamReport.Domain.Models.Requests;
+using TeamReport.WebAPI.Models;
 
-namespace TeamReport.Domain.Validators;
+namespace TeamReport.WebAPI.Validators;
 
-public class MemberRegistrationValidator:AbstractValidator<MemberRegistrationRequest>
+public class MemberRegistrationValidator : AbstractValidator<MemberRegistrationRequest>
 {
     public MemberRegistrationValidator()
     {

@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using redbull_team_1_teamreport_back.Data.Entities;
+using TeamReport.Data.Entities;
 
 namespace TeamReport.Data.Tests.Entities;
 
@@ -18,10 +18,10 @@ public class WeekTest
         var week = new Week()
         {
             Id = 1,
-            DateStart=DateTime.MaxValue,
-            DateEnd=DateTime.MaxValue
+            DateStart = DateTime.MaxValue,
+            DateEnd = DateTime.MaxValue
         };
-        
+
         week.Id.Should().Be(1);
         week.DateStart.Should().Be(DateTime.MaxValue);
         week.DateEnd.Should().Be(DateTime.MaxValue);

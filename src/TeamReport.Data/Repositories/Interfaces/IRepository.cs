@@ -1,6 +1,4 @@
-﻿using System.Runtime.InteropServices;
-
-namespace redbull_team_1_teamreport_back.Data.Repositories.Interfaces;
+﻿namespace TeamReport.Data.Repositories.Interfaces;
 
 public interface IRepository<TEntity>
 {

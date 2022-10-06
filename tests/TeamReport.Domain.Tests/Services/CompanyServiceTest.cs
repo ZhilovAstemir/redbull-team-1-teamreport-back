@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
 using Moq;
-using redbull_team_1_teamreport_back.Data.Entities;
-using redbull_team_1_teamreport_back.Data.Repositories;
-using redbull_team_1_teamreport_back.Data.Repositories.Interfaces;
+using TeamReport.Data.Entities;
+using TeamReport.Data.Repositories;
+using TeamReport.Data.Repositories.Interfaces;
 using TeamReport.Domain.Services;
 
 namespace TeamReport.Domain.Tests.Services;

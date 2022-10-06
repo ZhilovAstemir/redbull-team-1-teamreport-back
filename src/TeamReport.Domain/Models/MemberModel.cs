@@ -12,6 +12,6 @@ public class MemberModel
 
     public bool IsRegistrationCompleted()
     {
-        return Password is null;
+        return Password is not null;
     }
 }

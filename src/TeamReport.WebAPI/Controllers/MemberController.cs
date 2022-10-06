@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using redbull_team_1_teamreport_back.Data.Entities;
+using TeamReport.Data.Entities;
 using TeamReport.Domain.Exceptions;
 using TeamReport.Domain.Models;
-using TeamReport.Domain.Models.Requests;
 using TeamReport.Domain.Services.Interfaces;
 using TeamReport.WebAPI.Helpers;
 using TeamReport.WebAPI.Models;
@@ -73,6 +72,30 @@ public class MemberController : ControllerBase
             var memberModel = _mapper.Map<Member, MemberModel>(member);
 
             return Ok(memberModel);
+
+        }
+        catch
+        {
+            return BadRequest("Something went wrong during processing your request. Please try again later.");
+        }
+    }
+
+
+    [HttpPost]
+    [Route("continue-registration")]
+    [Authorize]
+    public async Task<IActionResult> ContinueRegistration([FromBody] ContinueRegistrationRequest request)
+    {
+        try
+        {
+            var member = (Member)HttpContext.Items["Member"] ?? throw new EntityNotFoundException("Authorized member should have data in HttpContext");
+            var memberModel = _mapper.Map<Member, MemberModel>(member);
+            memberModel.Title = request.Title;
+            memberModel.Password = request.Password;
+
+            var updatedMember = await _memberService.ContinueRegistration(memberModel);
+
+            return Ok(await _memberService.GetToken(updatedMember));
 
         }
         catch

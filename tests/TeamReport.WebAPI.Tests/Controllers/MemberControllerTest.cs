@@ -1,7 +1,8 @@
 ﻿using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using redbull_team_1_teamreport_back.Data.Repositories;
+using TeamReport.Data.Repositories;
 using TeamReport.Domain.Models;
 using TeamReport.Domain.Services;
 using TeamReport.Domain.Services.Interfaces;
@@ -88,6 +89,83 @@ public class MemberControllerTest
 
         var registrationRequest = _fixture.GetMemberRegistrationRequest();
         var response = await controller.Register(registrationRequest);
+
+        response.Should().BeOfType<BadRequestObjectResult>().Which.Value.Should().BeOfType<string>();
+    }
+
+    [Fact]
+    public async Task ShouldGetMemberInformation()
+    {
+        _fixture.ClearDatabase();
+
+        var controller = new MemberController(_service, _fixture.GetMapper());
+
+        var controllerContext = new ControllerContext();
+        var httpContext = new DefaultHttpContext();
+        var dbContext = _fixture.GetContext();
+        dbContext.Members.Add(_fixture.GetMember());
+        await dbContext.SaveChangesAsync();
+        var member = dbContext.Members.First();
+        httpContext.Items["Member"] = member;
+        controllerContext.HttpContext = httpContext;
+        controller.ControllerContext = controllerContext;
+
+        var response = await controller.GetMemberInformation();
+
+        response.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeOfType<MemberModel>();
+    }
+
+    [Fact]
+    public async Task ShouldBeAbleToContinueRegistration()
+    {
+        _fixture.ClearDatabase();
+
+        var controller = new MemberController(_service, _fixture.GetMapper());
+
+        var controllerContext = new ControllerContext();
+        var httpContext = new DefaultHttpContext();
+        var dbContext = _fixture.GetContext();
+        var member = _fixture.GetMember();
+        member.Title = null;
+        member.Password = null;
+        dbContext.Members.Add(member);
+        await dbContext.SaveChangesAsync();
+        var createdMember = dbContext.Members.First();
+        httpContext.Items["Member"] = createdMember;
+        controllerContext.HttpContext = httpContext;
+        controller.ControllerContext = controllerContext;
+
+        var request = _fixture.GetContinueRegistrationRequest();
+
+        var response = await controller.ContinueRegistration(request);
+
+        response.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeOfType<string>();
+    }
+
+    [Fact]
+    public async Task ShouldGetMemberInformationReturnBadRequestIfNoMemberInContext()
+    {
+        _fixture.ClearDatabase();
+
+        var controller = new MemberController(_service, _fixture.GetMapper());
+
+        var request = _fixture.GetContinueRegistrationRequest();
+
+        var response = await controller.GetMemberInformation();
+
+        response.Should().BeOfType<BadRequestObjectResult>().Which.Value.Should().BeOfType<string>();
+    }
+
+    [Fact]
+    public async Task ShouldContinueRegistrationReturnBadRequestIfNoMemberInContext()
+    {
+        _fixture.ClearDatabase();
+
+        var controller = new MemberController(_service, _fixture.GetMapper());
+
+        var request = _fixture.GetContinueRegistrationRequest();
+
+        var response = await controller.ContinueRegistration(request);
 
         response.Should().BeOfType<BadRequestObjectResult>().Which.Value.Should().BeOfType<string>();
     }

@@ -1,8 +1,9 @@
 ﻿using FluentAssertions;
 using Moq;
-using redbull_team_1_teamreport_back.Data.Entities;
-using redbull_team_1_teamreport_back.Data.Persistence;
-using redbull_team_1_teamreport_back.Data.Repositories;
+using TeamReport.Data.Entities;
+using TeamReport.Data.Persistence;
+using TeamReport.Data.Repositories;
+using TeamReport.Data.Repositories.Interfaces;
 using TeamReport.Domain.Exceptions;
 using TeamReport.Domain.Models;
 using TeamReport.Domain.Services;
@@ -102,5 +103,160 @@ public class MemberServiceTest
         var getTokenAction = () => service.GetToken(memberModel);
 
         getTokenAction.Should().ThrowAsync<DataException>();
+    }
+
+    [Fact]
+    public async Task ShouldBeAbleToGetAllMembers()
+    {
+        _fixture.ClearDatabase();
+
+        var service = new MemberService(new MemberRepository(_context), new CompanyRepository(_context), _fixture.GetMapper());
+
+        var member = _fixture.GetMember();
+        _context.Members.Add(member);
+        await _context.SaveChangesAsync();
+        var member2 = _fixture.GetMember();
+        member2.Company.Id = 0;
+        _context.Members.Add(member2);
+        await _context.SaveChangesAsync();
+
+        var memberModels = await service.GetAll();
+
+        memberModels.Should().HaveCount(2);
+    }
+
+    [Fact]
+    public async Task ShouldBeAbleToContinueMemberRegistration()
+    {
+        _fixture.ClearDatabase();
+
+        var service = new MemberService(new MemberRepository(_context), new CompanyRepository(_context), _fixture.GetMapper());
+
+        var member = _fixture.GetMember();
+        member.Title = null;
+        member.Password = null;
+        _context.Members.Add(member);
+        await _context.SaveChangesAsync();
+
+        var memberModels = await service.GetAll();
+        memberModels.Should().HaveCount(1);
+
+        var model = memberModels.First();
+
+        model.Title = "Title";
+        model.Password = "Password!";
+
+        var registeredMemberModel = await service.ContinueRegistration(model);
+
+        var login = async () => await service.Login(registeredMemberModel.Email, model.Password);
+        await login.Should().NotThrowAsync("Login success");
+    }
+
+    [Fact]
+    public async Task ShouldLoginThrowExceptionIfWrongPassword()
+    {
+        _fixture.ClearDatabase();
+
+        var service = new MemberService(new MemberRepository(_context), new CompanyRepository(_context), _fixture.GetMapper());
+
+        var member = _fixture.GetMember();
+        member.Title = null;
+        member.Password = null;
+        _context.Members.Add(member);
+        await _context.SaveChangesAsync();
+
+        var memberModels = await service.GetAll();
+        memberModels.Should().HaveCount(1);
+
+        var model = memberModels.First();
+
+        model.Title = "Title";
+        model.Password = "Password!";
+
+        var registeredMemberModel = await service.ContinueRegistration(model);
+
+        var login = async () => await service.Login(registeredMemberModel.Email, "WrongPass");
+        await login.Should().ThrowAsync<InvalidCreditalsException>("Login failed because of wrong password");
+    }
+
+    [Fact]
+    public async Task ShouldContinueRegistrationThrowExceptionIfRepoCanNotFindMember()
+    {
+        _fixture.ClearDatabase();
+
+        var memberRepositoryMock = new Mock<IMemberRepository>();
+        memberRepositoryMock.Setup(x => x.Read(It.IsAny<int>())).Returns(Task.FromResult((Member?)null));
+        var service = new MemberService(memberRepositoryMock.Object, new CompanyRepository(_context), _fixture.GetMapper());
+
+        var member = _fixture.GetMember();
+        member.Title = null;
+        member.Password = null;
+        _context.Members.Add(member);
+        await _context.SaveChangesAsync();
+
+        var createdMember = _context.Members.First();
+        var mapper = _fixture.GetMapper();
+        var model = mapper.Map<Member, MemberModel>(createdMember);
+
+        model.Title = "Title";
+        model.Password = "Password!";
+
+        var continueRegistration = async () => await service.ContinueRegistration(model);
+
+        await continueRegistration.Should().ThrowAsync<EntityNotFoundException>();
+    }
+
+
+    [Fact]
+    public async Task ShouldContinueRegistrationThrowExceptionIfRepoCanNotUpdateMember()
+    {
+        _fixture.ClearDatabase();
+
+        var member = _fixture.GetMember();
+        member.Title = null;
+        member.Password = null;
+        _context.Members.Add(member);
+        await _context.SaveChangesAsync();
+
+        var createdMember = _context.Members.First();
+        var mapper = _fixture.GetMapper();
+        var model = mapper.Map<Member, MemberModel>(createdMember);
+
+        model.Title = "Title";
+        model.Password = "Password!";
+
+        var memberRepositoryMock = new Mock<IMemberRepository>();
+        memberRepositoryMock.Setup(x => x.Read(It.IsAny<int>())).Returns(Task.FromResult(createdMember));
+        memberRepositoryMock.Setup(x => x.Update(It.IsAny<Member>())).Returns(Task.FromResult(false));
+        var service = new MemberService(memberRepositoryMock.Object, new CompanyRepository(_context), _fixture.GetMapper());
+
+        var continueRegistration = async () => await service.ContinueRegistration(model);
+
+        await continueRegistration.Should().ThrowAsync<EntityNotFoundException>();
+    }
+
+    [Fact]
+    public async Task ShouldRegisterThrowUsedEmailException()
+    {
+        _fixture.ClearDatabase();
+
+        var member = _fixture.GetMember();
+        member.Title = null;
+        member.Password = null;
+        _context.Members.Add(member);
+        await _context.SaveChangesAsync();
+
+        var createdMember = _context.Members.First();
+        var mapper = _fixture.GetMapper();
+        var model = mapper.Map<Member, MemberModel>(createdMember);
+
+        model.Title = "Title";
+        model.Password = "Password!";
+
+        var service = new MemberService(new MemberRepository(_context), new CompanyRepository(_context), _fixture.GetMapper());
+
+        var registration = async () => await service.Register(model);
+
+        await registration.Should().ThrowAsync<UsedEmailException>();
     }
 }

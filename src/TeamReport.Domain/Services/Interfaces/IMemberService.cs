@@ -7,5 +7,5 @@ public interface IMemberService
     public Task<List<MemberModel>> GetAll();
     public Task<string> GetToken(MemberModel member);
     public Task<MemberModel> Login(string email, string password);
-
+    public Task<MemberModel> ContinueRegistration(MemberModel memberModel);
 }
