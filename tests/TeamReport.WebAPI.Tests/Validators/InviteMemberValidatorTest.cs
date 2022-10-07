@@ -13,8 +13,7 @@ public class InviteMemberValidatorTest
         {
             FirstName = "Ivan",
             LastName = "Ivanov",
-            Email = "email",
-            CurrentUserId = 1
+            Email = "email"
         };
         var result = validator.Validate(model);
 
@@ -30,8 +29,7 @@ public class InviteMemberValidatorTest
         {
             FirstName = "",
             LastName = "Ivanov",
-            Email = "email@mail.ru",
-            CurrentUserId = 1
+            Email = "email@mail.ru"
         };
         var result = validator.Validate(model);
 
@@ -47,8 +45,7 @@ public class InviteMemberValidatorTest
         {
             FirstName = "Ivan",
             LastName = "",
-            Email = "email@mail.ru",
-            CurrentUserId = 1
+            Email = "email@mail.ru"
         };
         var result = validator.Validate(model);
 
@@ -64,8 +61,7 @@ public class InviteMemberValidatorTest
         {
             FirstName = "Ivan",
             LastName = "LastName",
-            Email = "email@mail.ru",
-            CurrentUserId = 1
+            Email = "email@mail.ru"
         };
         var result = validator.Validate(model);
 

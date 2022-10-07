@@ -3,9 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using TeamReport.Data.Entities;
 using TeamReport.Domain.Exceptions;
 using TeamReport.Domain.Models;
-using TeamReport.Domain.Services;
 using TeamReport.Domain.Services.Interfaces;
-using TeamReport.WebAPI.Extensions;
 using TeamReport.WebAPI.Helpers;
 using TeamReport.WebAPI.Models;
 
@@ -19,13 +17,15 @@ public class MemberController : ControllerBase
     private readonly IMemberService _memberService;
     private readonly IMapper _mapper;
     private readonly IEmailService _emailService;
+    private readonly ITeamService _teamService;
 
-    public MemberController(IMemberService memberService, IMapper mapper, IEmailService emailService)
+    public MemberController(IMemberService memberService, IMapper mapper, IEmailService emailService, ITeamService teamService)
     {
 
         _memberService = memberService;
         _mapper = mapper;
         _emailService = emailService;
+        _teamService = teamService;
     }
 
     [HttpPost]
@@ -37,7 +37,7 @@ public class MemberController : ControllerBase
             var user = await _memberService.Login(request.Email, request.Password);
             return Ok(await _memberService.GetToken(user));
         }
-        catch (Exception ex)
+        catch
         {
             return BadRequest("Something went wrong during processing your request. Please try again later.");
         }
@@ -109,11 +109,52 @@ public class MemberController : ControllerBase
     }
 
     [HttpPost("invite")]
-    public async Task<IActionResult> InviteMember([FromBody] InviteMemberModelRequest member)
+    [Authorize]
+    public async Task<IActionResult> InviteMember([FromBody] InviteMemberModelRequest inviteMemberModelRequest)
     {
-        var path = this.GetRequestPath();
-        var request = _mapper.Map<InviteMemberModelRequest, InviteMemberRequest>(member);
-        _emailService.InviteMember(request, path);
-        return Ok();
+        try
+        {
+            var leader = (Member)HttpContext.Items["Member"] ??
+                         throw new EntityNotFoundException("Authorized member should have data in HttpContext");
+
+            var memberModel = _mapper.Map<InviteMemberModelRequest, MemberModel>(inviteMemberModelRequest);
+            memberModel.Company = _mapper.Map<Company, CompanyModel>(leader.Company);
+
+            var registeredModel = await _memberService.GetMemberByEmail(memberModel.Email);
+            if (registeredModel == null)
+            {
+                registeredModel = await _memberService.Register(memberModel);
+            }
+            else
+            {
+                if (registeredModel.Password is null)
+                {
+                    registeredModel.Company = memberModel.Company;
+                    registeredModel.FirstName = memberModel.FirstName;
+                    registeredModel.LastName = memberModel.LastName;
+                    await _memberService.UpdateMemberInformation(registeredModel);
+                    registeredModel = await _memberService.GetMemberByEmail(registeredModel.Email);
+                }
+                else
+                {
+                    throw new MemberAlreadyRegisteredException(
+                        $"Member with email {registeredModel.Email} is already registered");
+                }
+            }
+
+            await _teamService.UpdateMemberLeaders(registeredModel.Id, new List<int>() { leader.Id });
+
+            var domain = "";
+            _emailService.InviteMember(registeredModel, domain);
+            return Ok(registeredModel);
+        }
+        catch (MemberAlreadyRegisteredException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch
+        {
+            return BadRequest("Something went wrong during processing your request. Please try again later.");
+        }
     }
 }

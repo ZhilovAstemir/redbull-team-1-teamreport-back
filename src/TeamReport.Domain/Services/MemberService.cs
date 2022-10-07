@@ -79,7 +79,11 @@ public class MemberService : IMemberService
     public async Task<MemberModel> Register(MemberModel memberModel)
     {
         var member = _mapper.Map<MemberModel, Member>(memberModel);
-        member.Password = PasswordHash.HashPassword(member.Password);
+        if (member.Password is not null)
+        {
+            member.Password = PasswordHash.HashPassword(member.Password);
+        }
+
         member.Company = await _companyRepository.Read(memberModel.Company.Id);
 
         if (await _memberRepository.ReadByEmail(member.Email) != null)
@@ -90,6 +94,31 @@ public class MemberService : IMemberService
         var addedMember = await _memberRepository.Create(member);
 
         return _mapper.Map<Member, MemberModel>(addedMember);
+    }
+
+    public async Task<MemberModel> GetMemberByEmail(string email)
+    {
+        var member = await _memberRepository.ReadByEmail(email);
+        if (member != null)
+        {
+            return _mapper.Map<Member, MemberModel>(member);
+        }
+        return null;
+    }
+
+
+    public async Task<MemberModel> UpdateMemberInformation(MemberModel model)
+    {
+        var member = await _memberRepository.Read(model.Id);
+        member.Company = await _companyRepository.Read(model.Company.Id);
+        member.FirstName = model.FirstName;
+        member.LastName = model.LastName;
+
+        if (await _memberRepository.Update(member))
+        {
+            return _mapper.Map<Member, MemberModel>(await _memberRepository.Read(model.Id));
+        }
+        return null;
     }
 }
 

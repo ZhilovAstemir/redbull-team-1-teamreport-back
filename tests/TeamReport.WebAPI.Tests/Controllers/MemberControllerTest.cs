@@ -1,8 +1,11 @@
+using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using TeamReport.Data.Persistence;
 using TeamReport.Data.Repositories;
+using TeamReport.Data.Repositories.Interfaces;
 using TeamReport.Domain.Models;
 using TeamReport.Domain.Services;
 using TeamReport.Domain.Services.Interfaces;
@@ -12,41 +15,138 @@ namespace TeamReport.WebAPI.Tests.Controllers;
 public class MemberControllerTest
 {
     private readonly ControllerTestFixture _fixture;
-    private readonly IMemberService _service;
+    private readonly IMemberService _memberService;
+    private readonly ITeamService _teamService;
     private readonly IEmailService _emailService;
-
+    private readonly IMemberRepository _memberRepository;
+    private readonly ICompanyRepository _companyRepository;
+    private readonly ILeadershipRepository _leadershipRepository;
+    private readonly ApplicationDbContext _context;
+    private readonly IMapper _mapper;
     public MemberControllerTest()
     {
         _fixture = new ControllerTestFixture();
-        _service = new MemberService(new MemberRepository(_fixture.GetContext()), new CompanyRepository(_fixture.GetContext()), _fixture.GetMapper());
+        _context = _fixture.GetContext();
+        _memberRepository = new MemberRepository(_context);
+        _companyRepository = new CompanyRepository(_context);
+        _leadershipRepository = new LeadershipRepository(_context);
+        _mapper = _fixture.GetMapper();
+        _memberService = new MemberService(_memberRepository, _companyRepository, _mapper);
         _emailService = new EmailService(_fixture.GetNewOptions());
+        _teamService = new TeamService(_memberRepository, _leadershipRepository, _companyRepository, _mapper);
     }
 
     [Fact]
     public void ShouldBeAbleToCreateMemberController()
     {
-        var controller = new MemberController(_service, _fixture.GetMapper(), _emailService);
+        var controller = new MemberController(_memberService, _mapper, _emailService, _teamService);
         controller.Should().NotBeNull();
     }
 
     [Fact]
     public async Task ShouldBeAbleToInviteMember()
     {
+        _fixture.ClearDatabase();
+
         var invitedMember = _fixture.GetInviteMemberRequest();
-        var memberController = new MemberController(_service, _fixture.GetMapper(), _emailService);
+        var memberController = new MemberController(_memberService, _mapper, _emailService, _teamService);
+
+        var controllerContext = new ControllerContext();
+        var httpContext = new DefaultHttpContext();
+        var dbContext = _fixture.GetContext();
+        dbContext.Members.Add(_fixture.GetMember());
+        await dbContext.SaveChangesAsync();
+        var member = dbContext.Members.First();
+        httpContext.Items["Member"] = member;
+        controllerContext.HttpContext = httpContext;
+        memberController.ControllerContext = controllerContext;
 
         var actual = await memberController.InviteMember(invitedMember);
-        var actualResult = actual as OkResult;
-
-        Assert.NotNull(actualResult);
-        Assert.Equal(StatusCodes.Status200OK, actualResult.StatusCode);
+        actual.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeOfType<MemberModel>();
     }
 
+    [Fact]
+    public async Task ShouldInviteMemberSendEmailIfUserDidNotContinueHisRegistration()
+    {
+        _fixture.ClearDatabase();
+
+        var inviteMemberRequest = _fixture.GetInviteMemberRequest();
+        var memberController = new MemberController(_memberService, _mapper, _emailService, _teamService);
+
+        var controllerContext = new ControllerContext();
+        var httpContext = new DefaultHttpContext();
+        var dbContext = _fixture.GetContext();
+        dbContext.Members.Add(_fixture.GetMember());
+        await dbContext.SaveChangesAsync();
+        var member = dbContext.Members.First();
+        httpContext.Items["Member"] = member;
+        controllerContext.HttpContext = httpContext;
+        memberController.ControllerContext = controllerContext;
+
+        var actual = await memberController.InviteMember(inviteMemberRequest);
+        actual.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeOfType<MemberModel>();
+
+        var memberModel = (actual as OkObjectResult).Value as MemberModel;
+        memberModel.Email.Should().Be(inviteMemberRequest.Email);
+        memberModel.FirstName.Should().Be(inviteMemberRequest.FirstName);
+        memberModel.LastName.Should().Be(inviteMemberRequest.LastName);
+
+        inviteMemberRequest.FirstName = "Ivan";
+        inviteMemberRequest.LastName = "Ivanov";
+
+        var response = await memberController.InviteMember(inviteMemberRequest);
+        response.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeOfType<MemberModel>();
+
+        var newResult = (response as OkObjectResult).Value as MemberModel;
+        newResult.Email.Should().Be(inviteMemberRequest.Email);
+        newResult.FirstName.Should().Be(inviteMemberRequest.FirstName);
+        newResult.LastName.Should().Be(inviteMemberRequest.LastName);
+
+    }
+
+    [Fact]
+    public async Task ShouldInviteMemberReturnBadRequestIfMemberAlreadyRegistered()
+    {
+        _fixture.ClearDatabase();
+
+        var inviteMemberRequest = _fixture.GetInviteMemberRequest();
+        var memberController = new MemberController(_memberService, _mapper, _emailService, _teamService);
+
+        var controllerContext = new ControllerContext();
+        var httpContext = new DefaultHttpContext();
+        var dbContext = _fixture.GetContext();
+        dbContext.Members.Add(_fixture.GetMember());
+        await dbContext.SaveChangesAsync();
+        var member = dbContext.Members.First();
+        httpContext.Items["Member"] = member;
+        controllerContext.HttpContext = httpContext;
+        memberController.ControllerContext = controllerContext;
+
+        var request = _fixture.GetInviteMemberRequest();
+        request.Email = member.Email;
+        var response = await memberController.InviteMember(request);
+        response.Should().BeOfType<BadRequestObjectResult>().Which.Value.Should().BeOfType<string>();
+    }
+
+    [Fact]
+    public async Task ShouldInviteMemberReturnBadRequestIfAnyException()
+    {
+        _fixture.ClearDatabase();
+
+        var inviteMemberRequest = _fixture.GetInviteMemberRequest();
+        var memberController = new MemberController(_memberService, _mapper, _emailService, _teamService);
+
+        var request = _fixture.GetInviteMemberRequest();
+        var response = await memberController.InviteMember(request);
+        response.Should().BeOfType<BadRequestObjectResult>().Which.Value.Should().BeOfType<string>();
+    }
+
+    [Fact]
     public async Task ShouldBeAbleToRegister()
     {
         _fixture.ClearDatabase();
 
-        var controller = new MemberController(_service, _fixture.GetMapper(), _emailService);
+        var controller = new MemberController(_memberService, _mapper, _emailService, _teamService);
         var request = _fixture.GetMemberRegistrationRequest();
         var response = await controller.Register(request);
 
@@ -59,7 +159,7 @@ public class MemberControllerTest
     {
         _fixture.ClearDatabase();
 
-        var controller = new MemberController(_service, _fixture.GetMapper(), _emailService);
+        var controller = new MemberController(_memberService, _mapper, _emailService, _teamService);
 
         var memberRegistrationRequest = _fixture.GetMemberRegistrationRequest();
         var registerResponse = await controller.Register(memberRegistrationRequest);
@@ -81,7 +181,7 @@ public class MemberControllerTest
         var serviceMock = new Mock<IMemberService>();
         serviceMock.Setup(x => x.Login(It.IsAny<string>(), It.IsAny<string>())).Throws(new Exception());
 
-        var controller = new MemberController(serviceMock.Object, _fixture.GetMapper(), _emailService);
+        var controller = new MemberController(serviceMock.Object, _mapper, _emailService, _teamService);
 
         var loginRequest = _fixture.GetLoginRequest();
         var loginResponse = await controller.Login(loginRequest);
@@ -97,7 +197,7 @@ public class MemberControllerTest
         var serviceMock = new Mock<IMemberService>();
         serviceMock.Setup(x => x.Register(It.IsAny<MemberModel>())).Throws(new Exception());
 
-        var controller = new MemberController(serviceMock.Object, _fixture.GetMapper(), _emailService);
+        var controller = new MemberController(serviceMock.Object, _mapper, _emailService, _teamService);
 
         var registrationRequest = _fixture.GetMemberRegistrationRequest();
         var response = await controller.Register(registrationRequest);
@@ -110,7 +210,7 @@ public class MemberControllerTest
     {
         _fixture.ClearDatabase();
 
-        var controller = new MemberController(_service, _fixture.GetMapper(), _emailService);
+        var controller = new MemberController(_memberService, _mapper, _emailService, _teamService);
 
         var controllerContext = new ControllerContext();
         var httpContext = new DefaultHttpContext();
@@ -132,7 +232,7 @@ public class MemberControllerTest
     {
         _fixture.ClearDatabase();
 
-        var controller = new MemberController(_service, _fixture.GetMapper(), _emailService);
+        var controller = new MemberController(_memberService, _mapper, _emailService, _teamService);
 
         var controllerContext = new ControllerContext();
         var httpContext = new DefaultHttpContext();
@@ -159,7 +259,7 @@ public class MemberControllerTest
     {
         _fixture.ClearDatabase();
 
-        var controller = new MemberController(_service, _fixture.GetMapper(), _emailService);
+        var controller = new MemberController(_memberService, _mapper, _emailService, _teamService);
 
         var request = _fixture.GetContinueRegistrationRequest();
 
@@ -173,7 +273,7 @@ public class MemberControllerTest
     {
         _fixture.ClearDatabase();
 
-        var controller = new MemberController(_service, _fixture.GetMapper(), _emailService);
+        var controller = new MemberController(_memberService, _mapper, _emailService, _teamService);
 
         var request = _fixture.GetContinueRegistrationRequest();
 

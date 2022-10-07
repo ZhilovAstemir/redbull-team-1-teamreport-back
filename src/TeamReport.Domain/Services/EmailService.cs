@@ -1,8 +1,12 @@
-﻿using MailKit.Net.Smtp;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using MailKit.Net.Smtp;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using MimeKit;
 using TeamReport.Domain.Infrastructures;
 using TeamReport.Domain.Models;
+using TeamReport.Domain.Services.Interfaces;
 
 namespace TeamReport.Domain.Services;
 public class EmailService : IEmailService
@@ -12,17 +16,6 @@ public class EmailService : IEmailService
     public EmailService(IOptions<EmailConfiguration> emailConfig)
     {
         _emailConfig = emailConfig.Value;
-    }
-
-    public void InviteMember(InviteMemberRequest request, string path)
-    {
-        var message = new Message(new string[]
-           { request.Email },
-           "Invitation",
-           $"Dear {request.FirstName} {request.LastName} we invite you {path}");
-        var emailMessage = CreateEmailMessage(message);
-
-        Send(emailMessage);
     }
 
     private MimeMessage CreateEmailMessage(Message message)
@@ -58,5 +51,31 @@ public class EmailService : IEmailService
                 client.Dispose();
             }
         }
+    }
+
+    public bool InviteMember(MemberModel memberModel, string frontDomain)
+    {
+        var token = GetToken(memberModel);
+        var link = frontDomain + "?token=" + token;
+        var message = new Message(new string[]
+                { memberModel.Email },
+            "Invitation",
+            $"Dear {memberModel.FirstName} {memberModel.LastName},\r\n We invite you join our team. Please click to continue registration: {link}");
+        var emailMessage = CreateEmailMessage(message);
+
+        Send(emailMessage);
+        return true;
+    }
+
+    public string GetToken(MemberModel member)
+    {
+        var jwt = new JwtSecurityToken(
+            issuer: AuthOptions.Issuer,
+            audience: AuthOptions.Audience,
+            expires: DateTime.UtcNow.Add(TimeSpan.FromDays(1)),
+            signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256),
+            claims: new List<Claim>() { new Claim("user", member.Id.ToString()) });
+
+        return new JwtSecurityTokenHandler().WriteToken(jwt);
     }
 }

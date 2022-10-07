@@ -17,7 +17,5 @@ public class InviteMemberValidator : AbstractValidator<InviteMemberModelRequest>
            .NotEmpty().WithMessage("Email is required")
            .Length(1, 50).WithMessage("Invalid email length")
            .EmailAddress().WithMessage("Invalid email format");
-        RuleFor(i => i.CurrentUserId)
-            .NotEmpty().WithMessage("Current User Id is required");
     }
 }
