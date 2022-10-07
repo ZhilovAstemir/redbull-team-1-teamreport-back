@@ -89,6 +89,26 @@ public class MemberController : ControllerBase
 
 
     [HttpPost]
+    [Route("info-by-id")]
+    [Authorize]
+    public async Task<IActionResult> GetMemberInformation([FromBody] int memberId)
+    {
+        try
+        {
+            var memberModel = await _memberService.GetMemberById(memberId);
+            memberModel.Password = "*****";
+
+            return Ok(memberModel);
+
+        }
+        catch
+        {
+            return BadRequest("Something went wrong during processing your request. Please try again later.");
+        }
+    }
+
+
+    [HttpPost]
     [Route("continue-registration")]
     [Authorize]
     public async Task<IActionResult> ContinueRegistration([FromBody] ContinueRegistrationRequest request)
@@ -135,7 +155,7 @@ public class MemberController : ControllerBase
                     registeredModel.Company = memberModel.Company;
                     registeredModel.FirstName = memberModel.FirstName;
                     registeredModel.LastName = memberModel.LastName;
-                    await _memberService.UpdateMemberInformation(registeredModel);
+                    await _memberService.UpdateMemberInformationBeforeInvite(registeredModel);
                     registeredModel = await _memberService.GetMemberByEmail(registeredModel.Email);
                 }
                 else

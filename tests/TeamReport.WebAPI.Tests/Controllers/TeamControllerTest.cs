@@ -1,11 +1,13 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Moq;
 using TeamReport.Data.Persistence;
 using TeamReport.Data.Repositories;
 using TeamReport.Data.Repositories.Interfaces;
 using TeamReport.Domain.Models;
 using TeamReport.Domain.Services;
+using TeamReport.Domain.Services.Interfaces;
 using TeamReport.WebAPI.Controllers;
 using TeamReport.WebAPI.Models;
 
@@ -117,12 +119,12 @@ public class TeamControllerTest
         controllerContext.HttpContext = httpContext;
         controller.ControllerContext = controllerContext;
 
-        var reporters = await controller.GetMemberReporters();
+        var reporters = await controller.GetMemberReporters(member1.Id);
         reporters.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeOfType<List<MemberModel>>().Which.Count.Should().Be(0);
 
         await _leadershipRepository.UpdateReporters(member1.Id, new List<int>() { member2.Id, member3.Id });
 
-        reporters = await controller.GetMemberReporters();
+        reporters = await controller.GetMemberReporters(member1.Id);
         reporters.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeOfType<List<MemberModel>>().Which.Count.Should().Be(2);
     }
 
@@ -139,7 +141,7 @@ public class TeamControllerTest
         controllerContext.HttpContext = httpContext;
         controller.ControllerContext = controllerContext;
 
-        var reporters = await controller.GetMemberReporters();
+        var reporters = await controller.GetMemberReporters(It.IsAny<int>());
         reporters.Should().BeOfType<BadRequestObjectResult>().Which.Value.Should().BeOfType<string>();
     }
 
@@ -166,12 +168,12 @@ public class TeamControllerTest
         controllerContext.HttpContext = httpContext;
         controller.ControllerContext = controllerContext;
 
-        var leaders = await controller.GetMemberLeaders();
+        var leaders = await controller.GetMemberLeaders(member1.Id);
         leaders.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeOfType<List<MemberModel>>().Which.Count.Should().Be(0);
 
         await _leadershipRepository.UpdateLeaders(member1.Id, new List<int>() { member2.Id, member3.Id });
 
-        leaders = await controller.GetMemberLeaders();
+        leaders = await controller.GetMemberLeaders(member1.Id);
         leaders.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeOfType<List<MemberModel>>().Which.Count.Should().Be(2);
     }
 
@@ -188,7 +190,7 @@ public class TeamControllerTest
         controllerContext.HttpContext = httpContext;
         controller.ControllerContext = controllerContext;
 
-        var reporters = await controller.GetMemberLeaders();
+        var reporters = await controller.GetMemberLeaders(It.IsAny<int>());
         reporters.Should().BeOfType<BadRequestObjectResult>().Which.Value.Should().BeOfType<string>();
     }
 
@@ -215,15 +217,16 @@ public class TeamControllerTest
         controllerContext.HttpContext = httpContext;
         controller.ControllerContext = controllerContext;
 
-        var leaders = await controller.GetMemberLeaders();
+        var leaders = await controller.GetMemberLeaders(member1.Id);
         leaders.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeOfType<List<MemberModel>>().Which.Count.Should().Be(0);
 
         await controller.UpdateMemberLeaders(new MemberIdsListRequest()
         {
+            MemberId = member1.Id,
             MembersIds = new List<int>() { member2.Id, member3.Id }
         });
 
-        leaders = await controller.GetMemberLeaders();
+        leaders = await controller.GetMemberLeaders(member1.Id);
         leaders.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeOfType<List<MemberModel>>().Which.Count.Should().Be(2);
     }
 
@@ -240,7 +243,7 @@ public class TeamControllerTest
         controllerContext.HttpContext = httpContext;
         controller.ControllerContext = controllerContext;
 
-        var leaders = await controller.UpdateMemberLeaders(new MemberIdsListRequest() { MembersIds = new List<int>() });
+        var leaders = await controller.UpdateMemberLeaders(new MemberIdsListRequest() { MemberId = 0, MembersIds = new List<int>() });
         leaders.Should().BeOfType<BadRequestObjectResult>().Which.Value.Should().BeOfType<string>();
     }
 
@@ -268,15 +271,16 @@ public class TeamControllerTest
         controllerContext.HttpContext = httpContext;
         controller.ControllerContext = controllerContext;
 
-        var reporters = await controller.GetMemberReporters();
+        var reporters = await controller.GetMemberReporters(member1.Id);
         reporters.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeOfType<List<MemberModel>>().Which.Count.Should().Be(0);
 
         await controller.UpdateMemberReporters(new MemberIdsListRequest()
         {
+            MemberId = member1.Id,
             MembersIds = new List<int>() { member2.Id, member3.Id }
         });
 
-        reporters = await controller.GetMemberReporters();
+        reporters = await controller.GetMemberReporters(member1.Id);
         reporters.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeOfType<List<MemberModel>>().Which.Count.Should().Be(2);
     }
 
@@ -293,7 +297,87 @@ public class TeamControllerTest
         controllerContext.HttpContext = httpContext;
         controller.ControllerContext = controllerContext;
 
-        var reporters = await controller.UpdateMemberReporters(new MemberIdsListRequest() { MembersIds = new List<int>() });
+        var reporters = await controller.UpdateMemberReporters(new MemberIdsListRequest() { MemberId = 0, MembersIds = new List<int>() });
+        reporters.Should().BeOfType<BadRequestObjectResult>().Which.Value.Should().BeOfType<string>();
+    }
+
+    [Fact]
+    public async Task ShouldGetMemberReportersReturnBadRequestIfAnyException()
+    {
+        _fixture.ClearDatabase();
+
+        var teamServiceMock = new Mock<ITeamService>();
+        teamServiceMock.Setup(x => x.GetMemberById(It.IsAny<int>())).Throws<Exception>();
+
+        var controller = new TeamController(teamServiceMock.Object, _fixture.GetMapper());
+
+        var controllerContext = new ControllerContext();
+        var httpContext = new DefaultHttpContext();
+        httpContext.Items["Member"] = _fixture.GetMember();
+        controllerContext.HttpContext = httpContext;
+        controller.ControllerContext = controllerContext;
+
+        var reporters = await controller.GetMemberReporters(0);
+        reporters.Should().BeOfType<BadRequestObjectResult>().Which.Value.Should().BeOfType<string>();
+    }
+
+    [Fact]
+    public async Task ShouldGetMemberLeadersReturnBadRequestIfAnyException()
+    {
+        _fixture.ClearDatabase();
+
+        var teamServiceMock = new Mock<ITeamService>();
+        teamServiceMock.Setup(x => x.GetMemberById(It.IsAny<int>())).Throws<Exception>();
+
+        var controller = new TeamController(teamServiceMock.Object, _fixture.GetMapper());
+
+        var controllerContext = new ControllerContext();
+        var httpContext = new DefaultHttpContext();
+        httpContext.Items["Member"] = _fixture.GetMember();
+        controllerContext.HttpContext = httpContext;
+        controller.ControllerContext = controllerContext;
+
+        var reporters = await controller.GetMemberLeaders(0);
+        reporters.Should().BeOfType<BadRequestObjectResult>().Which.Value.Should().BeOfType<string>();
+    }
+
+    [Fact]
+    public async Task ShouldUpdateMemberLeadersReturnBadRequestIfAnyException()
+    {
+        _fixture.ClearDatabase();
+
+        var teamServiceMock = new Mock<ITeamService>();
+        teamServiceMock.Setup(x => x.GetMemberById(It.IsAny<int>())).Throws<Exception>();
+
+        var controller = new TeamController(teamServiceMock.Object, _fixture.GetMapper());
+
+        var controllerContext = new ControllerContext();
+        var httpContext = new DefaultHttpContext();
+        httpContext.Items["Member"] = _fixture.GetMember();
+        controllerContext.HttpContext = httpContext;
+        controller.ControllerContext = controllerContext;
+
+        var reporters = await controller.UpdateMemberLeaders(new MemberIdsListRequest());
+        reporters.Should().BeOfType<BadRequestObjectResult>().Which.Value.Should().BeOfType<string>();
+    }
+
+    [Fact]
+    public async Task ShouldUpdateMemberReportersReturnBadRequestIfAnyException()
+    {
+        _fixture.ClearDatabase();
+
+        var teamServiceMock = new Mock<ITeamService>();
+        teamServiceMock.Setup(x => x.GetMemberById(It.IsAny<int>())).Throws<Exception>();
+
+        var controller = new TeamController(teamServiceMock.Object, _fixture.GetMapper());
+
+        var controllerContext = new ControllerContext();
+        var httpContext = new DefaultHttpContext();
+        httpContext.Items["Member"] = _fixture.GetMember();
+        controllerContext.HttpContext = httpContext;
+        controller.ControllerContext = controllerContext;
+
+        var reporters = await controller.UpdateMemberReporters(new MemberIdsListRequest());
         reporters.Should().BeOfType<BadRequestObjectResult>().Which.Value.Should().BeOfType<string>();
     }
 }

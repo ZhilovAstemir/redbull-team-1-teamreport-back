@@ -9,5 +9,6 @@ public interface IMemberService
     public Task<MemberModel> Login(string email, string password);
     public Task<MemberModel> ContinueRegistration(MemberModel memberModel);
     public Task<MemberModel> GetMemberByEmail(string email);
-    public Task<MemberModel> UpdateMemberInformation(MemberModel model);
+    public Task<MemberModel?> GetMemberById(int id);
+    public Task<MemberModel> UpdateMemberInformationBeforeInvite(MemberModel model);
 }

@@ -46,16 +46,19 @@ public class TeamController : ControllerBase
 
     [HttpGet]
     [Route("reporters")]
-    public async Task<IActionResult> GetMemberReporters()
+    public async Task<IActionResult> GetMemberReporters(int memberId)
     {
         try
         {
-            var member = (Member)HttpContext.Items["Member"] ??
-                         throw new EntityNotFoundException("Authorized member should have data in HttpContext");
+            var member = await _teamService.GetMemberById(memberId);
+            if (member != null)
+            {
+                var reporters = await _teamService.GetMemberReporters(memberId);
 
-            var reporters = await _teamService.GetMemberReporters(member.Id);
+                return Ok(reporters);
+            }
 
-            return Ok(reporters);
+            return BadRequest("Member not found");
         }
         catch
         {
@@ -65,16 +68,19 @@ public class TeamController : ControllerBase
 
     [HttpGet]
     [Route("leaders")]
-    public async Task<IActionResult> GetMemberLeaders()
+    public async Task<IActionResult> GetMemberLeaders(int memberId)
     {
         try
         {
-            var member = (Member)HttpContext.Items["Member"] ??
-                         throw new EntityNotFoundException("Authorized member should have data in HttpContext");
+            var member = await _teamService.GetMemberById(memberId);
+            if (member != null)
+            {
+                var leaders = await _teamService.GetMemberLeaders(memberId);
 
-            var leaders = await _teamService.GetMemberLeaders(member.Id);
+                return Ok(leaders);
+            }
 
-            return Ok(leaders);
+            return BadRequest("Member not found");
         }
         catch
         {
@@ -88,12 +94,15 @@ public class TeamController : ControllerBase
     {
         try
         {
-            var member = (Member)HttpContext.Items["Member"] ??
-                         throw new EntityNotFoundException("Authorized member should have data in HttpContext");
+            var member = await _teamService.GetMemberById(request.MemberId);
+            if (member != null)
+            {
+                var leaders = await _teamService.UpdateMemberLeaders(request.MemberId, request.MembersIds);
 
-            var leaders = await _teamService.UpdateMemberLeaders(member.Id, request.MembersIds);
+                return Ok(leaders);
+            }
 
-            return Ok(leaders);
+            return BadRequest("Member not found");
         }
         catch
         {
@@ -107,12 +116,16 @@ public class TeamController : ControllerBase
     {
         try
         {
-            var member = (Member)HttpContext.Items["Member"] ??
-                         throw new EntityNotFoundException("Authorized member should have data in HttpContext");
+            var member = await _teamService.GetMemberById(request.MemberId);
+            if (member != null)
+            {
+                var reporters = await _teamService.UpdateMemberReporters(request.MemberId, request.MembersIds);
 
-            var reporters = await _teamService.UpdateMemberReporters(member.Id, request.MembersIds);
+                return Ok(reporters);
+            }
 
-            return Ok(reporters);
+            return BadRequest("Member not found");
+
         }
         catch
         {

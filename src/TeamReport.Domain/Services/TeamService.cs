@@ -77,4 +77,15 @@ public class TeamService : ITeamService
         var teamMembers = await _memberRepository.ReadAll();
         return _mapper.Map<List<Member>, List<MemberModel>>(teamMembers);
     }
+
+
+    public async Task<MemberModel?> GetMemberById(int id)
+    {
+        var member = await _memberRepository.Read(id);
+        if (member != null)
+        {
+            return _mapper.Map<Member, MemberModel>(member);
+        }
+        return null;
+    }
 }

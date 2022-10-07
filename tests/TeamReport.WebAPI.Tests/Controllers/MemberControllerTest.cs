@@ -284,4 +284,37 @@ public class MemberControllerTest
 
         response.Should().BeOfType<BadRequestObjectResult>().Which.Value.Should().BeOfType<string>();
     }
+
+    [Fact]
+    public async Task ShouldGetMemberInformationById()
+    {
+        _fixture.ClearDatabase();
+
+        _context.Members.Add(_fixture.GetMember());
+        _context.SaveChanges();
+        var createdMember = _context.Members.First();
+
+        var controller = new MemberController(_memberService, _mapper, _emailService, _teamService, _configuration);
+
+        var request = _fixture.GetContinueRegistrationRequest();
+
+        var response = await controller.GetMemberInformation(createdMember.Id);
+
+        response.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeOfType<MemberModel>();
+    }
+
+    [Fact]
+    public async Task ShouldGetMemberInformationByIdReturnBadRequestIfAnyException()
+    {
+        _fixture.ClearDatabase();
+
+        var memberServiceMock = new Mock<IMemberService>();
+        memberServiceMock.Setup(x => x.GetMemberById(It.IsAny<int>())).Throws<Exception>();
+
+        var controller = new MemberController(_memberService, _mapper, _emailService, _teamService, _configuration);
+
+        var response = await controller.GetMemberInformation(1);
+
+        response.Should().BeOfType<BadRequestObjectResult>().Which.Value.Should().BeOfType<string>();
+    }
 }

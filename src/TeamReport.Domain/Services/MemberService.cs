@@ -107,7 +107,7 @@ public class MemberService : IMemberService
     }
 
 
-    public async Task<MemberModel> UpdateMemberInformation(MemberModel model)
+    public async Task<MemberModel> UpdateMemberInformationBeforeInvite(MemberModel model)
     {
         var member = await _memberRepository.Read(model.Id);
         member.Company = await _companyRepository.Read(model.Company.Id);
@@ -117,6 +117,16 @@ public class MemberService : IMemberService
         if (await _memberRepository.Update(member))
         {
             return _mapper.Map<Member, MemberModel>(await _memberRepository.Read(model.Id));
+        }
+        return null;
+    }
+
+    public async Task<MemberModel?> GetMemberById(int id)
+    {
+        var member = await _memberRepository.Read(id);
+        if (member != null)
+        {
+            return _mapper.Map<Member, MemberModel>(member);
         }
         return null;
     }
