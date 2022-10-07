@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using redbull_team_1_teamreport_back.Data.Entities;
-using redbull_team_1_teamreport_back.Data.Repositories.Interfaces;
+using TeamReport.Data.Entities;
+using TeamReport.Data.Repositories.Interfaces;
 using TeamReport.Domain.Infrastructures;
 using TeamReport.Domain.Models;
 using TeamReport.Domain.Services.Interfaces;

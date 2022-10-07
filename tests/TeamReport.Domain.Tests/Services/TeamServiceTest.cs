@@ -1,8 +1,7 @@
 ﻿using FluentAssertions;
 using Moq;
-using redbull_team_1_teamreport_back.Data.Entities;
+using TeamReport.Data.Entities;
 using TeamReport.Domain.Services;
-using Xunit;
 
 namespace TeamReport.Domain.Tests.Services;
 

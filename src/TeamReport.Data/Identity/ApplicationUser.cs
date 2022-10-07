@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace redbull_team_1_teamreport_back.Data.Identity;
+namespace TeamReport.Data.Identity;
 
 public class ApplicationUser : IdentityUser
 {

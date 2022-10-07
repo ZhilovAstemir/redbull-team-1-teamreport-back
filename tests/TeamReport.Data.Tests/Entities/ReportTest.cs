@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
-using redbull_team_1_teamreport_back.Data.Entities;
-using redbull_team_1_teamreport_back.Data.Enums;
+using TeamReport.Data.Entities;
+using TeamReport.Data.Enums;
 
 namespace TeamReport.Data.Tests.Entities;
 
@@ -17,7 +17,7 @@ public class ReportTest
     public void ShouldReportReportHaveProperties()
     {
         var member = new Member();
-        var week= new Week() { DateStart = DateTime.MaxValue, DateEnd =DateTime.MaxValue };
+        var week = new Week() { DateStart = DateTime.MaxValue, DateEnd = DateTime.MaxValue };
 
         var report = new Report()
         {

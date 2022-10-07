@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using redbull_team_1_teamreport_back.Data.Entities;
-using redbull_team_1_teamreport_back.Data.Persistence;
+using TeamReport.Data.Entities;
+using TeamReport.Data.Persistence;
 
 namespace TeamReport.Data.Tests.Repositories;
 

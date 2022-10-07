@@ -1,8 +1,8 @@
-﻿using redbull_team_1_teamreport_back.Data.Entities;
+﻿using TeamReport.Data.Entities;
 
-namespace redbull_team_1_teamreport_back.Data.Repositories.Interfaces;
+namespace TeamReport.Data.Repositories.Interfaces;
 
-public interface ICompanyRepository:IRepository<Company>
+public interface ICompanyRepository : IRepository<Company>
 {
-    
+
 }

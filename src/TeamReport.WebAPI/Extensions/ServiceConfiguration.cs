@@ -2,13 +2,10 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.OpenApi.Models;
-using redbull_team_1_teamreport_back.Data.Repositories;
-using redbull_team_1_teamreport_back.Data.Repositories.Interfaces;
-using TeamReport.Domain.Infrastructures;
-using TeamReport.Domain.Models.Requests;
+using TeamReport.Data.Repositories;
+using TeamReport.Data.Repositories.Interfaces;
 using TeamReport.Domain.Services;
 using TeamReport.Domain.Services.Interfaces;
-using TeamReport.Domain.Validators;
 using TeamReport.WebAPI.Models;
 using TeamReport.WebAPI.Validators;
 

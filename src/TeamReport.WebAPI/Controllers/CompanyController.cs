@@ -1,7 +1,6 @@
-﻿using System.Security.Authentication;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using redbull_team_1_teamreport_back.Data.Entities;
+using TeamReport.Data.Entities;
 using TeamReport.Domain.Exceptions;
 using TeamReport.Domain.Models;
 using TeamReport.Domain.Services.Interfaces;
@@ -34,9 +33,9 @@ public class CompanyController : ControllerBase
             var company = await _service.GetCompany(member.Id);
             return Ok(company);
         }
-        catch (Exception ex)
+        catch
         {
-            return BadRequest(ex);
+            return BadRequest("Something went wrong during processing your request. Please try again later.");
         }
     }
 
@@ -56,9 +55,9 @@ public class CompanyController : ControllerBase
 
             return BadRequest(request);
         }
-        catch (Exception ex)
+        catch
         {
-            return BadRequest(ex);
+            return BadRequest("Something went wrong during processing your request. Please try again later.");
         }
     }
 
@@ -79,9 +78,9 @@ public class CompanyController : ControllerBase
 
             return BadRequest(request);
         }
-        catch (Exception ex)
+        catch
         {
-            return BadRequest(ex);
+            return BadRequest("Something went wrong during processing your request. Please try again later.");
         }
     }
 }

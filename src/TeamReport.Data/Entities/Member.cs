@@ -1,4 +1,4 @@
-﻿namespace redbull_team_1_teamreport_back.Data.Entities;
+﻿namespace TeamReport.Data.Entities;
 
 public class Member
 {
@@ -7,6 +7,6 @@ public class Member
     public string LastName { get; set; }
     public string? Title { get; set; }
     public string Email { get; set; }
-    public string Password { get; set; }
+    public string? Password { get; set; }
     public Company? Company { get; set; }
 }

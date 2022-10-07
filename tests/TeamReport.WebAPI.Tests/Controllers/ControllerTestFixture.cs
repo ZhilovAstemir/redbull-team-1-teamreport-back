@@ -2,12 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Moq;
-using redbull_team_1_teamreport_back.Data.Entities;
-using redbull_team_1_teamreport_back.Data.Persistence;
+using TeamReport.Data.Entities;
+using TeamReport.Data.Persistence;
 using TeamReport.Domain.Infrastructures;
 using TeamReport.Domain.Mappers;
 using TeamReport.Domain.Models;
-using TeamReport.Domain.Models.Requests;
 using TeamReport.WebAPI.Mappers;
 using TeamReport.WebAPI.Models;
 
@@ -101,6 +100,10 @@ public class ControllerTestFixture
     {
         return new UpdateCompanyNameRequest() { NewCompanyName = "New Comapny Name" };
     }
+    public ContinueRegistrationRequest GetContinueRegistrationRequest()
+    {
+        return new ContinueRegistrationRequest() { Password = "Password!", Title = "Title" };
+    }
 
     public IMapper GetMapper()
     {
@@ -135,10 +138,10 @@ public class ControllerTestFixture
     {
         return new EmailConfiguration()
         {
-            From = "teamreports111@gmail.com", 
+            From = "teamreports111@gmail.com",
             SmtpServer = "smtp.gmail.com",
-            Port = 465, 
-            UserName = "teamreports111@gmail.com", 
+            Port = 465,
+            UserName = "teamreports111@gmail.com",
             Password = "btpyftfbrhibrgan"
         };
     }

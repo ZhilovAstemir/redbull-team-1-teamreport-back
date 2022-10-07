@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 using FluentAssertions;
-using redbull_team_1_teamreport_back.Data.Entities;
+using TeamReport.Data.Entities;
 using TeamReport.Domain.Mappers;
 using TeamReport.Domain.Models;
-using TeamReport.Domain.Models.Requests;
 
 namespace TeamReport.Domain.Tests.Mappers;
 

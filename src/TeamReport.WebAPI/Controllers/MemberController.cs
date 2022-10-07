@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using TeamReport.Data.Entities;
+using TeamReport.Domain.Exceptions;
 using TeamReport.Domain.Models;
-using TeamReport.Domain.Models.Requests;
 using TeamReport.Domain.Services;
 using TeamReport.Domain.Services.Interfaces;
 using TeamReport.WebAPI.Extensions;
+using TeamReport.WebAPI.Helpers;
 using TeamReport.WebAPI.Models;
 
 namespace TeamReport.WebAPI.Controllers;
@@ -23,7 +25,7 @@ public class MemberController : ControllerBase
 
         _memberService = memberService;
         _mapper = mapper;
-        _emailService = emailService;   
+        _emailService = emailService;
     }
 
     [HttpPost]
@@ -37,7 +39,7 @@ public class MemberController : ControllerBase
         }
         catch (Exception ex)
         {
-            return BadRequest(ex);
+            return BadRequest("Something went wrong during processing your request. Please try again later.");
         }
 
     }
@@ -46,19 +48,63 @@ public class MemberController : ControllerBase
     [Route("register")]
     [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-    public async Task<IActionResult> Register([FromBody] MemberRegistrationRequest member)
+    public async Task<IActionResult> Register([FromBody] MemberRegistrationRequest request)
     {
         try
         {
-            var memberModel = _mapper.Map<MemberRegistrationRequest, MemberModel>(member);
+            var memberModel = _mapper.Map<MemberRegistrationRequest, MemberModel>(request);
+            memberModel.Company = new CompanyModel() { Id = request.CompanyId };
 
-            var id = await _memberService.Register(memberModel);
+            var createdMemberModel = await _memberService.Register(memberModel);
 
-            return Ok(await _memberService.GetToken(memberModel));
+            return Ok(await _memberService.GetToken(createdMemberModel));
         }
-        catch (Exception ex)
+        catch
         {
-            return BadRequest(ex);
+            return BadRequest("Something went wrong during processing your request. Please try again later.");
+        }
+    }
+
+    [HttpGet]
+    [Route("info")]
+    [Authorize]
+    public async Task<IActionResult> GetMemberInformation()
+    {
+        try
+        {
+            var member = (Member)HttpContext.Items["Member"] ?? throw new EntityNotFoundException("Authorized member should have data in HttpContext");
+            var memberModel = _mapper.Map<Member, MemberModel>(member);
+
+            return Ok(memberModel);
+
+        }
+        catch
+        {
+            return BadRequest("Something went wrong during processing your request. Please try again later.");
+        }
+    }
+
+
+    [HttpPost]
+    [Route("continue-registration")]
+    [Authorize]
+    public async Task<IActionResult> ContinueRegistration([FromBody] ContinueRegistrationRequest request)
+    {
+        try
+        {
+            var member = (Member)HttpContext.Items["Member"] ?? throw new EntityNotFoundException("Authorized member should have data in HttpContext");
+            var memberModel = _mapper.Map<Member, MemberModel>(member);
+            memberModel.Title = request.Title;
+            memberModel.Password = request.Password;
+
+            var updatedMember = await _memberService.ContinueRegistration(memberModel);
+
+            return Ok(await _memberService.GetToken(updatedMember));
+
+        }
+        catch
+        {
+            return BadRequest("Something went wrong during processing your request. Please try again later.");
         }
     }
 

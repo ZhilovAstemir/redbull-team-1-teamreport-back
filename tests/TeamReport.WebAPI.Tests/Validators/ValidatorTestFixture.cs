@@ -1,4 +1,4 @@
-﻿using redbull_team_1_teamreport_back.Data.Entities;
+﻿using TeamReport.Data.Entities;
 using TeamReport.WebAPI.Models;
 
 namespace TeamReport.WebAPI.Tests.Validators;
@@ -23,6 +23,11 @@ public class ValidatorTestFixture
     public UpdateCompanyNameRequest GetUpdateCompanyNameRequest()
     {
         return new UpdateCompanyNameRequest() { NewCompanyName = "New Comapny Name" };
+    }
+
+    public ContinueRegistrationRequest GetContinueRegistrationRequest()
+    {
+        return new ContinueRegistrationRequest() { Password = "Password!", Title = "Title" };
     }
 
     public Member GetMember()

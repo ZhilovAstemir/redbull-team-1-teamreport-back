@@ -4,11 +4,13 @@
     [LastName]  NVARCHAR (MAX) NOT NULL,
     [Title]     NVARCHAR (MAX) NULL,
     [Email]     NVARCHAR (MAX) NOT NULL,
-    [Password]  NVARCHAR (MAX) NOT NULL,
+    [Password]  NVARCHAR (MAX) NULL,
     [CompanyId] INT            NULL,
     CONSTRAINT [PK_Members] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Members_Companies_CompanyId] FOREIGN KEY ([CompanyId]) REFERENCES [dbo].[Companies] ([Id])
 );
+
+
 
 
 GO

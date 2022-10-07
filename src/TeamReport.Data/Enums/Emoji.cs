@@ -1,4 +1,4 @@
-﻿namespace redbull_team_1_teamreport_back.Data.Enums;
+﻿namespace TeamReport.Data.Enums;
 
 public enum Emotion
 {

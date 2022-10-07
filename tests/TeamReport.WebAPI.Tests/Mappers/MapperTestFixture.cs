@@ -1,9 +1,8 @@
-﻿using redbull_team_1_teamreport_back.Data.Entities;
-using TeamReport.Domain.Models;
+﻿using TeamReport.Data.Entities;
 using TeamReport.Domain.Infrastructures;
-using TeamReport.Domain.Models.Requests;
+using TeamReport.WebAPI.Models;
 
-namespace TeamReport.Domain.Tests.Mappers;
+namespace TeamReport.WebAPI.Tests.Mappers;
 
 public class MapperTestFixture
 {
@@ -31,5 +30,5 @@ public class MapperTestFixture
             Title = member.Title
         };
     }
-    
+
 }

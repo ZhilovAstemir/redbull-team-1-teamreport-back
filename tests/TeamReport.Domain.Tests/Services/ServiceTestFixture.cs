@@ -2,15 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Moq;
-using redbull_team_1_teamreport_back.Data.Entities;
-using redbull_team_1_teamreport_back.Data.Persistence;
-using redbull_team_1_teamreport_back.Data.Repositories.Interfaces;
+using TeamReport.Data.Entities;
+using TeamReport.Data.Persistence;
+using TeamReport.Data.Repositories.Interfaces;
 using TeamReport.Domain.Infrastructures;
 using TeamReport.Domain.Mappers;
 using TeamReport.Domain.Models;
-using TeamReport.Domain.Models.Requests;
 using TeamReport.WebAPI.Mappers;
-using TeamReport.WebAPI.Models;
 
 namespace TeamReport.Domain.Tests.Services;
 
@@ -87,7 +85,8 @@ public class ServiceTestFixture
 
     public IMapper GetMapper()
     {
-        var mapperConfig = new MapperConfiguration(cfg => {
+        var mapperConfig = new MapperConfiguration(cfg =>
+        {
             cfg.AddProfile<MapperDomain>();
             cfg.AddProfile<MapperAPI>();
         });

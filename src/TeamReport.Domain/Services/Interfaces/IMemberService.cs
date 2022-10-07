@@ -1,13 +1,11 @@
-﻿using redbull_team_1_teamreport_back.Data.Entities;
-using TeamReport.Domain.Models;
+﻿using TeamReport.Domain.Models;
 
 namespace TeamReport.Domain.Services.Interfaces;
 public interface IMemberService
 {
-    public Task<Member> Register(MemberModel member);
-    public Task<List<Member>> GetAll();
+    public Task<MemberModel> Register(MemberModel member);
+    public Task<List<MemberModel>> GetAll();
     public Task<string> GetToken(MemberModel member);
-
     public Task<MemberModel> Login(string email, string password);
-
+    public Task<MemberModel> ContinueRegistration(MemberModel memberModel);
 }
