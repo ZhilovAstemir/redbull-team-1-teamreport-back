@@ -12,7 +12,9 @@ public class MemberRegistrationValidator : AbstractValidator<MemberRegistrationR
             .NotEmpty().EmailAddress().WithMessage("Email is required");
         RuleFor(request =>
                 request.Password)
-            .NotEmpty().Length(5, 30).WithMessage("Password is too short or empty");
+            .NotEmpty().WithMessage("Password is required")
+            .Length(6, 30).WithMessage("Password is too short")
+            .Matches("(?=.*?[#?!@$%^&*-])").WithMessage("Password should contain at least 1 symbol");
         RuleFor(request =>
                 request.LastName)
             .NotEmpty().WithMessage("Last Name is required");

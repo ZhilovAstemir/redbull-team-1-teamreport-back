@@ -72,7 +72,8 @@ public class ControllerTestFixture
             Password = "password",
             FirstName = "FirstName",
             LastName = "LastName",
-            Title = "Title"
+            Title = "Title",
+            CompanyId = 1
         };
     }
 

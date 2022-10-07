@@ -60,7 +60,7 @@ public class MemberServiceTest
     {
         _fixture.ClearDatabase();
 
-        var repository = _fixture.GetMemberRepositoryMock();
+        var repository = new Mock<IMemberRepository>();
         repository.Setup(x => x.ReadByEmail(It.IsAny<string>())).Returns(Task.FromResult((Member?)null));
 
         var service = new MemberService(new MemberRepository(_context), new CompanyRepository(_context), _fixture.GetMapper());
@@ -76,7 +76,7 @@ public class MemberServiceTest
     {
         _fixture.ClearDatabase();
 
-        var repository = _fixture.GetMemberRepositoryMock();
+        var repository = new MemberRepository(_fixture.GetContext());
 
         var service = new MemberService(new MemberRepository(_context), new CompanyRepository(_context), _fixture.GetMapper());
 
@@ -93,7 +93,7 @@ public class MemberServiceTest
     {
         _fixture.ClearDatabase();
 
-        var repository = _fixture.GetMemberRepositoryMock();
+        var repository = new MemberRepository(_fixture.GetContext());
 
         var service = new MemberService(new MemberRepository(_context), new CompanyRepository(_context), _fixture.GetMapper());
 
@@ -259,4 +259,43 @@ public class MemberServiceTest
 
         await registration.Should().ThrowAsync<UsedEmailException>();
     }
+
+    [Fact]
+    public async Task ShouldGetToken()
+    {
+        _fixture.ClearDatabase();
+
+        var service = new MemberService(new MemberRepository(_context), new CompanyRepository(_context), _fixture.GetMapper());
+
+        var token = await service.GetToken(_fixture.GetMemberModel());
+
+        token.Should().NotBeNull().And.BeOfType<string>();
+    }
+
+    [Fact]
+    public async Task ShouldGetMemberByEmail()
+    {
+        _fixture.ClearDatabase();
+
+        var member = _fixture.GetMember();
+        _context.Members.Add(member);
+        await _context.SaveChangesAsync();
+
+        var service = new MemberService(new MemberRepository(_context), new CompanyRepository(_context), _fixture.GetMapper());
+
+        var memberByEmail = await service.GetMemberByEmail(member.Email);
+        memberByEmail.Should().NotBeNull().And.BeOfType<MemberModel>();
+    }
+
+    [Fact]
+    public async Task ShouldGetMemberByEmailReturnNullIfCanNotFindMember()
+    {
+        _fixture.ClearDatabase();
+
+        var service = new MemberService(new MemberRepository(_context), new CompanyRepository(_context), _fixture.GetMapper());
+
+        var memberByEmail = await service.GetMemberByEmail("some email");
+        memberByEmail.Should().BeNull();
+    }
+
 }

@@ -5,6 +5,9 @@
       <Value>src\TeamReport.Data\TeamReport.Data.csproj\Migrations</Value>
       <Value>Program.cs:src\TeamReport.WebAPI\TeamReport.WebAPI.csproj</Value>
       <Value>ServiceConfiguration.cs:src\TeamReport.WebAPI\TeamReport.WebAPI.csproj</Value>
+      <Value>src\TeamReport.Data\TeamReport.Data.csproj\Exceptions</Value>
+      <Value>Extensions\ServiceConfiguration.cs:src\TeamReport.WebAPI\TeamReport.WebAPI.csproj</Value>
+      <Value>src\TeamReport.WebAPI\TeamReport.WebAPI.csproj\Extensions</Value>
     </MetricsExclusionList>
     <SolutionConfigured>True</SolutionConfigured>
   </Settings>

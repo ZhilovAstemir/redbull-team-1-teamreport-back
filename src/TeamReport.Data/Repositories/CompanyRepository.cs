@@ -49,3 +49,4 @@ public class CompanyRepository : ICompanyRepository
         return await _context.Companies.ToListAsync();
     }
 }
+

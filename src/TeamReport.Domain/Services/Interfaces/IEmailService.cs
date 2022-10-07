@@ -1,8 +1,8 @@
 ﻿using TeamReport.Domain.Models;
 
-namespace TeamReport.Domain.Services;
+namespace TeamReport.Domain.Services.Interfaces;
 
 public interface IEmailService
 {
-    void InviteMember(InviteMemberRequest inviteMember, string path);
+    bool InviteMember(MemberModel memberModel, string frontDomain);
 }

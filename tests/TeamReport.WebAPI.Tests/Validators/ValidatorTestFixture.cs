@@ -35,7 +35,7 @@ public class ValidatorTestFixture
         return new Member()
         {
             Email = "email@email.com",
-            Password = "password1",
+            Password = "password!",
             FirstName = "FirstName",
             LastName = "LastName",
             Title = "Title",

@@ -15,3 +15,4 @@ public class ApplicationDbContext : DbContext
     public DbSet<Week> Weeks { get; set; }
 
 }
+

@@ -31,7 +31,7 @@ public class MemberRegistrationValidatorTest
         var model = new MemberRegistrationRequest()
         {
             Email = "email@email.email",
-            Password = "Some password for test",
+            Password = "Some password for test!",
             FirstName = "FirstName",
             LastName = "LastName",
             Title = "Title"
@@ -47,7 +47,7 @@ public class MemberRegistrationValidatorTest
         var validator = new MemberRegistrationValidator();
         var model = new MemberRegistrationRequest()
         {
-            Password = "Some password for test",
+            Password = "Some password for test!",
             FirstName = "FirstName",
             LastName = "LastName",
             Title = "Title"
@@ -65,7 +65,7 @@ public class MemberRegistrationValidatorTest
         var model = new MemberRegistrationRequest()
         {
             Email = "email@email.email",
-            Password = "pass",
+            Password = "pass!",
             FirstName = "FirstName",
             LastName = "LastName",
             Title = "Title"
@@ -83,7 +83,7 @@ public class MemberRegistrationValidatorTest
         var model = new MemberRegistrationRequest()
         {
             Email = "email@email.email",
-            Password = "Some password for test",
+            Password = "Some password for test!",
             LastName = "LastName",
             Title = "Title"
         };
@@ -100,7 +100,7 @@ public class MemberRegistrationValidatorTest
         var model = new MemberRegistrationRequest()
         {
             Email = "email@email.email",
-            Password = "Some password for test",
+            Password = "Some password for test!",
             FirstName = "FirstName",
             Title = "Title"
         };
@@ -117,7 +117,7 @@ public class MemberRegistrationValidatorTest
         var model = new MemberRegistrationRequest()
         {
             Email = "email@email.email",
-            Password = "Some password for test",
+            Password = "Some password for test!",
             FirstName = "FirstName",
             LastName = "LastName"
         };

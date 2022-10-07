@@ -32,6 +32,11 @@ public class MemberRepository : IMemberRepository
         return await _context.Members.Include(x => x.Company).FirstOrDefaultAsync(c => c.Email == email);
     }
 
+    public async Task<List<Member>> ReadByCompany(int companyId)
+    {
+        return await _context.Members.Include(x => x.Company).Where(x => x.Company.Id == companyId).ToListAsync();
+    }
+
     public async Task<List<Member>> ReadAll()
     {
         return await _context.Members.Include(x => x.Company).ToListAsync();
