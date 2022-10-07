@@ -363,7 +363,7 @@ public class LeadershipRepositoryTest
 
         var repository = new LeadershipRepository(_context);
 
-        var updated = await repository.UpdateReporters(leader.Id, new List<Member>() { member });
+        var updated = await repository.UpdateReporters(leader.Id, new List<int>() { member.Id });
 
         updated.Should().HaveCount(1).And.Contain(member).And.NotContain(member2);
     }
@@ -399,7 +399,7 @@ public class LeadershipRepositoryTest
 
         var repository = new LeadershipRepository(_context);
 
-        var updated = await repository.UpdateLeaders(member2.Id, new List<Member>() { leader2 });
+        var updated = await repository.UpdateLeaders(member2.Id, new List<int>() { leader2.Id });
 
         updated.Should().HaveCount(1).And.Contain(leader2).And.NotContain(leader);
     }

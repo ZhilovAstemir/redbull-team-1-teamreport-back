@@ -62,15 +62,16 @@ public class LeadershipRepository : ILeadershipRepository
         return await _context.Leaderships.Where(x => x.Leader.Id == leaderId).Select(x => x.Member).ToListAsync();
     }
 
-    public async Task<List<Member>> UpdateLeaders(int reporterId, List<Member> leaders)
+    public async Task<List<Member>> UpdateLeaders(int reporterId, List<int> leadersIds)
     {
         await DeleteLeaders(reporterId);
 
         var reporter = await _context.Members.FirstOrDefaultAsync(x => x.Id == reporterId);
         if (reporter is null) throw new EntityNotFoundException("Can't find reporter to update his leaders");
-        foreach (Member leader in leaders)
+        foreach (int leaderId in leadersIds)
         {
-            _context.Add(new Leadership() { Leader = leader, Member = reporter });
+            var member = await _context.Members.FirstOrDefaultAsync(x => x.Id == leaderId);
+            _context.Add(new Leadership() { Id = 0, Leader = member, Member = reporter });
         }
 
         await _context.SaveChangesAsync();
@@ -78,15 +79,16 @@ public class LeadershipRepository : ILeadershipRepository
         return await ReadLeaders(reporterId);
     }
 
-    public async Task<List<Member>> UpdateReporters(int leaderId, List<Member> reporters)
+    public async Task<List<Member>> UpdateReporters(int leaderId, List<int> reportersIds)
     {
         await DeleteReporters(leaderId);
 
         var leader = await _context.Members.FirstOrDefaultAsync(x => x.Id == leaderId);
         if (leader is null) throw new EntityNotFoundException("Can't find leader to update his reporters");
-        foreach (Member reporter in reporters)
+        foreach (int reporterId in reportersIds)
         {
-            _context.Add(new Leadership() { Leader = leader, Member = reporter });
+            var member = await _context.Members.FirstOrDefaultAsync(x => x.Id == reporterId);
+            _context.Add(new Leadership() { Id = 0, Leader = leader, Member = member });
         }
 
         await _context.SaveChangesAsync();

@@ -43,30 +43,31 @@ public class TeamService : ITeamService
         return memberModels.ToList();
     }
 
-    public async Task<List<MemberModel>> UpdateMemberLeaders(MemberModel member, List<MemberModel> newLeadersModels)
+    public async Task<List<MemberModel>> UpdateMemberLeaders(int memberId, List<int> newLeadersIds)
     {
-        var leadersOfMember = await _leadershipRepository.ReadLeaders(member.Id);
+        var leadersOfMember = await _leadershipRepository.ReadLeaders(memberId);
         var leadersModels = _mapper.Map<List<Member>, List<MemberModel>>(leadersOfMember);
         if (leadersModels is null)
         {
             throw new AutoMapperMappingException();
         }
 
-        var newLeaders = await _leadershipRepository.UpdateLeaders(member.Id, _mapper.Map<List<MemberModel>, List<Member>>(newLeadersModels));
+        var newLeaders = await _leadershipRepository.UpdateLeaders(memberId, newLeadersIds);
 
         return _mapper.Map<List<Member>, List<MemberModel>>(newLeaders);
     }
 
-    public async Task<List<MemberModel>> UpdateMemberReporters(MemberModel member, List<MemberModel> newReportersModels)
+    public async Task<List<MemberModel>> UpdateMemberReporters(int memberId, List<int> newReportersIds)
     {
-        var reportersOOfMember = await _leadershipRepository.ReadReporters(member.Id);
+        var reportersOOfMember = await _leadershipRepository.ReadReporters(memberId);
         var reportersModel = _mapper.Map<List<Member>, List<MemberModel>>(reportersOOfMember);
         if (reportersModel is null)
         {
             throw new AutoMapperMappingException();
         }
 
-        var newReporters = await _leadershipRepository.UpdateLeaders(member.Id, _mapper.Map<List<MemberModel>, List<Member>>(newReportersModels));
+        var newReporters = await _leadershipRepository.
+            UpdateReporters(memberId, newReportersIds);
 
         return _mapper.Map<List<Member>, List<MemberModel>>(newReporters);
     }

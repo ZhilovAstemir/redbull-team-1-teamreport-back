@@ -18,6 +18,7 @@ public static class ServiceConfiguration
     {
         services.AddScoped<IMemberRepository, MemberRepository>();
         services.AddScoped<ICompanyRepository, CompanyRepository>();
+        services.AddScoped<ILeadershipRepository, LeadershipRepository>();
     }
 
     public static void AddDomainServices(this IServiceCollection services)
