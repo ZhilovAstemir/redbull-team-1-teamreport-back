@@ -11,9 +11,10 @@ public class InviteMemberValidatorTest
         var validator = new InviteMemberValidator();
         var model = new InviteMemberModelRequest()
         {
-            FirstName = "Ivan", 
+            FirstName = "Ivan",
             LastName = "Ivanov",
-            Email = "email"
+            Email = "email",
+            CurrentUserId = 1
         };
         var result = validator.Validate(model);
 
@@ -29,12 +30,13 @@ public class InviteMemberValidatorTest
         {
             FirstName = "",
             LastName = "Ivanov",
-            Email = "email@mail.ru"
+            Email = "email@mail.ru",
+            CurrentUserId = 1
         };
         var result = validator.Validate(model);
 
         result.IsValid.Should().BeFalse();
-        result.Errors.Should().HaveCount(2).And.Contain(x => x.ErrorMessage.Contains("First name"));
+        result.Errors.Should().HaveCount(2).And.Contain(x => x.PropertyName == "FirstName");
     }
 
     [Fact]
@@ -45,12 +47,28 @@ public class InviteMemberValidatorTest
         {
             FirstName = "Ivan",
             LastName = "",
-            Email = "email@mail.ru"
+            Email = "email@mail.ru",
+            CurrentUserId = 1
         };
         var result = validator.Validate(model);
 
         result.IsValid.Should().BeFalse();
-        result.Errors.Should().HaveCount(2).And.Contain(x => x.ErrorMessage.Contains("Last name"));
+        result.Errors.Should().Contain(x => x.PropertyName == "LastName");
     }
 
+    [Fact]
+    public void ShouldInviteMemberValidatorValidateModel()
+    {
+        var validator = new InviteMemberValidator();
+        var model = new InviteMemberModelRequest()
+        {
+            FirstName = "Ivan",
+            LastName = "LastName",
+            Email = "email@mail.ru",
+            CurrentUserId = 1
+        };
+        var result = validator.Validate(model);
+
+        result.IsValid.Should().BeTrue();
+    }
 }
