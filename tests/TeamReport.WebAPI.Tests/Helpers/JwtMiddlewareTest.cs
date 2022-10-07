@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Moq;
 using TeamReport.Data.Entities;
+using TeamReport.Data.Persistence;
 using TeamReport.Data.Repositories;
+using TeamReport.Data.Repositories.Interfaces;
 using TeamReport.Domain.Exceptions;
 using TeamReport.Domain.Models;
 using TeamReport.Domain.Services;
@@ -14,9 +16,17 @@ namespace TeamReport.WebAPI.Tests.Helpers;
 public class JwtMiddlewareTest
 {
     private readonly HelpersTestFixture _fixture;
+    private readonly IMemberRepository _memberRepository;
+    private readonly ILeadershipRepository _leadershipRepository;
+    private readonly ICompanyRepository _companyRepository;
+    private readonly ApplicationDbContext _context;
     public JwtMiddlewareTest()
     {
         _fixture = new HelpersTestFixture();
+        _context = _fixture.GetContext();
+        _memberRepository = new MemberRepository(_context);
+        _leadershipRepository = new LeadershipRepository(_context);
+        _companyRepository = new CompanyRepository(_context);
     }
 
     [Fact]
@@ -30,7 +40,7 @@ public class JwtMiddlewareTest
     public void ShouldJwtMiddlewareDoNothingIfNoToken()
     {
         var middleware = new JwtMiddleware(null, WebApplication.CreateBuilder().Configuration);
-        var task = middleware.Invoke(new DefaultHttpContext(), new TeamService(new MemberRepository(_fixture.GetContext()), _fixture.GetMapper()));
+        var task = middleware.Invoke(new DefaultHttpContext(), _memberRepository);
         task.IsCompleted.Should().BeTrue();
     }
 
@@ -47,7 +57,7 @@ public class JwtMiddlewareTest
 
 
         httpContext.Request.Headers.Add("Authorization", await authService.GetToken(mapper.Map<Member, MemberModel>(member)));
-        var task = middleware.Invoke(httpContext, new TeamService(memberRepository, mapper));
+        var task = middleware.Invoke(httpContext, _memberRepository);
 
         task.IsCompleted.Should().BeTrue();
 
@@ -67,7 +77,7 @@ public class JwtMiddlewareTest
 
 
         httpContext.Request.Headers.Add("Authorization", "2012347192740912oaisfhoiahsdfoi");
-        var task = () => middleware.Invoke(httpContext, new TeamService(memberRepository, mapper));
+        var task = () => middleware.Invoke(httpContext, _memberRepository);
 
         task.Should().ThrowAsync<TokenValidationException>();
     }

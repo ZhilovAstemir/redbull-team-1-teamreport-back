@@ -9,7 +9,7 @@ using TeamReport.Domain.Services.Interfaces;
 using TeamReport.WebAPI.Models;
 using TeamReport.WebAPI.Validators;
 
-namespace TeamReport.WebAPI;
+namespace TeamReport.WebAPI.Extensions;
 
 [ExcludeFromCodeCoverage]
 public static class ServiceConfiguration
@@ -18,6 +18,7 @@ public static class ServiceConfiguration
     {
         services.AddScoped<IMemberRepository, MemberRepository>();
         services.AddScoped<ICompanyRepository, CompanyRepository>();
+        services.AddScoped<ILeadershipRepository, LeadershipRepository>();
     }
 
     public static void AddDomainServices(this IServiceCollection services)

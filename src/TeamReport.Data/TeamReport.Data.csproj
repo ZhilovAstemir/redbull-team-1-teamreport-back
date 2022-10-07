@@ -9,11 +9,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Compile Remove="Exceptions\**" />
       <Compile Remove="Persistence\Migrations\**" />
-      <EmbeddedResource Remove="Exceptions\**" />
       <EmbeddedResource Remove="Persistence\Migrations\**" />
-      <None Remove="Exceptions\**" />
       <None Remove="Persistence\Migrations\**" />
     </ItemGroup>
 

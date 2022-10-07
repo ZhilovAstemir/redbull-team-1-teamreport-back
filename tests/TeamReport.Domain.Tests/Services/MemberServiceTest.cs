@@ -60,7 +60,7 @@ public class MemberServiceTest
     {
         _fixture.ClearDatabase();
 
-        var repository = _fixture.GetMemberRepositoryMock();
+        var repository = new Mock<IMemberRepository>();
         repository.Setup(x => x.ReadByEmail(It.IsAny<string>())).Returns(Task.FromResult((Member?)null));
 
         var service = new MemberService(new MemberRepository(_context), new CompanyRepository(_context), _fixture.GetMapper());
@@ -76,7 +76,7 @@ public class MemberServiceTest
     {
         _fixture.ClearDatabase();
 
-        var repository = _fixture.GetMemberRepositoryMock();
+        var repository = new MemberRepository(_fixture.GetContext());
 
         var service = new MemberService(new MemberRepository(_context), new CompanyRepository(_context), _fixture.GetMapper());
 
@@ -93,7 +93,7 @@ public class MemberServiceTest
     {
         _fixture.ClearDatabase();
 
-        var repository = _fixture.GetMemberRepositoryMock();
+        var repository = new MemberRepository(_fixture.GetContext());
 
         var service = new MemberService(new MemberRepository(_context), new CompanyRepository(_context), _fixture.GetMapper());
 

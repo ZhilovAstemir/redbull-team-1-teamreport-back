@@ -1,8 +1,8 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
+using TeamReport.Data.Repositories.Interfaces;
 using TeamReport.Domain.Exceptions;
 using TeamReport.Domain.Infrastructures;
-using TeamReport.Domain.Services.Interfaces;
 
 namespace TeamReport.WebAPI.Helpers;
 
@@ -17,14 +17,14 @@ public class JwtMiddleware
         _configuration = configuration;
     }
 
-    public async Task Invoke(HttpContext context, ITeamService teamService)
+    public async Task Invoke(HttpContext context, IMemberRepository memberRepository)
     {
         try
         {
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
             if (token != null)
-                await AttachUserToContext(context, teamService, token);
+                await AttachUserToContext(context, memberRepository, token);
         }
         catch
         {
@@ -33,7 +33,7 @@ public class JwtMiddleware
         await _next(context);
     }
 
-    public async Task AttachUserToContext(HttpContext context, ITeamService teamService, string token)
+    public async Task AttachUserToContext(HttpContext context, IMemberRepository memberRepository, string token)
     {
 
         var tokenHandler = new JwtSecurityTokenHandler();
@@ -49,6 +49,6 @@ public class JwtMiddleware
         var jwtToken = (JwtSecurityToken)validatedToken;
         var userId = int.Parse(jwtToken.Claims.First(x => x.Type == "user").Value);
 
-        context.Items["Member"] = await teamService.Get(userId);
+        context.Items["Member"] = await memberRepository.Read(userId);
     }
 }
