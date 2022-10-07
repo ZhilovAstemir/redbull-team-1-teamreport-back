@@ -50,7 +50,7 @@ public class ContinueRegistrationValidatorTest
         result.IsValid.Should().BeFalse();
         result.Errors.Should().HaveCount(1).And.Contain(x => x.ErrorMessage.Contains("Password"));
 
-        model.Password = "pass";
+        model.Password = "pass!";
         result = validator.Validate(model);
 
         result.IsValid.Should().BeFalse();

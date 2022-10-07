@@ -18,14 +18,17 @@ public class MemberController : ControllerBase
     private readonly IMapper _mapper;
     private readonly IEmailService _emailService;
     private readonly ITeamService _teamService;
+    private readonly IConfiguration _configuration;
 
-    public MemberController(IMemberService memberService, IMapper mapper, IEmailService emailService, ITeamService teamService)
+    public MemberController(IMemberService memberService, IMapper mapper,
+        IEmailService emailService, ITeamService teamService, IConfiguration configuration)
     {
 
         _memberService = memberService;
         _mapper = mapper;
         _emailService = emailService;
         _teamService = teamService;
+        _configuration = configuration;
     }
 
     [HttpPost]
@@ -144,7 +147,8 @@ public class MemberController : ControllerBase
 
             await _teamService.UpdateMemberLeaders(registeredModel.Id, new List<int>() { leader.Id });
 
-            var domain = "";
+            var domain = _configuration.GetValue<string>("Domain");
+
             _emailService.InviteMember(registeredModel, domain);
             return Ok(registeredModel);
         }

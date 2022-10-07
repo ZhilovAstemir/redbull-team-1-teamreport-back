@@ -44,7 +44,7 @@ public class CompanyRegistrationValidatorTest
     {
         var validator = new CompanyRegistrationValidator();
         var model = _fixture.GetCompanyRegistrationRequest();
-        model.Password = "pass1";
+        model.Password = "pass!";
         var result = validator.Validate(model);
 
         result.IsValid.Should().BeFalse();
@@ -72,7 +72,7 @@ public class CompanyRegistrationValidatorTest
         var validator = new CompanyRegistrationValidator();
         var model = _fixture.GetCompanyRegistrationRequest();
 
-        model.Password = "password1";
+        model.Password = "password!";
         var result = validator.Validate(model);
 
         result.IsValid.Should().BeTrue();

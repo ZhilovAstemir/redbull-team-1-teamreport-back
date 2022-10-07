@@ -2,6 +2,7 @@ using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Moq;
 using TeamReport.Data.Persistence;
 using TeamReport.Data.Repositories;
@@ -23,6 +24,7 @@ public class MemberControllerTest
     private readonly ILeadershipRepository _leadershipRepository;
     private readonly ApplicationDbContext _context;
     private readonly IMapper _mapper;
+    private readonly IConfiguration _configuration;
     public MemberControllerTest()
     {
         _fixture = new ControllerTestFixture();
@@ -34,12 +36,13 @@ public class MemberControllerTest
         _memberService = new MemberService(_memberRepository, _companyRepository, _mapper);
         _emailService = new EmailService(_fixture.GetNewOptions());
         _teamService = new TeamService(_memberRepository, _leadershipRepository, _companyRepository, _mapper);
+        _configuration = new ConfigurationManager();
     }
 
     [Fact]
     public void ShouldBeAbleToCreateMemberController()
     {
-        var controller = new MemberController(_memberService, _mapper, _emailService, _teamService);
+        var controller = new MemberController(_memberService, _mapper, _emailService, _teamService, _configuration);
         controller.Should().NotBeNull();
     }
 
@@ -49,7 +52,7 @@ public class MemberControllerTest
         _fixture.ClearDatabase();
 
         var invitedMember = _fixture.GetInviteMemberRequest();
-        var memberController = new MemberController(_memberService, _mapper, _emailService, _teamService);
+        var memberController = new MemberController(_memberService, _mapper, _emailService, _teamService, _configuration);
 
         var controllerContext = new ControllerContext();
         var httpContext = new DefaultHttpContext();
@@ -71,7 +74,7 @@ public class MemberControllerTest
         _fixture.ClearDatabase();
 
         var inviteMemberRequest = _fixture.GetInviteMemberRequest();
-        var memberController = new MemberController(_memberService, _mapper, _emailService, _teamService);
+        var memberController = new MemberController(_memberService, _mapper, _emailService, _teamService, _configuration);
 
         var controllerContext = new ControllerContext();
         var httpContext = new DefaultHttpContext();
@@ -110,7 +113,7 @@ public class MemberControllerTest
         _fixture.ClearDatabase();
 
         var inviteMemberRequest = _fixture.GetInviteMemberRequest();
-        var memberController = new MemberController(_memberService, _mapper, _emailService, _teamService);
+        var memberController = new MemberController(_memberService, _mapper, _emailService, _teamService, _configuration);
 
         var controllerContext = new ControllerContext();
         var httpContext = new DefaultHttpContext();
@@ -134,7 +137,7 @@ public class MemberControllerTest
         _fixture.ClearDatabase();
 
         var inviteMemberRequest = _fixture.GetInviteMemberRequest();
-        var memberController = new MemberController(_memberService, _mapper, _emailService, _teamService);
+        var memberController = new MemberController(_memberService, _mapper, _emailService, _teamService, _configuration);
 
         var request = _fixture.GetInviteMemberRequest();
         var response = await memberController.InviteMember(request);
@@ -146,7 +149,7 @@ public class MemberControllerTest
     {
         _fixture.ClearDatabase();
 
-        var controller = new MemberController(_memberService, _mapper, _emailService, _teamService);
+        var controller = new MemberController(_memberService, _mapper, _emailService, _teamService, _configuration);
         var request = _fixture.GetMemberRegistrationRequest();
         var response = await controller.Register(request);
 
@@ -159,7 +162,7 @@ public class MemberControllerTest
     {
         _fixture.ClearDatabase();
 
-        var controller = new MemberController(_memberService, _mapper, _emailService, _teamService);
+        var controller = new MemberController(_memberService, _mapper, _emailService, _teamService, _configuration);
 
         var memberRegistrationRequest = _fixture.GetMemberRegistrationRequest();
         var registerResponse = await controller.Register(memberRegistrationRequest);
@@ -181,7 +184,7 @@ public class MemberControllerTest
         var serviceMock = new Mock<IMemberService>();
         serviceMock.Setup(x => x.Login(It.IsAny<string>(), It.IsAny<string>())).Throws(new Exception());
 
-        var controller = new MemberController(serviceMock.Object, _mapper, _emailService, _teamService);
+        var controller = new MemberController(serviceMock.Object, _mapper, _emailService, _teamService, _configuration);
 
         var loginRequest = _fixture.GetLoginRequest();
         var loginResponse = await controller.Login(loginRequest);
@@ -197,7 +200,7 @@ public class MemberControllerTest
         var serviceMock = new Mock<IMemberService>();
         serviceMock.Setup(x => x.Register(It.IsAny<MemberModel>())).Throws(new Exception());
 
-        var controller = new MemberController(serviceMock.Object, _mapper, _emailService, _teamService);
+        var controller = new MemberController(serviceMock.Object, _mapper, _emailService, _teamService, _configuration);
 
         var registrationRequest = _fixture.GetMemberRegistrationRequest();
         var response = await controller.Register(registrationRequest);
@@ -210,7 +213,7 @@ public class MemberControllerTest
     {
         _fixture.ClearDatabase();
 
-        var controller = new MemberController(_memberService, _mapper, _emailService, _teamService);
+        var controller = new MemberController(_memberService, _mapper, _emailService, _teamService, _configuration);
 
         var controllerContext = new ControllerContext();
         var httpContext = new DefaultHttpContext();
@@ -232,7 +235,7 @@ public class MemberControllerTest
     {
         _fixture.ClearDatabase();
 
-        var controller = new MemberController(_memberService, _mapper, _emailService, _teamService);
+        var controller = new MemberController(_memberService, _mapper, _emailService, _teamService, _configuration);
 
         var controllerContext = new ControllerContext();
         var httpContext = new DefaultHttpContext();
@@ -259,7 +262,7 @@ public class MemberControllerTest
     {
         _fixture.ClearDatabase();
 
-        var controller = new MemberController(_memberService, _mapper, _emailService, _teamService);
+        var controller = new MemberController(_memberService, _mapper, _emailService, _teamService, _configuration);
 
         var request = _fixture.GetContinueRegistrationRequest();
 
@@ -273,7 +276,7 @@ public class MemberControllerTest
     {
         _fixture.ClearDatabase();
 
-        var controller = new MemberController(_memberService, _mapper, _emailService, _teamService);
+        var controller = new MemberController(_memberService, _mapper, _emailService, _teamService, _configuration);
 
         var request = _fixture.GetContinueRegistrationRequest();
 

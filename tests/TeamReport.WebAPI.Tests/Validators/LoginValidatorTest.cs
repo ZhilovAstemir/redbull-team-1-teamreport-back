@@ -30,7 +30,7 @@ public class LoginValidatorTest
         var validator = new LoginValidator();
         var model = new LoginRequest()
         {
-            Password = "Some password for test"
+            Password = "Some password for test!"
         };
         var result = validator.Validate(model);
 
@@ -45,6 +45,21 @@ public class LoginValidatorTest
         var model = new LoginRequest()
         {
             Email = "email@email.email"
+        };
+        var result = validator.Validate(model);
+
+        result.IsValid.Should().BeFalse();
+        result.Errors.Should().HaveCount(1).And.Contain(x => x.ErrorMessage.Contains("Password"));
+    }
+
+    [Fact]
+    public void ShouldLoginValidatorValidateShortPassword()
+    {
+        var validator = new LoginValidator();
+        var model = new LoginRequest()
+        {
+            Email = "email@email.email",
+            Password = "passs["
         };
         var result = validator.Validate(model);
 

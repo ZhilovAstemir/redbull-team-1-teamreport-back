@@ -8,7 +8,9 @@ public class ContinueRegistrationValidator : AbstractValidator<ContinueRegistrat
     public ContinueRegistrationValidator()
     {
         RuleFor(x => x.Title).NotEmpty().WithMessage("Title is required");
-        RuleFor(x => x.Password).NotEmpty().Matches("(?=.*?[A-Za-z])(?=.*?[#?!@$%^&*-]).{5,}")
-            .WithMessage("Password should contain at least 5 letters and 1 symbol");
+        RuleFor(x => x.Password)
+            .NotEmpty().WithMessage("Password is required")
+            .Length(6, 30).WithMessage("Password is too short")
+            .Matches("(?=.*?[#?!@$%^&*-])").WithMessage("Password should contain at least 1 symbol");
     }
 }
