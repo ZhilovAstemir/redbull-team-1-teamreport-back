@@ -91,6 +91,7 @@ public class ServiceTestFixture
     {
         var repositoryMock = new Mock<IReportRepository>();
         repositoryMock.Setup(x => x.Create(It.IsAny<Report>(), It.IsAny<Week>(), It.IsAny<Member>())).ReturnsAsync(1);
+        repositoryMock.Setup(x => x.GetMemberReportsById(It.IsAny<int>())).ReturnsAsync(GetReportsList);
         return repositoryMock;
     }
 
@@ -104,6 +105,11 @@ public class ServiceTestFixture
 
     public ReportModel GetReportModel()
     {
+        WeekModel week = new WeekModel()
+        {
+            DateEnd = new DateTime(2022, 11, 10),
+            DateStart = new DateTime(2022, 11, 03)
+        };
         return new ReportModel()
         {
             Morale = Emotion.Good, 
@@ -115,8 +121,7 @@ public class ServiceTestFixture
             High = "High", 
             Low = "Low", 
             Else = "Else",
-            EndDate = new DateTime(2022, 10, 10),
-            StartDate = new DateTime(2022, 10, 03)
+            Week = week
         };
     }
 
@@ -147,5 +152,56 @@ public class ServiceTestFixture
             UserName = "teamreports111@gmail.com",
             Password = "btpyftfbrhibrgan"
         };
+    }
+
+    public Member GetMemberWithId()
+    {
+        return new Member()
+        {
+            Id = 1,
+            Email = "email@email.com",
+            Password = PasswordHash.HashPassword("password"),
+            FirstName = "FirstName",
+            LastName = "LastName",
+            Title = "Title",
+            Company = new Company() { Id = 1, Name = "CompanyName" }
+        };
+    }
+
+    public List<Report> GetReportsList()
+    {
+        Member member = new Member()
+        {
+            Id = 1,
+            Email = "email@email.com",
+            Password = PasswordHash.HashPassword("password"),
+            FirstName = "FirstName",
+            LastName = "LastName",
+            Title = "Title",
+            Company = new Company() { Id = 1, Name = "CompanyName" }
+        };
+        Week week = new Week()
+        {
+            DateEnd = new DateTime(2022, 11, 10),
+            DateStart = new DateTime(2022, 11, 03)
+        };
+        Report report = new Report
+        {
+            Morale = Emotion.Good,
+            MoraleComment = "Good",
+            Stress = Emotion.Low,
+            StressComment = "Low",
+            Workload = Emotion.Low,
+            WorkloadComment = "Low",
+            High = "High",
+            Low = "Low",
+            Else = "Else",
+            Member = member, 
+            Week = week
+        };
+        List<Report> reports = new List<Report>();
+        reports.Add(report);
+
+        return reports;
     }
 }

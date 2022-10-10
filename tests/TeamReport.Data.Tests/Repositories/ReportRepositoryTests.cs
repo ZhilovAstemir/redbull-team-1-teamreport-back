@@ -10,19 +10,57 @@ public class ReportRepositoryTests
     private readonly RepositoryTestFixture _fixture;
     private readonly ApplicationDbContext _context;
 
-
     public ReportRepositoryTests()
     {
         _fixture = new RepositoryTestFixture();
         _context = _fixture.GetContext();
     }
-
-    [Fact]
-    public void ShouldBeAbleToCreateReportRepository()
+	
+	public void ShouldBeAbleToCreateReportRepository()
     {
         var repository = new ReportRepository(_context);
         repository.Should().NotBeNull();
     }
+
+    [Fact]
+    public async Task ShouldBeAbleToGetReportsByMemberId()
+    {
+        _fixture.ClearDatabase(_context);
+        var repository = new ReportRepository(_context);
+        var member = new Member()
+        {
+            Id = 1,
+            Email = "email@email.com",
+            FirstName = "FirstName",
+            LastName = "LastName",
+            Password = "Password@@@"
+        };
+        var week = new Week()
+        {
+            DateEnd = new DateTime(2020, 10, 10),
+            DateStart = new DateTime(2021, 10, 10)
+        };
+        var report = new Report
+        {
+            Morale = Emotion.Good, 
+            MoraleComment = "comment", 
+            Stress = Emotion.Okay,
+            StressComment = "comment",
+            Workload = Emotion.Good,
+            WorkloadComment = "comment",
+            High = "okay",
+            Low = "okay", 
+            Else = "okay", 
+            Member = member,
+            Week = week
+        };
+       repository.Create(report, week, member);
+
+       List<Report> expectedReports = await repository.GetMemberReportsById(report.Member.Id);
+
+       Assert.NotNull(expectedReports);
+       expectedReports.Should().Contain(report);
+	}
 
     [Fact]
     public void ShouldBeAbleToAddReport()

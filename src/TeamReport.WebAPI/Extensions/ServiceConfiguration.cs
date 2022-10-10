@@ -20,9 +20,9 @@ public static class ServiceConfiguration
     {
         services.AddScoped<IMemberRepository, MemberRepository>();
         services.AddScoped<ICompanyRepository, CompanyRepository>();
-        services.AddScoped<IReportRepository, ReportRepository>();
         services.AddScoped<IWeekRepository, WeekRepository>();
         services.AddScoped<ILeadershipRepository, LeadershipRepository>();
+        services.AddScoped<IReportRepository, ReportRepository>();
     }
 
     public static void AddDomainServices(this IServiceCollection services)

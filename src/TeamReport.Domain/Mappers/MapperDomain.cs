@@ -9,9 +9,11 @@ public class MapperDomain : Profile
     public MapperDomain()
     {
         CreateMap<Member, MemberModel>().ReverseMap();
-        CreateMap<Company,CompanyModel>().ReverseMap();
+
+        CreateMap<Company, CompanyModel>().ReverseMap();
+        CreateMap<Report, ReportModel>();
         CreateMap<ReportModel, Report>();
-        CreateMap<WeekModel, Week>();
+        CreateMap<WeekModel, Week>().ReverseMap();
     }
 }
 

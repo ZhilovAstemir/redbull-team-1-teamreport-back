@@ -1,7 +1,8 @@
 ﻿using TeamReport.Data.Enums;
 
-namespace TeamReport.Domain.Models;
-public class ReportModel
+namespace TeamReport.WebAPI.Models;
+
+public class ReportResponse
 {
     public Emotion Morale { get; set; }
     public string? MoraleComment { get; set; }
@@ -12,5 +13,5 @@ public class ReportModel
     public string? High { get; set; }
     public string? Low { get; set; }
     public string? Else { get; set; }
-    public WeekModel Week { get; set; } 
+    public WeekResponse Week { get; set; }
 }

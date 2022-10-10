@@ -13,8 +13,8 @@ public class WeekRepository: IWeekRepository
         _context = context;
     }
 
-    public async Task<Week> GetWeekByEndDate(DateTime endData) =>
-        await _context.Weeks.FirstOrDefaultAsync(d => d.DateEnd.Date == endData.Date);
+    public async Task<Week> GetWeekByEndDate(DateTime dataEnd) =>
+        await _context.Weeks.FirstOrDefaultAsync(d => d.DateEnd.Date == dataEnd.Date);
 
     public async Task<int> Add(Week week)
     {

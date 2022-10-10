@@ -22,8 +22,8 @@ public class ReportService: IReportService
     public async Task<int> Add(ReportModel report, Member member)
     {
         int reportId;
-        var week = await _weekRepository.GetWeekByEndDate(report.EndDate.Date);
-        if (report.EndDate < report.StartDate)
+        var week = await _weekRepository.GetWeekByEndDate(report.Week.DateEnd.Date);
+        if (report.Week.DateEnd < report.Week.DateStart)
         {
             throw new DataException("Start date is more then end date");
         }
@@ -31,8 +31,8 @@ public class ReportService: IReportService
         {
             var newWeek = new WeekModel
             {
-                DateEnd = report.EndDate,
-                DateStart = report.StartDate
+                DateEnd = report.Week.DateEnd,
+                DateStart = report.Week.DateStart
             };
             await _weekRepository.Add(_mapper.Map<Week>(newWeek));
             reportId = await _reportRepository.Create(_mapper.Map<Report>(report), _mapper.Map<Week>(newWeek), member);
@@ -44,5 +44,19 @@ public class ReportService: IReportService
         
         return reportId;
     }
-
+	
+	public async Task<List<ReportModel>> GetReportsByMemberId(Member member)
+    {
+        if(member == null)
+        {
+            throw new DataException("member is null");
+        }
+        int memberId = member.Id;
+        List<Report> reports = await _reportRepository.GetMemberReportsById(memberId);
+        if (reports != null)
+        {
+            return _mapper.Map<List<ReportModel>>(reports);
+        }
+        return null;
+    }
 }

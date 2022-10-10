@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using TeamReport.Data.Entities;
 using TeamReport.Domain.Models;
 using TeamReport.Domain.Services.Interfaces;
-using TeamReport.WebAPI.Extensions;
 using TeamReport.WebAPI.Models;
+using TeamReport.WebAPI.Extensions;
 
 namespace TeamReport.WebAPI.Controllers;
 
@@ -22,6 +22,15 @@ public class ReportController : ControllerBase
         _mapper = mapper;
     }
 
+    [HttpGet("get-reports-by-member-id")]
+    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+    public async Task<ActionResult<List<ReportResponse>>> GetReportsByMemberId()
+    {
+        var member = this.HttpContext.Items["Member"];
+        var reports = await _reportService.GetReportsByMemberId(member as Member);
+        return Ok(_mapper.Map<List<ReportResponse>>(reports));
+	}
+	
     [HttpPost]
     [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]

@@ -1,4 +1,6 @@
 ﻿using FluentAssertions;
+using TeamReport.Data.Entities;
+using TeamReport.Domain.Exceptions;
 using TeamReport.Domain.Services;
 
 namespace TeamReport.Domain.Tests.Services;
@@ -29,5 +31,35 @@ public class ReportServiceTest
         int expectedId = reportId.Result;
 
         Assert.NotNull(expectedId);
+    }
+
+    [Fact]
+    public async void ShouldBeAbleToGetReportsByMemberId()
+    {
+        var service = new ReportService(_fixture.GetReportRepositoryMock().Object, _fixture.GetMapper(), _fixture.GetWeekRepositoryMock().Object);
+        var actualReport = _fixture.GetReportModel();
+        var member = _fixture.GetMemberWithId();
+
+        var reportId = service.Add(actualReport, member);
+        var expectedReports = await service.GetReportsByMemberId(member);
+
+        reportId.Should().NotBeNull();
+        expectedReports.Should().NotBeNull();
+        expectedReports.Should().HaveCount(1);
+        Assert.Equal(expectedReports[0].MoraleComment, actualReport.MoraleComment);
+        Assert.Equal(expectedReports[0].StressComment, actualReport.StressComment);
+        Assert.Equal(expectedReports[0].WorkloadComment, actualReport.WorkloadComment);
+    }
+
+    [Fact]
+    public async void ThenGetReportsByMemberIdMemberIdIsNull_ShouldThrowDataException()
+    {
+        var service = new ReportService(_fixture.GetReportRepositoryMock().Object, _fixture.GetMapper(), _fixture.GetWeekRepositoryMock().Object);
+        var actualReport = _fixture.GetReportModel();
+        Member member = null;
+
+        var expectedReports = async () => await service.GetReportsByMemberId(member);
+
+        await expectedReports.Should().ThrowAsync<DataException>();
     }
 }

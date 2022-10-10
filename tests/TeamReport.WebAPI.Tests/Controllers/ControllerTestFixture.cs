@@ -100,6 +100,11 @@ public class ControllerTestFixture
 
     public ReportRequest GetReportRequest()
     {
+        WeekRequest week = new WeekRequest()
+        {
+            DateEnd = new DateTime(2022, 10, 10),
+            DateStart = new DateTime(2022, 10, 03)
+        };
         return new ReportRequest()
         {
             Morale = Emotion.Good,
@@ -111,8 +116,7 @@ public class ControllerTestFixture
             High = "High",
             Low = "Low",
             Else = "Else",
-            EndDate = new DateTime(2022, 10, 10),
-            StartDate = new DateTime(2022, 10, 03)
+            Week = week
         };
     }
 
@@ -184,6 +188,42 @@ public class ControllerTestFixture
             FirstName = "NewFirstName",
             LastName = "NewLastName",
             Title = "NewTitle"
+        };
+    }
+
+    public Member GetMemberWithId()
+    {
+        return new Member()
+        {
+            Id = 1,
+            Email = "email@email.com",
+            Password = PasswordHash.HashPassword("password"),
+            FirstName = "FirstName",
+            LastName = "LastName",
+            Title = "Title",
+            Company = new Company() { Id = 1, Name = "CompanyName" }
+        };
+    }
+
+    public ReportModel GetReportModel()
+    {
+        WeekModel week = new WeekModel()
+        {
+            DateEnd = new DateTime(2022, 11, 10),
+            DateStart = new DateTime(2022, 11, 03)
+        };
+        return new ReportModel()
+        {
+            Morale = Emotion.Good,
+            MoraleComment = "Good",
+            Stress = Emotion.Low,
+            StressComment = "Low",
+            Workload = Emotion.Low,
+            WorkloadComment = "Low",
+            High = "High",
+            Low = "Low",
+            Else = "Else",
+            Week = week
         };
     }
 }

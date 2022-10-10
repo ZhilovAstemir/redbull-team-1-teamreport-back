@@ -13,6 +13,5 @@ public class ReportRequest
     public string? High { get; set; }
     public string? Low { get; set; }
     public string? Else { get; set; }
-    public DateTime StartDate { get; set; }
-    public DateTime EndDate { get; set; }            
+    public WeekRequest Week { get; set; }           
 }
