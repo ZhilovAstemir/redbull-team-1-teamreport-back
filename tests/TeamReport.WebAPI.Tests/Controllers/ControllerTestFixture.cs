@@ -156,4 +156,15 @@ public class ControllerTestFixture
             Email = "misterjohn@gmail.com"
         };
     }
+
+    public EditMemberInformationRequest GetEditMemberInformationRequest()
+    {
+        return new EditMemberInformationRequest()
+        {
+            Id = 1,
+            FirstName = "NewFirstName",
+            LastName = "NewLastName",
+            Title = "NewTitle"
+        };
+    }
 }

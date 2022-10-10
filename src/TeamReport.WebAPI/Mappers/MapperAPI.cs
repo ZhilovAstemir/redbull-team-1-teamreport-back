@@ -8,9 +8,9 @@ public class MapperAPI : Profile
 {
     public MapperAPI()
     {
-
         CreateMap<InviteMemberModelRequest, MemberModel>().ReverseMap();
         CreateMap<MemberRegistrationRequest, MemberModel>().ReverseMap();
         CreateMap<CompanyRegistrationRequest, MemberModel>().ReverseMap();
+        CreateMap<EditMemberInformationRequest, MemberModel>().ReverseMap();
     }
 }
