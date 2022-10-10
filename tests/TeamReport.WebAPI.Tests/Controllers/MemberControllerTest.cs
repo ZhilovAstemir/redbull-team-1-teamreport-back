@@ -317,4 +317,51 @@ public class MemberControllerTest
 
         response.Should().BeOfType<BadRequestObjectResult>().Which.Value.Should().BeOfType<string>();
     }
+
+    [Fact]
+    public async Task ShouldEditMemberInformation()
+    {
+        _fixture.ClearDatabase();
+
+        var controller = new MemberController(_memberService, _mapper, _emailService, _teamService, _configuration);
+
+        var controllerContext = new ControllerContext();
+        var httpContext = new DefaultHttpContext();
+        var dbContext = _fixture.GetContext();
+        var member = _fixture.GetMember();
+        member.Title = null;
+        member.Password = null;
+        dbContext.Members.Add(member);
+        await dbContext.SaveChangesAsync();
+        var createdMember = dbContext.Members.First();
+        httpContext.Items["Member"] = createdMember;
+        controllerContext.HttpContext = httpContext;
+        controller.ControllerContext = controllerContext;
+
+        var request = _fixture.GetEditMemberInformationRequest();
+        request.Id = createdMember.Id;
+
+        var response = await controller.EditMemberInformation(request);
+
+        response.Should().BeOfType<OkObjectResult>().Which.Value.Should().BeOfType<MemberModel>();
+        var resultModel = (response as OkObjectResult)?.Value as MemberModel;
+
+        resultModel?.Id.Should().Be(request.Id);
+        resultModel?.FirstName.Should().Be(request.FirstName);
+        resultModel?.LastName.Should().Be(request.LastName);
+        resultModel?.Title.Should().Be(request.Title);
+    }
+
+    [Fact]
+    public async Task ShouldEditMemberInformationReturnBadRequestIfAnyException()
+    {
+        _fixture.ClearDatabase();
+
+        var controller = new MemberController(_memberService, _mapper, _emailService, _teamService, _configuration);
+
+        var request = _fixture.GetEditMemberInformationRequest();
+        var response = await controller.EditMemberInformation(request);
+
+        response.Should().BeOfType<BadRequestObjectResult>().Which.Value.Should().BeOfType<string>();
+    }
 }

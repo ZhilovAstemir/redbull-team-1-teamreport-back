@@ -121,6 +121,23 @@ public class MemberService : IMemberService
         return null;
     }
 
+    public async Task<MemberModel> EditMemberInformation(MemberModel model)
+    {
+        var member = await _memberRepository.Read(model.Id);
+        if (member == null)
+        {
+            throw new EntityNotFoundException("Can't find member to edit his/her information");
+        }
+
+        member.FirstName = model.FirstName;
+        member.LastName = model.LastName;
+        member.Title = model.Title;
+
+        await _memberRepository.Update(member);
+
+        return _mapper.Map<Member, MemberModel>(member);
+    }
+
     public async Task<MemberModel?> GetMemberById(int id)
     {
         var member = await _memberRepository.Read(id);

@@ -181,4 +181,21 @@ public class MemberController : ControllerBase
             return BadRequest("Something went wrong during processing your request. Please try again later.");
         }
     }
+
+    [HttpPost]
+    [Route("edit")]
+    [Authorize]
+    public async Task<IActionResult> EditMemberInformation(EditMemberInformationRequest request)
+    {
+        try
+        {
+            var model = _mapper.Map<EditMemberInformationRequest, MemberModel>(request);
+            var updatedModel = await _memberService.EditMemberInformation(model);
+            return Ok(updatedModel);
+        }
+        catch
+        {
+            return BadRequest("Something went wrong during processing your request. Please try again later.");
+        }
+    }
 }

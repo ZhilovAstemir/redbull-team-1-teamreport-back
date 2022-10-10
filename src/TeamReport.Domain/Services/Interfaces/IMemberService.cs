@@ -11,4 +11,5 @@ public interface IMemberService
     public Task<MemberModel> GetMemberByEmail(string email);
     public Task<MemberModel?> GetMemberById(int id);
     public Task<MemberModel> UpdateMemberInformationBeforeInvite(MemberModel model);
+    public Task<MemberModel> EditMemberInformation(MemberModel model);
 }
