@@ -298,4 +298,43 @@ public class MemberServiceTest
         memberByEmail.Should().BeNull();
     }
 
+    [Fact]
+    public async Task ShouldEditMemberInformation()
+    {
+        _fixture.ClearDatabase();
+
+        var memberRepository = new MemberRepository(_context);
+        var mapper = _fixture.GetMapper();
+        var service = new MemberService(memberRepository, new CompanyRepository(_context), mapper);
+
+        var member = _fixture.GetMember();
+        var creatdMember = await memberRepository.Create(member);
+        var model = mapper.Map<Member, MemberModel>(creatdMember);
+        model.Should().NotBeNull();
+
+        model.FirstName = "NewFirstName";
+        model.LastName = "NewLastName";
+        model.Title = "NewTitle";
+
+        var updated = await service.EditMemberInformation(model);
+        updated.FirstName.Should().Be(model.FirstName);
+        updated.LastName.Should().Be(model.LastName);
+        updated.Title.Should().Be(model.Title);
+    }
+
+    [Fact]
+    public async Task ShouldEditMemberInformationThrowExceptionIfMemberNotFound()
+    {
+        _fixture.ClearDatabase();
+
+        var memberRepository = new MemberRepository(_context);
+        var mapper = _fixture.GetMapper();
+        var service = new MemberService(memberRepository, new CompanyRepository(_context), mapper);
+
+        var model = _fixture.GetMemberModel();
+        model.Id = 0;
+
+        var updated = async () => await service.EditMemberInformation(model);
+        await updated.Should().ThrowAsync<EntityNotFoundException>();
+    }
 }
