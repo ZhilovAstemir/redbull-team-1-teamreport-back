@@ -308,8 +308,8 @@ public class MemberServiceTest
         var service = new MemberService(memberRepository, new CompanyRepository(_context), mapper);
 
         var member = _fixture.GetMember();
-        var creatdMember = await memberRepository.Create(member);
-        var model = mapper.Map<Member, MemberModel>(creatdMember);
+        var createdMember = await memberRepository.Create(member);
+        var model = mapper.Map<Member, MemberModel>(createdMember);
         model.Should().NotBeNull();
 
         model.FirstName = "NewFirstName";
