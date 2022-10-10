@@ -1,10 +1,9 @@
 ﻿using TeamReport.Data.Enums;
 
-namespace TeamReport.Data.Entities;
+namespace TeamReport.WebAPI.Models;
 
-public class Report
+public class ReportRequest
 {
-    public int Id { get; set; }
     public Emotion Morale { get; set; }
     public string? MoraleComment { get; set; }
     public Emotion Stress { get; set; }
@@ -14,6 +13,6 @@ public class Report
     public string? High { get; set; }
     public string? Low { get; set; }
     public string? Else { get; set; }
-    public Week Week { get; set; } 
-    public Member Member { get; set; }
+    public DateTime StartDate { get; set; }
+    public DateTime EndDate { get; set; }            
 }

@@ -6,6 +6,7 @@ using TeamReport.Data.Identity;
 using TeamReport.Data.Persistence;
 using TeamReport.Domain.Infrastructures;
 using TeamReport.Domain.Mappers;
+using TeamReport.WebAPI;
 using TeamReport.WebAPI.Extensions;
 using TeamReport.WebAPI.Helpers;
 using TeamReport.WebAPI.Mappers;
@@ -85,6 +86,7 @@ app.UseCors(MyAllowSpecificOrigins);
 
 app.UseAuthorization();
 app.UseAuthentication();
+app.UseCustomExceptionHandler();
 
 app.MapControllers();
 

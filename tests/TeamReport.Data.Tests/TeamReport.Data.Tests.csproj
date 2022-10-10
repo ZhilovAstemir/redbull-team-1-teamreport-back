@@ -26,8 +26,4 @@
     <ProjectReference Include="..\..\src\TeamReport.Data\TeamReport.Data.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Repositories\" />
-  </ItemGroup>
-
 </Project>

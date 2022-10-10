@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Moq;
 using TeamReport.Data.Entities;
+using TeamReport.Data.Enums;
 using TeamReport.Data.Persistence;
 using TeamReport.Domain.Infrastructures;
 using TeamReport.Domain.Mappers;
@@ -94,6 +95,24 @@ public class ControllerTestFixture
             LastName = member.LastName,
             Password = member.Password,
             Title = member.Title
+        };
+    }
+
+    public ReportRequest GetReportRequest()
+    {
+        return new ReportRequest()
+        {
+            Morale = Emotion.Good,
+            MoraleComment = "Good",
+            Stress = Emotion.Low,
+            StressComment = "Low",
+            Workload = Emotion.Low,
+            WorkloadComment = "Low",
+            High = "High",
+            Low = "Low",
+            Else = "Else",
+            EndDate = new DateTime(2022, 10, 10),
+            StartDate = new DateTime(2022, 10, 03)
         };
     }
 

@@ -9,9 +9,9 @@ public class ApplicationDbContext : DbContext
         : base(option) { }
 
     public DbSet<Company> Companies { get; set; }
-    public DbSet<Member> Members { get; set; }
-    public DbSet<Leadership> Leaderships { get; set; }
-    public DbSet<Report> Reports { get; set; }
+    public DbSet<Member> Members { get; set; } 
+    public DbSet<Leadership> Leaderships { get; set; } 
+    public DbSet<Report> Reports { get; set; } 
     public DbSet<Week> Weeks { get; set; }
 
 }

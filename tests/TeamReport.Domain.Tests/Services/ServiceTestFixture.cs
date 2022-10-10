@@ -2,7 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Moq;
+using redbull_team_1_teamreport_back.Data.Repositories.Interfaces;
 using TeamReport.Data.Entities;
+using TeamReport.Data.Enums;
 using TeamReport.Data.Persistence;
 using TeamReport.Domain.Infrastructures;
 using TeamReport.Domain.Mappers;
@@ -82,6 +84,49 @@ public class ServiceTestFixture
         var mapper = new Mapper(mapperConfig);
 
         return mapper;
+    }
+
+
+    public Mock<IReportRepository> GetReportRepositoryMock()
+    {
+        var repositoryMock = new Mock<IReportRepository>();
+        repositoryMock.Setup(x => x.Create(It.IsAny<Report>(), It.IsAny<Week>(), It.IsAny<Member>())).ReturnsAsync(1);
+        return repositoryMock;
+    }
+
+    public Mock<IWeekRepository> GetWeekRepositoryMock()
+    {
+        var repositoryMock = new Mock<IWeekRepository>();
+        repositoryMock.Setup(x => x.Add(It.IsAny<Week>())).ReturnsAsync(5);
+        repositoryMock.Setup(x => x.GetWeekByEndDate(It.IsAny<DateTime>())).Returns(Task.FromResult(GetWeek()));
+        return repositoryMock;
+    }
+
+    public ReportModel GetReportModel()
+    {
+        return new ReportModel()
+        {
+            Morale = Emotion.Good, 
+            MoraleComment = "Good", 
+            Stress = Emotion.Low, 
+            StressComment = "Low", 
+            Workload = Emotion.Low,
+            WorkloadComment = "Low",
+            High = "High", 
+            Low = "Low", 
+            Else = "Else",
+            EndDate = new DateTime(2022, 10, 10),
+            StartDate = new DateTime(2022, 10, 03)
+        };
+    }
+
+    public Week GetWeek()
+    {
+        return new Week()
+        {
+            DateEnd = new DateTime(2022, 10, 10),
+            DateStart = new DateTime(2022, 10, 03)
+        };
     }
 
     public IOptions<EmailConfiguration> GetNewOptions()

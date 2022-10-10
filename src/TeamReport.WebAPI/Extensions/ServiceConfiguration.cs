@@ -2,6 +2,8 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.OpenApi.Models;
+using redbull_team_1_teamreport_back.Data.Repositories;
+using redbull_team_1_teamreport_back.Data.Repositories.Interfaces;
 using TeamReport.Data.Repositories;
 using TeamReport.Data.Repositories.Interfaces;
 using TeamReport.Domain.Services;
@@ -18,6 +20,8 @@ public static class ServiceConfiguration
     {
         services.AddScoped<IMemberRepository, MemberRepository>();
         services.AddScoped<ICompanyRepository, CompanyRepository>();
+        services.AddScoped<IReportRepository, ReportRepository>();
+        services.AddScoped<IWeekRepository, WeekRepository>();
         services.AddScoped<ILeadershipRepository, LeadershipRepository>();
     }
 
@@ -27,6 +31,7 @@ public static class ServiceConfiguration
         services.AddScoped<ITeamService, TeamService>();
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<ICompanyService, CompanyService>();
+        services.AddScoped<IReportService, ReportService>();
     }
 
     public static void AddSwaggerGen(this IServiceCollection services)
@@ -70,5 +75,6 @@ public static class ServiceConfiguration
         services.AddScoped<IValidator<InviteMemberModelRequest>, InviteMemberValidator>();
         services.AddScoped<IValidator<CompanyRegistrationRequest>, CompanyRegistrationValidator>();
         services.AddScoped<IValidator<UpdateCompanyNameRequest>, UpdateCompanyNameValidator>();
+        services.AddScoped<IValidator<ReportRequest>, ReportRequestValidator>();
     }
 }
